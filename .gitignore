@@ -1,7 +1,9 @@
 *.aux
 *.log
-*.out
+*.lof
+*.lot
 *.toc
+*.out
 *.synctex.gz
 *.fls
 *.fdb_latexmk
