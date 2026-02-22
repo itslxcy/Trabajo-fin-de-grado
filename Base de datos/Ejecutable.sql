@@ -1,0 +1,1 @@
+SELECT * FROM criterios_evaluacion;
