@@ -23,7 +23,6 @@ INSERT INTO tipo_entrada (nombre) VALUES
 CREATE TABLE idioma (
     id SERIAL PRIMARY KEY,
     nombre TEXT UNIQUE NOT NULL);
--- Ampliación de idiomas solicitada
 INSERT INTO idioma (nombre) VALUES
 ('español'), ('inglés'), ('francés'), ('portugués'), ('gallego'), ('catalán'), ('euskera');
 
@@ -39,12 +38,6 @@ CREATE TABLE entorno_uso (
 INSERT INTO entorno_uso (nombre) VALUES 
 ('Interior/Cama'), ('Interior/Silla'), ('Exterior/Luz Solar'), ('Exterior/Movimiento');
 
-CREATE TABLE nivel_fatiga (
-    id SERIAL PRIMARY KEY,
-    grado TEXT NOT NULL, 
-    descripcion TEXT);
-INSERT INTO nivel_fatiga (grado) VALUES ('Baja'), ('Media'), ('Alta');
-
 --TABLA DE SISTEMAS SAAC
 CREATE TABLE saac_sistema (
     id SERIAL PRIMARY KEY,
@@ -54,7 +47,7 @@ CREATE TABLE saac_sistema (
     requiere_financiacion BOOLEAN DEFAULT FALSE,
     requiere_interlocutor BOOLEAN,
     tiempo_entrenamiento SMALLINT, 
-    fatiga_id INT REFERENCES nivel_fatiga(id),
+    nivel_fatiga SMALLINT,
     velocidad SMALLINT,
     robustez SMALLINT, 
     escalabilidad SMALLINT,
@@ -115,34 +108,53 @@ CREATE TABLE paciente_entrada (
     PRIMARY KEY (paciente_id, entrada_id));
 
 --CARGA DE DATOS DE SISTEMAS
+--1=Bajo, 2=Medio, 3=Alto
 INSERT INTO saac_sistema
-(nombre, descripcion, coste_min, requiere_financiacion, requiere_interlocutor, tiempo_entrenamiento, velocidad, robustez, escalabilidad, portable, admite_anclaje)
+(nombre, descripcion, coste_min, requiere_financiacion, requiere_interlocutor, tiempo_entrenamiento, nivel_fatiga, velocidad, robustez, escalabilidad, portable, admite_anclaje)
 VALUES
-('Panel pictogramas','Tablero símbolos',0,false,true,1,1,3,2,true,true),
-('Panel alfabético','Tablero letras',0,false,true,2,1,3,2,true,true),
-('SpeakBook','Cuaderno comunicación',0,false,true,1,1,3,2,true,true),
-('Puntero Láser','Puntero mirada/cabeza',99,false,true,1,1,3,0,true,false),
-('MegaBEE','Comunicador mirada',770,false,true,2,2,2,1,true,true),
-('Look to Speak','App mirada Google',0,false,false,2,2,2,2,true,true),
-('Tallk','App con seguimiento ocular Samsung',0,false,false,2,2,1,1,true,true),
-('Grid 3','Software comunicación profesional',300,false,false,2,3,2,3,true,true),
-('Verbo','Software comunicación Eneso',40,false,false,2,3,2,3,true,true),
-('Eye tracker','Seguimiento ocular hardware',260,true,false,3,3,2,3,false,true),
-('Proloquo2Go','App pictográfica iOS',300,false,false,2,3,3,3,true,true),
-('TD Snap','Comunicador profesional Tobii',60,false,false,2,3,3,3,true,true),
-('Look to learn','Software entrenamiento mirada',520,false,true,1,2,2,1,true,true),
-('Tablero ETRAN','Panel transparente mirada',90,false,true,1,1,3,1,true,true),
-('Asistente de voz AAC','App de texto a voz frases',0,false,false,1,3,2,2,true,false),
-('Speak4Me','Conversor de texto a voz simple',0,false,false,1,2,3,1,true,false),
-('Voice Access','Control del dispositivo mediante voz',0,false,false,2,3,1,2,true,false),
-('Speech to Text','Dictado por voz y transcripción',0,false,false,1,3,1,2,true,false),
-('ComuniQa','Solución integral hardware + software',4000, true, false, 2,3,3,3,true,true);
+('Panel pictogramas','Tablero símbolos',0,false,true,1,2,1,3,2,true,true),
+('Panel alfabético','Tablero letras',0,false,true,2,2,1,3,2,true,true),
+('SpeakBook','Cuaderno comunicación',0,false,true,1,1,1,3,2,true,true),
+('Puntero Láser','Puntero mirada/cabeza',99,false,true,1,3,1,3,0,true,false),
+('MegaBEE','Comunicador mirada',770,false,true,2,3,2,2,1,true,true),
+('Look to Speak','App mirada Google',0,false,false,2,3,2,2,2,true,true),
+('Tallk','App con seguimiento ocular Samsung',0,false,false,2,3,2,1,1,true,true),
+('Grid 3','Software comunicación profesional',300,false,false,2,2,3,2,3,true,true),
+('Verbo','Software comunicación Eneso',40,false,false,2,2,3,2,3,true,true),
+('Eye tracker','Seguimiento ocular hardware',260,true,false,3,3,3,2,3,false,true),
+('Proloquo2Go','App pictográfica iOS',300,false,false,2,2,3,3,3,true,true),
+('TD Snap','Comunicador profesional Tobii',60,false,false,2,2,3,3,3,true,true),
+('Look to learn','Software entrenamiento mirada',520,false,true,1,3,2,2,1,true,true),
+('Tablero ETRAN','Panel transparente mirada',90,false,true,1,3,1,3,1,true,true),
+('Asistente de voz AAC','App de texto a voz frases',0,false,false,1,1,3,2,2,true,false),
+('Speak4Me','Conversor de texto a voz simple',0,false,false,1,1,2,3,1,true,false),
+('Voice Access','Control del dispositivo mediante voz',0,false,false,2,1,3,1,2,true,false),
+('Speech to Text','Dictado por voz y transcripción',0,false,false,1,1,3,1,2,true,false),
+('ComuniQa','Solución integral hardware + software',4000, true, false, 2,2,3,3,3,true,true);
 
 --REQUISITOS FUNCIONALES 
-INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_cognitivo_min)
-SELECT id, 3, 1 FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Puntero Láser', 'Tablero ETRAN');
+--Sistemas de baja tecnología / acceso directo
+INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
+SELECT id, 3, 0, 1, 0 FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 'Puntero Láser');
+
+--Sistemas de mirada con alta tecnología
+INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
+SELECT id, 3, 1, 2, 3 FROM saac_sistema WHERE nombre IN ('Eye tracker', 'Tallk', 'Look to Speak', 'MegaBEE', 'Look to learn');
+
+--Software de comunicación complejo
+INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
+SELECT id, 2, 2, 3, 3 FROM saac_sistema WHERE nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa');
+
+--Apps de texto a voz con acceso manual
+INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
+SELECT id, 2, 3, 2, 2 FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'Asistente de voz AAC', 'Speak4Me');
+
+--Sistemas de voz
+INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
+SELECT id, 1, 3, 2, 2 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text');
 
 --ENTRADAS DE LOS SISTEMAS
+--1=Manos, 2=Ojos, 3=Cabeza, 4=Voz, 5=Pulsador
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, 1 FROM saac_sistema WHERE nombre IN ('Asistente de voz AAC', 'Proloquo2Go', 'Speak4Me', 'Grid 3', 'Verbo');
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
@@ -164,7 +176,7 @@ INSERT INTO sistema_idioma (sistema_id, idioma_id)
 SELECT s.id, i.id FROM saac_sistema s, idioma i 
 WHERE s.nombre IN ('Look to Speak', 'Voice Access', 'Speech to Text', 'Speak4Me')
 AND i.nombre IN ('inglés', 'francés', 'portugués');
--- Sistemas de baja tecnología (El idioma lo define el contenido impreso)
+--Sistemas de baja tecnología pueden encontrarse en cualquier idioma
 INSERT INTO sistema_idioma (sistema_id, idioma_id)
 SELECT s.id, i.id FROM saac_sistema s, idioma i 
 WHERE s.nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN')
