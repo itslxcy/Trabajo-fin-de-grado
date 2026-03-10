@@ -1,172 +1,181 @@
-
+--LIMPIEZA DE TABLAS
 DROP TABLE IF EXISTS paciente_entrada CASCADE;
 DROP TABLE IF EXISTS sistema_entrada CASCADE;
 DROP TABLE IF EXISTS sistema_idioma CASCADE;
+DROP TABLE IF EXISTS sistema_plataforma CASCADE;
+DROP TABLE IF EXISTS sistema_entorno CASCADE;
+DROP TABLE IF EXISTS sistema_requisito_funcional CASCADE;
 DROP TABLE IF EXISTS paciente CASCADE;
 DROP TABLE IF EXISTS saac_sistema CASCADE;
 DROP TABLE IF EXISTS tipo_entrada CASCADE;
 DROP TABLE IF EXISTS idioma CASCADE;
+DROP TABLE IF EXISTS plataforma CASCADE;
+DROP TABLE IF EXISTS entorno_uso CASCADE;
+DROP TABLE IF EXISTS nivel_fatiga CASCADE;
 
--- TABLAS CATÁLOGO
-
+--TABLAS MAESTRAS
 CREATE TABLE tipo_entrada (
     id SERIAL PRIMARY KEY,
-    nombre TEXT UNIQUE NOT NULL
-);
-
+    nombre TEXT UNIQUE NOT NULL);
 INSERT INTO tipo_entrada (nombre) VALUES
-('manos'),
-('ojos'),
-('cabeza'),
-('voz'),
-('pulsador'),
-('cerebro');
-
--------------------------------------------------------
+('manos'), ('ojos'), ('cabeza'), ('voz'), ('pulsador'), ('cerebro');
 
 CREATE TABLE idioma (
     id SERIAL PRIMARY KEY,
-    nombre TEXT UNIQUE NOT NULL
-);
-
+    nombre TEXT UNIQUE NOT NULL);
+-- Ampliación de idiomas solicitada
 INSERT INTO idioma (nombre) VALUES
-('español'),
-('inglés');
+('español'), ('inglés'), ('francés'), ('portugués'), ('gallego'), ('catalán'), ('euskera');
 
--- TABLA SISTEMAS SAAC
+CREATE TABLE plataforma (
+    id SERIAL PRIMARY KEY,
+    nombre TEXT UNIQUE NOT NULL);
+INSERT INTO plataforma (nombre) VALUES 
+('Windows'), ('iOS'), ('Android'), ('Hardware Propio');
 
+CREATE TABLE entorno_uso (
+    id SERIAL PRIMARY KEY,
+    nombre TEXT UNIQUE NOT NULL);
+INSERT INTO entorno_uso (nombre) VALUES 
+('Interior/Cama'), ('Interior/Silla'), ('Exterior/Luz Solar'), ('Exterior/Movimiento');
+
+CREATE TABLE nivel_fatiga (
+    id SERIAL PRIMARY KEY,
+    grado TEXT NOT NULL, 
+    descripcion TEXT);
+INSERT INTO nivel_fatiga (grado) VALUES ('Baja'), ('Media'), ('Alta');
+
+--TABLA DE SISTEMAS SAAC
 CREATE TABLE saac_sistema (
     id SERIAL PRIMARY KEY,
     nombre TEXT NOT NULL,
     descripcion TEXT,
-
     coste_min NUMERIC,
-    coste_max NUMERIC,
     requiere_financiacion BOOLEAN DEFAULT FALSE,
-
-    nivel_visual SMALLINT,
-    nivel_auditivo SMALLINT,
-    nivel_cognitivo SMALLINT,
-    nivel_tecnologico SMALLINT,
-
     requiere_interlocutor BOOLEAN,
-    tiempo_entrenamiento SMALLINT,
-    fatiga_fisica SMALLINT,
+    tiempo_entrenamiento SMALLINT, 
+    fatiga_id INT REFERENCES nivel_fatiga(id),
     velocidad SMALLINT,
-    robustez SMALLINT,
+    robustez SMALLINT, 
     escalabilidad SMALLINT,
-
-    portable BOOLEAN,
-    admite_anclaje BOOLEAN
+    portable BOOLEAN, 
+    admite_anclaje BOOLEAN 
 );
 
--- RELACIONES SISTEMA
+--TABLAS DE RELACIÓN Y REQUISITOS
+CREATE TABLE sistema_requisito_funcional (
+    sistema_id INT PRIMARY KEY REFERENCES saac_sistema(id) ON DELETE CASCADE,
+    nivel_visual_min SMALLINT DEFAULT 0,
+    nivel_auditivo_min SMALLINT DEFAULT 0,
+    nivel_cognitivo_min SMALLINT DEFAULT 0,
+    nivel_tecnologico_min SMALLINT DEFAULT 0
+);
+
+CREATE TABLE sistema_entorno (
+    sistema_id INT REFERENCES saac_sistema(id) ON DELETE CASCADE,
+    entorno_id INT REFERENCES entorno_uso(id) ON DELETE CASCADE,
+    PRIMARY KEY (sistema_id, entorno_id));
 
 CREATE TABLE sistema_entrada (
     sistema_id INT REFERENCES saac_sistema(id) ON DELETE CASCADE,
     entrada_id INT REFERENCES tipo_entrada(id) ON DELETE CASCADE,
-    PRIMARY KEY (sistema_id, entrada_id)
-);
-
--------------------------------------------------------
+    PRIMARY KEY (sistema_id, entrada_id));
 
 CREATE TABLE sistema_idioma (
     sistema_id INT REFERENCES saac_sistema(id) ON DELETE CASCADE,
     idioma_id INT REFERENCES idioma(id) ON DELETE CASCADE,
-    PRIMARY KEY (sistema_id, idioma_id)
-);
+    PRIMARY KEY (sistema_id, idioma_id));
 
--- TABLA PACIENTE
+CREATE TABLE sistema_plataforma (
+    sistema_id INT REFERENCES saac_sistema(id) ON DELETE CASCADE,
+    plataforma_id INT REFERENCES plataforma(id) ON DELETE CASCADE,
+    PRIMARY KEY (sistema_id, plataforma_id));
 
+--TABLA PACIENTE
 CREATE TABLE paciente (
     id SERIAL PRIMARY KEY,
     nombre TEXT,
-
-    presupuesto NUMERIC,
-    vision SMALLINT,
-    audicion SMALLINT,
-    cognicion SMALLINT,
-    tecnologia SMALLINT,
-    resistencia SMALLINT,
-
-    necesita_independencia BOOLEAN,
-    usa_silla BOOLEAN,
-    entorno SMALLINT,
-    tiene_financiacion BOOLEAN DEFAULT FALSE
+    presupuesto NUMERIC, 
+    vision SMALLINT, 
+    audicion SMALLINT, 
+    cognicion SMALLINT, 
+    tecnologia SMALLINT, 
+    resistencia SMALLINT, 
+    necesita_independencia BOOLEAN, 
+    usa_silla BOOLEAN, 
+    entorno_id INT REFERENCES entorno_uso(id),
+    tiene_financiacion BOOLEAN DEFAULT FALSE, 
+    idioma_id INT REFERENCES idioma(id) NOT NULL,
+    plataforma_preferida_id INT REFERENCES plataforma(id)
 );
-
--------------------------------------------------------
 
 CREATE TABLE paciente_entrada (
     paciente_id INT REFERENCES paciente(id) ON DELETE CASCADE,
     entrada_id INT REFERENCES tipo_entrada(id) ON DELETE CASCADE,
-    PRIMARY KEY (paciente_id, entrada_id)
-);
+    PRIMARY KEY (paciente_id, entrada_id));
 
--- ÍNDICES
-
-CREATE INDEX idx_sistema_coste_min ON saac_sistema(coste_min);
-CREATE INDEX idx_sistema_cognitivo ON saac_sistema(nivel_cognitivo);
-CREATE INDEX idx_sistema_visual ON saac_sistema(nivel_visual);
-CREATE INDEX idx_sistema_velocidad ON saac_sistema(velocidad);
-
--------------------------------------------------------
--- DATOS SISTEMAS
--------------------------------------------------------
-
+--CARGA DE DATOS DE SISTEMAS
 INSERT INTO saac_sistema
-(nombre, descripcion, coste_min, coste_max, requiere_financiacion,
- nivel_visual, nivel_auditivo, nivel_cognitivo, nivel_tecnologico,
- requiere_interlocutor, tiempo_entrenamiento, fatiga_fisica,
- velocidad, robustez, escalabilidad, portable, admite_anclaje)
-
+(nombre, descripcion, coste_min, requiere_financiacion, requiere_interlocutor, tiempo_entrenamiento, velocidad, robustez, escalabilidad, portable, admite_anclaje)
 VALUES
-('Panel pictogramas','Tablero símbolos',20,80,false,3,0,1,0,true,1,1,1,3,2,true,true),
-('Panel alfabético','Tablero letras',20,60,false,3,0,2,0,true,2,2,1,3,2,true,true),
-('SpeakBook','Cuaderno comunicación',10,50,false,3,0,1,0,true,1,1,1,3,2,true,true),
-('Gafas láser','Puntero montado',80,150,false,3,0,1,0,false,1,1,2,3,0,true,true),
-('MegaBEE','Comunicador mirada',600,900,false,3,0,2,2,true,2,1,2,2,1,true,true),
-('Look to Speak','App mirada',0,0,false,3,1,2,2,false,2,1,2,2,2,true,true),
-('Grid 3','Software comunicación',500,900,false,2,3,2,3,false,2,1,3,2,3,true,true),
-('TTS móvil','Texto a voz',0,50,false,1,3,1,1,false,1,1,2,3,2,true,false),
-('Eye tracker','Seguimiento ocular',1500,3000,true,3,1,2,3,false,3,1,3,2,3,false,true),
-('Proloquo2Go','App pictográfica avanzada',800,1200,false,2,3,2,2,false,2,1,3,3,3,true,true),
-('TD Snap','Comunicador profesional',800,1400,false,2,3,2,3,false,2,1,3,3,3,true,true),
-('LAMP Words for Life','Sistema lingüístico motor',900,1500,false,2,3,3,2,false,3,2,3,3,3,true,true),
-('PECS','Intercambio de imágenes',50,200,false,2,1,1,1,true,2,1,1,3,2,true,false),
-('Tablero ETRAN','Panel transparente',40,150,false,3,1,1,1,true,1,1,1,3,1,true,true),
-('Switch scanning','Barrido con pulsador',300,800,false,1,2,2,2,false,2,1,1,3,3,true,true),
-('BCI comunicador','Interfaz cerebral',4000,10000,true,1,2,3,4,false,4,1,1,1,4,false,true);
+('Panel pictogramas','Tablero símbolos',0,false,true,1,1,3,2,true,true),
+('Panel alfabético','Tablero letras',0,false,true,2,1,3,2,true,true),
+('SpeakBook','Cuaderno comunicación',0,false,true,1,1,3,2,true,true),
+('Puntero Láser','Puntero mirada/cabeza',99,false,true,1,1,3,0,true,false),
+('MegaBEE','Comunicador mirada',770,false,true,2,2,2,1,true,true),
+('Look to Speak','App mirada Google',0,false,false,2,2,2,2,true,true),
+('Tallk','App con seguimiento ocular Samsung',0,false,false,2,2,1,1,true,true),
+('Grid 3','Software comunicación profesional',300,false,false,2,3,2,3,true,true),
+('Verbo','Software comunicación Eneso',40,false,false,2,3,2,3,true,true),
+('Eye tracker','Seguimiento ocular hardware',260,true,false,3,3,2,3,false,true),
+('Proloquo2Go','App pictográfica iOS',300,false,false,2,3,3,3,true,true),
+('TD Snap','Comunicador profesional Tobii',60,false,false,2,3,3,3,true,true),
+('Look to learn','Software entrenamiento mirada',520,false,true,1,2,2,1,true,true),
+('Tablero ETRAN','Panel transparente mirada',90,false,true,1,1,3,1,true,true),
+('Asistente de voz AAC','App de texto a voz frases',0,false,false,1,3,2,2,true,false),
+('Speak4Me','Conversor de texto a voz simple',0,false,false,1,2,3,1,true,false),
+('Voice Access','Control del dispositivo mediante voz',0,false,false,2,3,1,2,true,false),
+('Speech to Text','Dictado por voz y transcripción',0,false,false,1,3,1,2,true,false),
+('ComuniQa','Solución integral hardware + software',4000, true, false, 2,3,3,3,true,true);
 
--------------------------------------------------------
--- ENTRADAS CORRECTAS
--------------------------------------------------------
+--REQUISITOS FUNCIONALES 
+INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_cognitivo_min)
+SELECT id, 3, 1 FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Puntero Láser', 'Tablero ETRAN');
 
-INSERT INTO sistema_entrada
-SELECT id,1 FROM saac_sistema WHERE nombre IN
-('TTS móvil','Proloquo2Go','LAMP Words for Life','PECS');
+--ENTRADAS DE LOS SISTEMAS
+INSERT INTO sistema_entrada (sistema_id, entrada_id)
+SELECT id, 1 FROM saac_sistema WHERE nombre IN ('Asistente de voz AAC', 'Proloquo2Go', 'Speak4Me', 'Grid 3', 'Verbo');
+INSERT INTO sistema_entrada (sistema_id, entrada_id)
+SELECT id, 2 FROM saac_sistema WHERE nombre IN ('MegaBEE', 'Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look to learn');
+INSERT INTO sistema_entrada (sistema_id, entrada_id)
+SELECT id, 4 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text');
 
-INSERT INTO sistema_entrada
-SELECT id,2 FROM saac_sistema WHERE nombre IN
-('MegaBEE','Look to Speak','Eye tracker','Tablero ETRAN');
+--IDIOMAS
+--Todos soportan Español (ID 1)
+INSERT INTO sistema_idioma (sistema_id, idioma_id)
+SELECT id, 1 FROM saac_sistema;
+--Sistemas con soporte completo (Internacionales + Lenguas Cooficiales)
+INSERT INTO sistema_idioma (sistema_id, idioma_id)
+SELECT s.id, i.id FROM saac_sistema s, idioma i 
+WHERE s.nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa', 'Proloquo2Go')
+AND i.nombre IN ('inglés', 'francés', 'portugués', 'gallego', 'catalán', 'euskera');
+--Sistemas con soporte Internacional (Google/Apple)
+INSERT INTO sistema_idioma (sistema_id, idioma_id)
+SELECT s.id, i.id FROM saac_sistema s, idioma i 
+WHERE s.nombre IN ('Look to Speak', 'Voice Access', 'Speech to Text', 'Speak4Me')
+AND i.nombre IN ('inglés', 'francés', 'portugués');
+-- Sistemas de baja tecnología (El idioma lo define el contenido impreso)
+INSERT INTO sistema_idioma (sistema_id, idioma_id)
+SELECT s.id, i.id FROM saac_sistema s, idioma i 
+WHERE s.nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN')
+AND i.nombre IN ('inglés', 'francés', 'portugués', 'gallego', 'catalán', 'euskera');
 
-INSERT INTO sistema_entrada
-SELECT id,3 FROM saac_sistema WHERE nombre='Gafas láser';
-
-INSERT INTO sistema_entrada
-SELECT id,5 FROM saac_sistema WHERE nombre IN
-('Switch scanning','Grid 3');
-
-INSERT INTO sistema_entrada
-SELECT id,6 FROM saac_sistema WHERE nombre='BCI comunicador';
-
--------------------------------------------------------
--- IDIOMAS
--------------------------------------------------------
-
-INSERT INTO sistema_idioma
-SELECT id,1 FROM saac_sistema;
-
-INSERT INTO sistema_idioma
-SELECT id,2 FROM saac_sistema
-WHERE nombre IN ('Grid 3','TD Snap','Proloquo2Go','Eye tracker','Look to Speak');
+--PLATAFORMAS
+INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
+SELECT id, 4 FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero Láser', 'MegaBEE', 'Tablero ETRAN', 'ComuniQa');
+INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
+SELECT id, 1 FROM saac_sistema WHERE nombre IN ('Grid 3', 'Eye tracker', 'Verbo', 'Look to learn', 'TD Snap');
+INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
+SELECT id, 3 FROM saac_sistema WHERE nombre IN ('Look to Speak', 'Tallk', 'Voice Access', 'Speech to Text', 'Asistente de voz AAC');
+INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
+SELECT id, 2 FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'TD Snap', 'Grid 3', 'Speak4Me');
