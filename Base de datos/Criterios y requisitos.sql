@@ -30,7 +30,7 @@ CREATE TABLE plataforma (
     id SERIAL PRIMARY KEY,
     nombre TEXT UNIQUE NOT NULL);
 INSERT INTO plataforma (nombre) VALUES 
-('Windows'), ('iOS'), ('Android'), ('Hardware Propio');
+('Windows'), ('iOS'), ('Android'), ('Hardware Propio'), ('Web');
 
 CREATE TABLE entorno_uso (
     id SERIAL PRIMARY KEY,
@@ -130,7 +130,10 @@ VALUES
 ('Speak4Me','Conversor de texto a voz simple',0,false,false,1,1,2,3,1,true,false),
 ('Voice Access','Control del dispositivo mediante voz',0,false,false,2,1,3,1,2,true,false),
 ('Speech to Text','Dictado por voz y transcripción',0,false,false,1,1,3,1,2,true,false),
-('ComuniQa','Solución integral hardware + software',4000, true, false, 2,2,3,3,3,true,true);
+('ComuniQa','Solución integral hardware + software',4000, true, false, 2,2,3,3,3,true,true),
+('Cboard','Comunicador pictográfico online',0,false,false,1,1,2,2,3,true,false),
+('Picto4Me','Editor web de tableros con pictogramas',0,false,false,2,1,2,2,3,true,false),
+('LetMeTalk Web','Comunicador basado en pictogramas',0,false,false,1,1,2,2,3,true,false);
 
 --REQUISITOS FUNCIONALES 
 --Sistemas de baja tecnología / acceso directo
@@ -153,10 +156,15 @@ SELECT id, 2, 3, 2, 2 FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'Asisten
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
 SELECT id, 1, 3, 2, 2 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text');
 
+--Sistemas web
+INSERT INTO sistema_requisito_funcional
+(sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
+SELECT id, 2, 2, 2, 2 FROM saac_sistema WHERE nombre IN ('Cboard','Picto4Me','LetMeTalk Web');
+
 --ENTRADAS DE LOS SISTEMAS
 --1=Manos, 2=Ojos, 3=Cabeza, 4=Voz, 5=Pulsador
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
-SELECT id, 1 FROM saac_sistema WHERE nombre IN ('Asistente de voz AAC', 'Proloquo2Go', 'Speak4Me', 'Grid 3', 'Verbo');
+SELECT id, 1 FROM saac_sistema WHERE nombre IN ('Asistente de voz AAC', 'Proloquo2Go', 'Speak4Me', 'Grid 3', 'Verbo','Cboard','Picto4Me','LetMeTalk Web');
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, 2 FROM saac_sistema WHERE nombre IN ('MegaBEE', 'Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look to learn');
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
@@ -183,11 +191,15 @@ WHERE s.nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Table
 AND i.nombre IN ('inglés', 'francés', 'portugués', 'gallego', 'catalán', 'euskera');
 
 --PLATAFORMAS
+--1=Windows, 2=iOS, 3=Android, 4=Hardware propio, 5=Web
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
 SELECT id, 4 FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero Láser', 'MegaBEE', 'Tablero ETRAN', 'ComuniQa');
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
 SELECT id, 1 FROM saac_sistema WHERE nombre IN ('Grid 3', 'Eye tracker', 'Verbo', 'Look to learn', 'TD Snap');
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
-SELECT id, 3 FROM saac_sistema WHERE nombre IN ('Look to Speak', 'Tallk', 'Voice Access', 'Speech to Text', 'Asistente de voz AAC');
+SELECT id, 3 FROM saac_sistema WHERE nombre IN ('Look to Speak', 'Tallk', 'Voice Access', 'Speech to Text', 'Asistente de voz AAC','Speak4Me');
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
-SELECT id, 2 FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'TD Snap', 'Grid 3', 'Speak4Me');
+SELECT id, 2 FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'TD Snap', 'Speak4Me');
+INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
+SELECT id, 5 FROM saac_sistema 
+WHERE nombre IN ('Speak4Me','Cboard','Picto4Me','LetMeTalk Web');
