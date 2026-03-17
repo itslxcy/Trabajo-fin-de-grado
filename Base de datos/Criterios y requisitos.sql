@@ -1,4 +1,5 @@
 
+
 --LIMPIEZA DE TABLAS
 DROP TABLE IF EXISTS paciente_entrada CASCADE;
 DROP TABLE IF EXISTS sistema_entrada CASCADE;
@@ -134,7 +135,8 @@ VALUES
 ('ComuniQa','Solución integral hardware + software',4000, true, false, 2,2,3,3,3,true,true),
 ('Cboard','Comunicador pictográfico online',0,false,false,1,1,2,2,3,true,false),
 ('Picto4Me','Editor web de tableros con pictogramas',0,false,false,2,1,2,2,3,true,false),
-('LetMeTalk Web','Comunicador basado en pictogramas',0,false,false,1,1,2,2,3,true,false);
+('LetMeTalk Web','Comunicador basado en pictogramas',0,false,false,1,1,2,2,3,true,false),
+('TouchChat','App pictográfica',300,false,2,3,2,2,false,2,1,3,3,3,true,true);
 
 --REQUISITOS FUNCIONALES 
 --Sistemas de baja tecnología / acceso directo
@@ -151,7 +153,7 @@ SELECT id, 2, 2, 3, 3 FROM saac_sistema WHERE nombre IN ('Grid 3', 'Verbo', 'TD 
 
 --Apps de texto a voz con acceso manual
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
-SELECT id, 2, 3, 2, 2 FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'Asistente de voz AAC', 'Speak4Me');
+SELECT id, 2, 3, 2, 2 FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'Asistente de voz AAC', 'Speak4Me','TouchChat');
 
 --Sistemas de voz
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
@@ -165,7 +167,7 @@ SELECT id, 2, 2, 2, 2 FROM saac_sistema WHERE nombre IN ('Cboard','Picto4Me','Le
 --ENTRADAS DE LOS SISTEMAS
 --1=Manos, 2=Ojos, 3=Cabeza, 4=Voz, 5=Pulsador
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
-SELECT id, 1 FROM saac_sistema WHERE nombre IN ('Asistente de voz AAC', 'Proloquo2Go', 'Speak4Me', 'Grid 3', 'Verbo','Cboard','Picto4Me','LetMeTalk Web');
+SELECT id, 1 FROM saac_sistema WHERE nombre IN ('Asistente de voz AAC', 'Proloquo2Go', 'Speak4Me', 'Grid 3', 'Verbo','Cboard','Picto4Me','LetMeTalk Web','TouchChat');
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, 2 FROM saac_sistema WHERE nombre IN ('MegaBEE', 'Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look to learn');
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
@@ -183,7 +185,7 @@ AND i.nombre IN ('inglés', 'francés', 'portugués', 'gallego', 'catalán', 'eu
 --Sistemas con soporte Internacional (Google/Apple)
 INSERT INTO sistema_idioma (sistema_id, idioma_id)
 SELECT s.id, i.id FROM saac_sistema s, idioma i 
-WHERE s.nombre IN ('Look to Speak', 'Voice Access', 'Speech to Text', 'Speak4Me')
+WHERE s.nombre IN ('Look to Speak', 'Voice Access', 'Speech to Text', 'Speak4Me','TouchChat')
 AND i.nombre IN ('inglés', 'francés', 'portugués');
 --Sistemas de baja tecnología pueden encontrarse en cualquier idioma
 INSERT INTO sistema_idioma (sistema_id, idioma_id)
