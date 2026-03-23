@@ -1,5 +1,3 @@
-
-
 --LIMPIEZA DE TABLAS
 DROP TABLE IF EXISTS paciente_entrada CASCADE;
 DROP TABLE IF EXISTS sistema_entrada CASCADE;

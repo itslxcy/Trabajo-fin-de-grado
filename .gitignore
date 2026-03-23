@@ -7,3 +7,9 @@
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+
+#Entorno virtual
+tfg/
+__pycache__/
+*.pyc
+.env
