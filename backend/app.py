@@ -4,31 +4,27 @@ from sqlalchemy import text
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 
+#Variables de entorno .env
 load_dotenv() 
 
 app = Flask(__name__)
 
-user = os.getenv('DB_USER')
-password = os.getenv('DB_PASSWORD')
+#Config de la base de datos pgAdmin
+usuario = os.getenv('DB_USER')
+contrasena = os.getenv('DB_PASSWORD')
 host = os.getenv('DB_HOST')
-port = os.getenv('DB_PORT')
-name = os.getenv('DB_NAME')
+puerto = os.getenv('DB_PORT')
+base = os.getenv('DB_NAME')
 
-print(f"DEBUG: Intentando conectar a {name} en el puerto {port}")
-
-app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{user}:{password}@{host}:{port}/{name}'
+#URI protocolo + usuario y contraseña + ubicación + nombre base de datos
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{usuario}:{contrasena}@{host}:{puerto}/{base}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+bd = SQLAlchemy(app)
 
 @app.route('/')
 def inicio():
-    try:
-        #Respuesta de la base de datos
-        db.session.execute(text('SELECT 1'))
-        return "<h1>¡Conexión lista!</h1><p>Tu TFG ya está conectado a pgAdmin.</p>"
-    except Exception as e:
-        return f"<h1>Error de conexión</h1><p>{str(e)}</p>"
+    return "primera prueba de la página web"
 
 if __name__ == '__main__':
     app.run(debug=True)
