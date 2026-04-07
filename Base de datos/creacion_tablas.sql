@@ -47,7 +47,7 @@ CREATE TABLE saac_sistema (
     requiere_financiacion BOOLEAN DEFAULT FALSE,
     requiere_interlocutor BOOLEAN,
     tiempo_entrenamiento SMALLINT, 
-    nivel_fatiga SMALLINT,
+    fatiga_fisica SMALLINT,
     velocidad SMALLINT,
     robustez SMALLINT, 
     escalabilidad SMALLINT,

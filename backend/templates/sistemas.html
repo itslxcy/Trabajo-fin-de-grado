@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistemas SAAC - TFG</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background-color: #f4f4f9; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Catálogo de Sistemas SAAC</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Coste Min.</th>
+                <th>Portable</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sistema in lista %}
+            <tr>
+                <td>{{ sistema.nombre }}</td>
+                <td>{{ sistema.descripcion }}</td>
+                <td>{{ sistema.coste_min }} €</td>
+                <td>{{ 'Sí' if sistema.portable else 'No' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
