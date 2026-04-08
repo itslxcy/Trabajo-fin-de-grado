@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cuestionario de Evaluación SAAC</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+        .pregunta { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 15px; }
+        label { display: block; margin-top: 10px; }
+        button { background: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Evaluación del Paciente</h1>
+    <form action="/recomendar" method="POST">
+        
+        <div class="pregunta">
+            <p>1. ¿Qué idioma principal utiliza el paciente?</p>
+            <select name="idioma_id">
+                {% for i in idiomas %}
+                <option value="{{ i.id }}">{{ i.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="pregunta">
+            <p>2. Nivel de visión (0 a 3):</p>
+            <input type="range" name="vision" min="0" max="3" step="1" list="tickmarks">
+            <datalist id="tickmarks">
+                <option value="0" label="Nula"></option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3" label="Perfecta"></option>
+            </datalist>
+        </div>
+
+        <button type="submit">Obtener Recomendación</button>
+    </form>
+</body>
+</html>

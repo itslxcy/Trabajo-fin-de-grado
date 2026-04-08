@@ -110,7 +110,7 @@ CREATE TABLE paciente_entrada (
 --CARGA DE DATOS DE SISTEMAS
 --1=Bajo, 2=Medio, 3=Alto
 INSERT INTO saac_sistema
-(nombre, descripcion, coste_min, requiere_financiacion, requiere_interlocutor, tiempo_entrenamiento, nivel_fatiga, velocidad, robustez, escalabilidad, portable, admite_anclaje)
+(nombre, descripcion, coste_min, requiere_financiacion, requiere_interlocutor, tiempo_entrenamiento, fatiga_fisica, velocidad, robustez, escalabilidad, portable, admite_anclaje)
 VALUES
 ('Panel pictogramas','Tablero símbolos',0,false,true,1,2,1,3,2,true,true),
 ('Panel alfabético','Tablero letras',0,false,true,2,2,1,3,2,true,true),
@@ -134,7 +134,7 @@ VALUES
 ('Cboard','Comunicador pictográfico online',0,false,false,1,1,2,2,3,true,false),
 ('Picto4Me','Editor web de tableros con pictogramas',0,false,false,2,1,2,2,3,true,false),
 ('LetMeTalk Web','Comunicador basado en pictogramas',0,false,false,1,1,2,2,3,true,false),
-('TouchChat','App pictográfica',300,false,2,3,2,2,false,2,1,3,3,3,true,true);
+('TouchChat','App pictográfica',300,false,false, 2,2,3,3,3,true,true);
 
 --REQUISITOS FUNCIONALES 
 --Sistemas de baja tecnología / acceso directo
@@ -155,7 +155,7 @@ SELECT id, 2, 3, 2, 2 FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'Asisten
 
 --Sistemas de voz
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min)
-SELECT id, 1, 3, 2, 2 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text');
+SELECT id, 0, 3, 2, 2 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text');
 
 --Sistemas web
 INSERT INTO sistema_requisito_funcional
