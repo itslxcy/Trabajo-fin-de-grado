@@ -3,7 +3,7 @@ from flask import Flask , render_template, request
 from dotenv import load_dotenv
 from extension import bd  # Importamos bd
 import modelos            # Importamos los modelos para que Flask los reconozca
-from modelos import SaacSistema , Idioma, SistemaRequisitoFuncional
+from modelos import SaacSistema , Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma
 
 
 load_dotenv()
@@ -25,23 +25,36 @@ bd.init_app(app)
 
 @app.route('/cuestionario')
 def cuestionario():
-    #Cargamos los idiomas para que el desplegable sea real
-    lista_idiomas = Idioma.query.all()
-    return render_template('cuestionario.html', idiomas=lista_idiomas)
+    # Cargamos todas las opciones de la base de datos para los desplegables
+    idiomas = Idioma.query.all()
+    entradas = TipoEntrada.query.all()
+    plataformas = Plataforma.query.all()
+    
+    return render_template('cuestionario.html', 
+                           idiomas=idiomas, 
+                           entradas=entradas, 
+                           plataformas=plataformas)
 
 @app.route('/recomendar', methods=['POST'])
 def recomendar():
-    #Recoger los datos del formulario
-    idioma_id = request.form.get('idioma_id')
-    nivel_vision = int(request.form.get('vision'))
+    # 1. Recoger datos del formulario
+    id_idioma = request.form.get('idioma_id')
+    id_entrada = request.form.get('entrada_id')
+    id_plataforma = request.form.get('plataforma_id')
+    v_vision = int(request.form.get('vision'))
+    v_cognicion = int(request.form.get('cognicion'))
 
-    #Filtrar la base de datos (Lógica de recomendación)
-    #Buscamos sistemas que soporten el idioma Y cumplan el requisito visual
-    resultados = SaacSistema.query.join(SistemaRequisitoFuncional).filter(
-        SaacSistema.idiomas.any(id=idioma_id),
-        SistemaRequisitoFuncional.nivel_visual_min <= nivel_vision
-    ).all()
+    # 2. Lógica de Filtrado (El corazón del sistema experto)
+    consulta = SaacSistema.query.join(SistemaRequisitoFuncional).filter(
+        SaacSistema.idiomas.any(id=id_idioma),
+        SaacSistema.entradas.any(id=id_entrada),
+        SaacSistema.plataformas.any(id=id_plataforma),
+        SistemaRequisitoFuncional.nivel_visual_min <= v_vision,
+        SistemaRequisitoFuncional.nivel_cognitivo_min <= v_cognicion
+    )
+    resultados = consulta.all()
 
+    # 3. Mostrar resultados
     return render_template('sistemas.html', lista=resultados)
 
 if __name__ == '__main__':
@@ -50,4 +63,4 @@ if __name__ == '__main__':
 
 
 #python backend/app.py
-#http://127.0.0.1:5000
+#http://127.0.0.1:5000/cuestionario

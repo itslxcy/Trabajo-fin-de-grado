@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <title>Cuestionario de Evaluación SAAC</title>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; line-height: 1.6; }
-        .pregunta { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 15px; }
-        label { display: block; margin-top: 10px; }
-        button { background: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; font-size: 16px; }
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; line-height: 1.6; background-color: #f9f9f9; }
+        h1 { color: #2c3e50; text-align: center; }
+        .pregunta { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        p { font-weight: bold; margin-bottom: 10px; }
+        select, input[type="range"] { width: 100%; padding: 8px; margin-top: 5px; }
+        button { background: #4CAF50; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; width: 100%; transition: background 0.3s; }
+        button:hover { background: #45a049; }
+        small { color: #666; display: block; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -24,17 +28,36 @@
         </div>
 
         <div class="pregunta">
-            <p>2. Nivel de visión (0 a 3):</p>
-            <input type="range" name="vision" min="0" max="3" step="1" list="tickmarks">
-            <datalist id="tickmarks">
-                <option value="0" label="Nula"></option>
-                <option value="1"></option>
-                <option value="2"></option>
-                <option value="3" label="Perfecta"></option>
-            </datalist>
+            <p>2. Nivel de visión:</p>
+            <input type="range" name="vision" min="0" max="3" step="1" value="3">
+            <small>(0: Nula, 1: Baja, 2: Media, 3: Perfecta)</small>
         </div>
 
-        <button type="submit">Obtener Recomendación</button>
+        <div class="pregunta">
+            <p>3. ¿Cómo puede interactuar con el sistema?</p>
+            <select name="entrada_id">
+                {% for e in entradas %}
+                <option value="{{ e.id }}">{{ e.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="pregunta">
+            <p>4. Nivel cognitivo / capacidad de aprendizaje:</p>
+            <input type="range" name="cognicion" min="0" max="3" step="1" value="2">
+            <small>(0: Muy bajo, 3: Sin dificultades)</small>
+        </div>
+
+        <div class="pregunta">
+            <p>5. Dispositivo o plataforma preferida:</p>
+            <select name="plataforma_id">
+                {% for p in plataformas %}
+                <option value="{{ p.id }}">{{ p.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit">Obtener Recomendación Experta</button>
     </form>
 </body>
 </html>
