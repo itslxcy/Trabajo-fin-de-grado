@@ -37,67 +37,58 @@ def cuestionario():
 
 @app.route('/recomendar', methods=['POST'])
 def recomendar():
-    # 1. Capturar datos de Información Básica e Idioma
+    # 1. Captura de datos
     id_idioma = request.form.get('idioma_id')
     
-    # 2. Capturar Capacidades (Numéricos con valores por defecto)
+    # Capacidades (Añadimos v_habla)
     v_vision = int(request.form.get('vision', 3))
     v_audicion = int(request.form.get('audicion', 3))
     v_cognicion = int(request.form.get('cognicion', 3))
+    v_habla = int(request.form.get('habla', 3))  # <-- Nueva
     v_tecno = int(request.form.get('tecnologia', 3))
     v_resistencia = int(request.form.get('resistencia', 3))
     
-    # 3. Capturar Entorno y Ayudas (Booleanos)
-    # Importante: Usamos los nuevos nombres que pusiste en el HTML
+    # Ayudas y Entorno
     v_ayuda_inicial = request.form.get('ayuda_inicial') == 'true'
     v_ayuda_diaria = request.form.get('ayuda_diaria') == 'true'
     v_usa_silla = request.form.get('usa_silla') == 'true'
     
-    # 4. Capturar Economía
     raw_presupuesto = request.form.get('presupuesto')
     v_presupuesto = float(raw_presupuesto) if raw_presupuesto else 999999.0
 
-    # --- INICIO DE LA LÓGICA DE FILTRADO ---
+    # --- LÓGICA DE FILTRADO ---
     consulta = SaacSistema.query.join(SistemaRequisitoFuncional)
 
     # A. Filtro de Idioma
     if id_idioma:
         consulta = consulta.filter(SaacSistema.idiomas.any(id=id_idioma))
 
-    # B. Filtros de Capacidades Base (Corte: Requisito <= Capacidad)
+    # B. Filtros de Capacidades (Incluyendo Habla)
+    # Requisito del sistema <= Capacidad del paciente
     consulta = consulta.filter(
         SistemaRequisitoFuncional.nivel_visual_min <= v_vision,
         SistemaRequisitoFuncional.nivel_auditivo_min <= v_audicion,
         SistemaRequisitoFuncional.nivel_cognitivo_min <= v_cognicion,
+        SistemaRequisitoFuncional.nivel_habla_min <= v_habla, # <-- Filtro de habla
         SistemaRequisitoFuncional.nivel_tecnologico_min <= v_tecno
     )
 
-    # C. Lógica de Seguridad: Ayuda para Sistemas Tecnológicos
-    # Si el nivel cognitivo o tecnológico es muy bajo y NO hay ayuda inicial,
-    # solo permitimos sistemas de baja tecnología (nivel_tecnologico_min 0 o 1).
+    # C. Lógica de Seguridad (Ayuda inicial/Tecnología)
     if (v_tecno <= 1 or v_cognicion <= 1) and not v_ayuda_inicial:
         consulta = consulta.filter(SistemaRequisitoFuncional.nivel_tecnologico_min <= 1)
-        # Además, forzamos que el sistema sea independiente
         consulta = consulta.filter(SaacSistema.requiere_interlocutor == False)
 
-    # D. Lógica de Seguridad: Ayuda para Mantenimiento Diario
-    # Si la resistencia es nula y no hay ayuda diaria, filtramos sistemas con fatiga alta.
+    # D. Lógica de Seguridad (Ayuda diaria/Fatiga)
     if v_resistencia == 0 and not v_ayuda_diaria:
         consulta = consulta.filter(SaacSistema.fatiga_fisica <= 1)
 
-    # E. Filtro de Fatiga General (Resistencia del paciente >= Fatiga del sistema)
+    # E. Filtros Generales (Fatiga, Presupuesto, Silla)
     consulta = consulta.filter(SaacSistema.fatiga_fisica <= v_resistencia)
-
-    # F. Filtro de Presupuesto
     consulta = consulta.filter(SaacSistema.coste_min <= v_presupuesto)
-
-    # G. Filtro de Silla de Ruedas
     if v_usa_silla:
         consulta = consulta.filter(SaacSistema.admite_anclaje == True)
 
-    # Ejecución de la consulta
     resultados = consulta.all()
-
     return render_template('sistemas.html', lista=resultados)
 
 if __name__ == '__main__':
