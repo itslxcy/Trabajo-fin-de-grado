@@ -80,6 +80,7 @@ class SistemaRequisitoFuncional(bd.Model):
     nivel_auditivo_min = bd.Column(bd.SmallInteger, default=0)
     nivel_cognitivo_min = bd.Column(bd.SmallInteger, default=0)
     nivel_tecnologico_min = bd.Column(bd.SmallInteger, default=0)
+    nivel_habla_min = bd.Column(bd.SmallInteger, default=0)
 
 class Paciente(bd.Model):
     __tablename__ = 'paciente'

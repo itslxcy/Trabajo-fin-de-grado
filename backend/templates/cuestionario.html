@@ -4,108 +4,178 @@
     <meta charset="UTF-8">
     <title>Evaluación Clínica SAAC</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; line-height: 1.6; background-color: #f0f2f5; }
-        .seccion { background: white; padding: 25px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; border-bottom: 2px solid #ac4caf; padding-bottom: 10px; }
-        .pregunta { margin-bottom: 15px; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; }
-        select, input[type="number"], input[type="range"] { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
-        .radio-group { display: flex; gap: 20px; margin-top: 10px; }
-        button { background: #b22ecc; color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; }
-        button:hover { background: #ae27a9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 750px; margin: 40px auto; padding: 20px; line-height: 1.6; background-color: #f0f2f5; }
+        .seccion { background: white; padding: 25px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #ac4caf; padding-bottom: 10px; margin-top: 0; }
+        .pregunta { margin-bottom: 25px; }
+        label { font-weight: bold; display: block; margin-bottom: 10px; }
+        
+        /* Cuadrícula para Checkboxes (Selección múltiple fácil) */
+        .opciones-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 12px; 
+            background: #fdf5ff; 
+            padding: 15px; 
+            border-radius: 8px; 
+            border: 1px solid #e1bee7; 
+        }
+        .opcion-item { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95em; }
+        .opcion-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: #ac4caf; }
+
+        /* Estructura Esquemática del Slider (Regla graduada) */
+        .slider-wrapper {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+        
+        .slider-container {
+            width: 100%;
+            position: relative;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 0;
+            cursor: pointer;
+            accent-color: #ac4caf;
+        }
+
+        /* Escala numérica exactamente debajo de los puntos */
+        .escala-numerica {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 4px; /* Alineación con el track del slider */
+            margin-top: -2px;
+        }
+
+        .escala-numerica span {
+            font-size: 0.9em;
+            color: #555;
+            font-weight: bold;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Inputs generales */
+        input[type="text"], input[type="number"] { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
+        .radio-group { display: flex; gap: 20px; margin-top: 5px; }
+        
+        button { background: #b22ecc; color: white; padding: 18px; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #8e24aa; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(178, 46, 204, 0.3); }
+        small { color: #666; display: block; margin-top: 8px; font-style: italic; font-size: 0.85em; }
     </style>
 </head>
 <body>
-    <h1>Evaluación del usuario</h1>
+
+    <h1>Evaluación del Usuario SAAC</h1>
+
     <form action="/recomendar" method="POST">
         
         <div class="seccion">
-            <h2>Información básica</h2>
+            <h2>1. Información Básica e Idiomas</h2>
             <div class="pregunta">
                 <label>Nombre del usuario:</label>
-                <input type="text" name="nombre" placeholder="Ej: Lucía Gil">
+                <input type="text" name="nombre" placeholder="Ej: Lucía Gil" required>
             </div>
             <div class="pregunta">
-                <label>Idioma de comunicación:</label>
-                <select name="idioma_id">
+                <label>Idiomas de comunicación:</label>
+                <div class="opciones-grid">
                     {% for i in idiomas %}
-                    <option value="{{ i.id }}">{{ i.nombre }}</option>
+                    <label class="opcion-item">
+                        <input type="checkbox" name="idioma_ids" value="{{ i.id }}"> {{ i.nombre|capitalize }}
+                    </label>
                     {% endfor %}
-                </select>
+                </div>
+                <small>Seleccione todos los idiomas que el usuario pueda comprender.</small>
             </div>
         </div>
 
         <div class="seccion">
-            <h2>Capacidades del usuario</h2>
+            <h2>2. Capacidades del Usuario</h2>
+            
+            {% set caps = [
+                ('vision', 'Nivel visual', '0: Nula, 3: Óptima', 2),
+                ('audicion', 'Nivel auditivo', '0: Sordera, 3: Perfecta', 3),
+                ('habla', 'Capacidad Oral / Habla', '0: Nula, 3: Fluida', 3),
+                ('cognicion', 'Nivel Cognitivo', '0: Muy limitado, 3: Sin dificultades', 2),
+                ('tecnologia', 'Nivel Tecnológico', '0: Muy limitado, 3: Experto', 1),
+                ('resistencia', 'Resistencia a la fatiga', '0: Poco tiempo, 3: Mucho tiempo', 2)
+            ] %}
+
+            {% for id, titulo, desc, defecto in caps %}
             <div class="pregunta">
-                <label>Nivel visual (0-3):</label>
-                <input type="range" name="vision" min="0" max="3" step="1" value="2">
-            <small>(0: Muy limitado, 3: Visión óptima)</small>
+                <label>{{ titulo }}:</label>
+                <div class="slider-wrapper">
+                    <div class="slider-container">
+                        <input type="range" name="{{ id }}" min="0" max="3" step="1" value="{{ defecto }}" list="tickmarks">
+                        <div class="escala-numerica">
+                            <span>0</span><span>1</span><span>2</span><span>3</span>
+                        </div>
+                    </div>
+                </div>
+                <small>({{ desc }})</small>
             </div>
-            <div class="pregunta">
-                <label>Nivel auditivo (0 a 3):</label>
-                <input type="range" name="audicion" min="0" max="3" step="1" value="3">
-            <small>(0: Sordera profunda, 3: Audición perfecta)</small>
-            </div>
-            <div class="pregunta">
-                <label>Capacidad Oral / Habla (0 a 3):</label>
-                <input type="range" name="habla" min="0" max="3" step="1" value="3">
-            <small>(0: Nula, 1: Solo sonidos, 2: Habla inteligible con dificultad, 3: Habla fluida)</small>
-            </div>
-            <div class="pregunta">
-                <label>Nivel Cognitivo / Comprensión (0 a 3):</label>
-                <input type="range" name="cognicion" min="0" max="3" step="1" value="2">
-            <small>(0: Muy limitado, 3: Sin dificultades de comprensión)</small>
-            </div>
-            <div class="pregunta">
-                <label>Nivel Tecnológico (Manejo de dispositivos 0-3):</label>
-                <input type="range" name="tecnologia" min="0" max="3" step="1" value="1">
-            <small>(0: Muy limitado, 3: Alto nivel tecnológico)</small>
-            </div>
-            <div class="pregunta">
-                <label>Resistencia a la fatiga (¿Cuánto aguanta esforzándose? 0-3):</label>
-                <input type="range" name="resistencia" min="0" max="3" step="1" value="2">
-            <small>(0: Poco tiempo, 3: Mucho tiempo)</small>
-            </div>
+            {% endfor %}
+
+            <datalist id="tickmarks">
+                <option value="0"></option><option value="1"></option>
+                <option value="2"></option><option value="3"></option>
+            </datalist>
         </div>
 
         <div class="seccion">
-            <h2>Entorno y Autonomía</h2>
+            <h2>3. Interacción y Dispositivos</h2>
             <div class="pregunta">
-                <label>¿Cuenta con ayuda externa para uso inicial del dispositivo como su puesta en marcha y familiarización?</label>
-                <div class="radio-group">
-                    <input type="radio" name="ayuda_inicial" value="true" checked> Sí, tiene ayuda
-                    <input type="radio" name="ayuda_inicial" value="false"> No, necesita independencia total
+                <label>Formas de interacción posibles:</label>
+                <div class="opciones-grid">
+                    {% for e in entradas %}
+                    <label class="opcion-item">
+                        <input type="checkbox" name="entrada_ids" value="{{ e.id }}"> {{ e.nombre|capitalize }}
+                    </label>
+                    {% endfor %}
                 </div>
             </div>
             <div class="pregunta">
-                <label>¿Cuenta con ayuda externa para uso diario del dispositivo como su mantenimiento y carga?</label>
+                <label>Plataformas o Dispositivos preferidos:</label>
+                <div class="opciones-grid">
+                    {% for p in plataformas %}
+                    <label class="opcion-item">
+                        <input type="checkbox" name="plataforma_ids" value="{{ p.id }}"> {{ p.nombre }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="seccion">
+            <h2>4. Entorno y Economía</h2>
+            <div class="pregunta">
+                <label>¿Ayuda externa para puesta en marcha inicial?</label>
                 <div class="radio-group">
-                    <input type="radio" name="ayuda_diaria" value="true" checked> Sí, tiene ayuda
-                    <input type="radio" name="ayuda_diaria" value="false"> No, necesita independencia total
+                    <label><input type="radio" name="ayuda_inicial" value="true" checked> Sí</label>
+                    <label><input type="radio" name="ayuda_inicial" value="false"> No</label>
+                </div>
+            </div>
+            <div class="pregunta">
+                <label>¿Ayuda externa para mantenimiento diario?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="ayuda_diaria" value="true" checked> Sí</label>
+                    <label><input type="radio" name="ayuda_diaria" value="false"> No</label>
                 </div>
             </div>
             <div class="pregunta">
                 <label>¿Utiliza silla de ruedas?</label>
                 <div class="radio-group">
-                    <input type="radio" name="usa_silla" value="true"> Sí
-                    <input type="radio" name="usa_silla" value="false" checked> No
+                    <label><input type="radio" name="usa_silla" value="true"> Sí</label>
+                    <label><input type="radio" name="usa_silla" value="false" checked> No</label>
                 </div>
             </div>
-        </div>
-
-        <div class="seccion">
-            <h2>Presupuesto</h2>
             <div class="pregunta">
                 <label>Presupuesto máximo disponible (€):</label>
-                <input type="number" name="presupuesto" value="500">
-            </div>
-            <div class="pregunta">
-                <label>¿Cuenta con financiación pública o becas?</label>
-                <div class="radio-group">
-                    <input type="radio" name="tiene_financiacion" value="true"> Sí
-                    <input type="radio" name="tiene_financiacion" value="false" checked> No
-                </div>
+                <input type="number" name="presupuesto" value="500" min="0">
             </div>
         </div>
 
