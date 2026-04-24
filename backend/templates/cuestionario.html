@@ -75,7 +75,7 @@
     <form action="/recomendar" method="POST">
         
         <div class="seccion">
-            <h2>1. Información Básica e Idiomas</h2>
+            <h2>1. Información básica</h2>
             <div class="pregunta">
                 <label>Nombre del usuario:</label>
                 <input type="text" name="nombre" placeholder="Ej: Lucía Gil" required>
@@ -89,7 +89,7 @@
                     </label>
                     {% endfor %}
                 </div>
-                <small>Seleccione todos los idiomas que el usuario pueda comprender.</small>
+                <small>Seleccione todos los idiomas en los que el usuario desee comunicarse.</small>
             </div>
         </div>
 
@@ -97,12 +97,12 @@
             <h2>2. Capacidades del Usuario</h2>
             
             {% set caps = [
-                ('vision', 'Nivel visual', '0: Nula, 3: Óptima', 2),
-                ('audicion', 'Nivel auditivo', '0: Sordera, 3: Perfecta', 3),
-                ('habla', 'Capacidad Oral / Habla', '0: Nula, 3: Fluida', 3),
-                ('cognicion', 'Nivel Cognitivo', '0: Muy limitado, 3: Sin dificultades', 2),
-                ('tecnologia', 'Nivel Tecnológico', '0: Muy limitado, 3: Experto', 1),
-                ('resistencia', 'Resistencia a la fatiga', '0: Poco tiempo, 3: Mucho tiempo', 2)
+                ('vision', 'Nivel visual', '0: Nula, 1: Limitada (Requiere alto contraste o braile), 2: Funcional (Prefiere fuentes grandes), 3: Óptima', 0),
+                ('audicion', 'Nivel auditivo', '0: Sordera, 1: Hipoacusia, 2: Limitada (Dificultad en entornos ruidosos) 3: Perfecta', 0),
+                ('habla', 'Capacidad oral / Habla', '0: Nula, 1: Con dificultad, 2: Comprensible, 3: Fluida', 0),
+                ('cognicion', 'Nivel cognitivo', '0: Muy limitado (Presenta dificultades de comprensión o memoria), 1: Con apoyo (Comprende instrucciones simples pero se distrae con facilidad), 2: Autónomo con pautas (Puede necesitar apoyo en tareas complejas) 3: Sin dificultades', 0),
+                ('tecnologia', 'Nivel tecnológico', '0: Muy limitado (No ha usado dispositivos digitales), 1: Principiante (Domina conceptos básicos pero no menús), 2: Usuario habitual (Navega por internet y utiliza apps con autonomía), 3: Experto (Domina configuración de sistemas y resolución de problemas)', 0),
+                ('resistencia', 'Resistencia a la fatiga', '0: Muy baja (Menos de 10 minutos de atención o esfuerzo físico), 1: Baja (Aguanta periodos cortos y requiere descansos), 2: Estable (Mantiene el ritmo por 1-2 horas), 3: Alta (Capacidad para mantener la concentración y esfuerzo durante periodos prolongados)', 0)
             ] %}
 
             {% for id, titulo, desc, defecto in caps %}
@@ -127,7 +127,7 @@
         </div>
 
         <div class="seccion">
-            <h2>3. Interacción y Dispositivos</h2>
+            <h2>3. Interacción y dispositivos</h2>
             <div class="pregunta">
                 <label>Formas de interacción posibles:</label>
                 <div class="opciones-grid">
@@ -139,7 +139,7 @@
                 </div>
             </div>
             <div class="pregunta">
-                <label>Plataformas o Dispositivos preferidos:</label>
+                <label>Plataformas o dispositivos preferidos:</label>
                 <div class="opciones-grid">
                     {% for p in plataformas %}
                     <label class="opcion-item">
@@ -151,16 +151,16 @@
         </div>
 
         <div class="seccion">
-            <h2>4. Entorno y Economía</h2>
+            <h2>4. Entorno y economía</h2>
             <div class="pregunta">
-                <label>¿Ayuda externa para puesta en marcha inicial?</label>
+                <label>¿Cuenta con ayuda externa para puesta en marcha inicial del SAAC?</label>
                 <div class="radio-group">
                     <label><input type="radio" name="ayuda_inicial" value="true" checked> Sí</label>
                     <label><input type="radio" name="ayuda_inicial" value="false"> No</label>
                 </div>
             </div>
             <div class="pregunta">
-                <label>¿Ayuda externa para mantenimiento diario?</label>
+                <label>¿Cuenta con ayuda externa para el mantenimiento diario del SAAC?</label>
                 <div class="radio-group">
                     <label><input type="radio" name="ayuda_diaria" value="true" checked> Sí</label>
                     <label><input type="radio" name="ayuda_diaria" value="false"> No</label>
@@ -179,7 +179,7 @@
             </div>
         </div>
 
-        <button type="submit">Generar Informe de Recomendación</button>
+        <button type="submit">Generar informe de recomendación</button>
     </form>
 </body>
 </html>
