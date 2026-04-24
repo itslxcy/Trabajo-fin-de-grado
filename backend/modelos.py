@@ -63,6 +63,7 @@ class SaacSistema(bd.Model):
     escalabilidad = bd.Column(bd.SmallInteger)
     portable = bd.Column(bd.Boolean)
     admite_anclaje = bd.Column(bd.Boolean)
+    es_accesorio = bd.Column(bd.Boolean, default=False)
 
     #Relación con requisitos funcionales (Uno a Uno)
     requisitos = bd.relationship('SistemaRequisitoFuncional', backref='sistema', uselist=False, cascade="all, delete")
