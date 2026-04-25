@@ -6,15 +6,25 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 40px; background-color: #f4f4f9; color: #333; }
         .seccion-tabla { background: white; padding: 20px; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        
+        /* Título y acento en Morado */
         h1 { color: #2c3e50; border-bottom: 3px solid #ac4caf; display: inline-block; padding-bottom: 5px; }
         h2 { color: #ac4caf; margin-top: 0; }
+        
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { padding: 14px; border-bottom: 1px solid #eee; text-align: left; }
+        
+        /* Celdas de cabecera en Morado */
         th { background-color: #ac4caf; color: white; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px; }
+        
         tr:hover { background-color: #fdfaff; }
+        
+        .plataformas-texto { font-weight: 500; color: #555; font-size: 0.95em; }
         .nota-clinica { font-style: italic; color: #6a1b9a; font-size: 0.9em; font-weight: 500; }
         .no-resultados { padding: 20px; background: #ffebee; color: #c62828; border-radius: 8px; font-weight: bold; }
         .precio { font-weight: bold; color: #2e7d32; }
+        
+        /* Botón en Morado */
         .btn-volver { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #ac4caf; color: white; text-decoration: none; border-radius: 5px; transition: 0.3s; }
         .btn-volver:hover { background: #8e24aa; }
     </style>
@@ -31,7 +41,7 @@
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Coste aprox.</th>
-                    <th>Portable</th>
+                    <th>Disponible en tus plataformas</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,7 +50,21 @@
                     <td><strong>{{ sistema.nombre }}</strong></td>
                     <td>{{ sistema.descripcion }}</td>
                     <td class="precio">{{ sistema.coste_min }} €</td>
-                    <td>{{ 'Sí' if sistema.portable else 'No' }}</td>
+                    <td class="plataformas-texto">
+                        {% set found = namespace(any=false, first=true) %}
+                        {% for p in sistema.plataformas %}
+                            {% if not plataformas_seleccionadas or p.id in plataformas_seleccionadas %}
+                                {% if not found.first %}, {% endif %}
+                                {{ p.nombre }}
+                                {% set found.any = true %}
+                                {% set found.first = false %}
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if not found.any %}
+                            <small style="color: #999;">No disponible para tus plataformas</small>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

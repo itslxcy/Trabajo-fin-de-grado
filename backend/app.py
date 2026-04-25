@@ -38,6 +38,7 @@ def recomendar():
     # 1. Capturar datos básicos
     nombre = request.form.get('nombre')
     ids_entradas = [int(x) for x in request.form.getlist('entrada_ids') if x]
+    ids_plataformas = [int(x) for x in request.form.getlist('plataforma_ids') if x]
     
     try:
         v_presupuesto = float(request.form.get('presupuesto', 999999))
@@ -65,6 +66,12 @@ def recomendar():
     # FILTRO: Entradas (Selección dinámica)
     if ids_entradas:
         consulta = consulta.filter(SaacSistema.entradas.any(TipoEntrada.id.in_(ids_entradas)))
+
+    # --- NUEVO FILTRO 4: PLATAFORMAS (ESTRICTO) ---
+    # Esto es lo que faltaba. Si el usuario selecciona plataformas, 
+    # solo mostramos sistemas que existan en al menos UNA de ellas
+    if ids_plataformas:
+        consulta = consulta.filter(SaacSistema.plataformas.any(Plataforma.id.in_(ids_plataformas)))
 
     # EJECUTAR CONSULTA
     resultados = consulta.all()
@@ -105,7 +112,8 @@ def recomendar():
     return render_template('sistemas.html', 
                            sistemas=sistemas_finales, 
                            accesorios=accesorios_finales,
-                           nombre_usuario=nombre)
+                           nombre_usuario=nombre,
+                           plataformas_seleccionadas=ids_plataformas)
 
 if __name__ == '__main__':
     app.run(debug=True)
