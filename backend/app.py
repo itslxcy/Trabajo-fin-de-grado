@@ -1,9 +1,9 @@
 import os
-from flask import Flask, render_template, request
-from dotenv import load_dotenv
-from extension import bd
 import modelos
+from flask import Flask, render_template, request
 from modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma
+from extension import bd
+from dotenv import load_dotenv
 from sqlalchemy import or_
 
 load_dotenv()
@@ -22,6 +22,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 bd.init_app(app)
 
+@app.route('/')
+def informar():
+    return render_template("informacion.html")
+
+@app.route('/ELA')
+def info_ela():
+    return render_template("ELA.html")
+
+@app.route('/SAAC')
+def info_saac():
+    return render_template("SAAC.html")
+
 @app.route('/cuestionario')
 def cuestionario():
     idiomas = Idioma.query.all()
@@ -33,7 +45,7 @@ def cuestionario():
                            entradas=entradas, 
                            plataformas=plataformas)
 
-@app.route('/recomendar', methods=['POST'])
+@app.route('/recomendar')
 def recomendar():
     # 1. Capturar datos básicos
     nombre = request.form.get('nombre')
@@ -109,7 +121,7 @@ def recomendar():
     print(f"--- DEBUG: {nombre} ---")
     print(f"Sistemas: {len(sistemas_finales)} | Accesorios: {len(accesorios_finales)}")
 
-    return render_template('sistemas.html', 
+    return render_template('recomendacion.html', 
                            sistemas=sistemas_finales, 
                            accesorios=accesorios_finales,
                            nombre_usuario=nombre,

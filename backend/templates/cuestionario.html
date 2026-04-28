@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <title>Evaluación Clínica SAAC</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
-
 </head>
 <body>
+
+    <nav class="nav-tabs">
+    <a href="/">Inicio</a>
+    <a href="/ELA">Sobre la ELA</a>
+    <a href="/SAAC">¿Qué es un SAAC?</a>
+    <a href="/cuestionario">Cuestionario</a>
+</nav>
+
     <h1>Evaluación del Usuario SAAC</h1>
 
     <form action="/recomendar" method="POST">
@@ -116,8 +123,8 @@
             </div>
         </div>
 
+        <button type="submit" class="boton-enviar">Generar informe de recomendación</button>
+        
     </form>
-</body>
-    <button type="submit" class="btn-enviar">Generar informe de recomendación</button>
 </body>
 </html>
