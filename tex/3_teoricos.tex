@@ -1,7 +1,7 @@
 \capitulo{3}{Fundamentos teóricos y estado del arte}
 
 \section{Introducción}
-En este capítulo se presentan los conceptos teóricos necesarios para comprender el desarrollo del trabajo. Se describe la enfermedad objeto de estudio (ELA), los sistemas aumentativos y alternativos de comunicación (SAAC), sus tipologías, los criterios para su selección, así como los fundamentos de los sistemas de apoyo a la decisión. Finalmente, se expone una revisión del estado del arte de soluciones existentes y trabajos relacionados.
+En este capítulo se presentan los conceptos teóricos necesarios para comprender el desarrollo del trabajo. Se describe la enfermedad objeto de estudio (ELA), los sistemas aumentativos y alternativos de comunicación (SAAC), los criterios para su selección, así como los fundamentos de los sistemas de apoyo a la decisión. Finalmente, se expone una revisión del estado del arte de soluciones existentes y trabajos relacionados.
 
 \section{Esclerosis Lateral Amiotrófica}
 La Esclerosis Lateral Amiotrófica (ELA) es una enfermedad neurodegenerativa progresiva que afecta selectivamente a las motoneuronas superiores e inferiores, responsables del control voluntario de la musculatura. La degeneración de estas neuronas provoca debilidad muscular progresiva, pérdida de movilidad y, en fases avanzadas, parálisis generalizada.
@@ -32,71 +32,7 @@ Se distinguen dos categorías principales:
     \item \textbf{Sistema alternativo}: Se utiliza cuando la persona no puede comunicarse mediante el habla y necesita un sistema sustitutivo a esta.
 \end{itemize}
 
-\section{Componentes y clasificación}
-A continuación se enumeran los elementos constitutivos de los SAAC y en base a estos se establecen las correspondientes clasificaciones.
-
-\begin{itemize}
-    \item \textbf{Código}: Naturaleza del contenido
-    \item \textbf{Medio físico}: Soporte en el cual se almacena el contenido.
-    \item \textbf{Métodos de acceso}: Forma en la que se selecciona o señala el contenido. 
-\end{itemize}
-
-Se estudian con más detalle en los siguientes apartados:
-
-\subsubsection{Clasificación según la naturaleza del contenido}
-El contenido representa la información que el usuario desea transmitir. Dependiendo de las capacidades cognitivas, lingüísticas y visuales del individuo, los símbolos utilizados pueden clasificarse en tres categorías principales:
-
-\begin{itemize}
-    \item \textbf{Contenido fotográfico}: Utiliza imágenes reales de objetos, personas o acciones. Es el nivel de abstracción más bajo, lo que lo hace ideal para etapas iniciales o personas con dificultades cognitivas severas, ya que la relación entre la imagen y el concepto es directa y evidente.
-    \item \textbf{Contenido pictográfico}: Se basa en dibujos o iconos que representan conceptos, acciones o sentimientos. Requieren un mayor nivel de abstracción que la fotografía, pero permiten una comunicación más versátil y rápida.
-    \item \textbf{Contenido alfabético}: Es el nivel más avanzado y flexible, basado en el uso de letras, palabras y frases escritas. Permite al usuario generar mensajes precisos. Su implementación suele requerir que el usuario conserve capacidades de lectoescritura y se suele apoyar en sistemas de predicción de palabras para aumentar la velocidad de comunicación.
-\end{itemize}
-
-\subsection{Clasificación según nivel tecnológico del medio físico}
-El soporte físico determina las capacidades del sistema y se pueden distinguir cuatro categorías:
-
-\begin{itemize}
-    \item \textbf{Sin ayuda}: Sistemas bimodales que combinan gestos o signos con lenguaje oral.
-    \item \textbf{Con ayuda de baja tecnología}: Objetos reales, fotografías o pictogramas impresos.
-    \item \textbf{Con ayuda de media tecnología}: Dispositivos simples con grabación manual de mensajes.
-    \item \textbf{Con ayuda de alta tecnología}: Sistemas electrónicos avanzados con síntesis de voz, control ocular o interfaces adaptativas.
-\end{itemize}
-
-\subsection{Clasificación según el método de acceso}
-La selección del método depende fundamentalmente del control motor residual del usuario Según estos, se presentan los principales sistemas de acceso:
-
-\begin{itemize}
-\item \textbf{Acceso directo mediante toque o señalamiento}: 
-Este método es el más rápido pero requiere precisión motora suficiente y control postural estable.
-\item \textbf{Acceso por control vocal}: 
-Este método utiliza algoritmos de procesamiento de lenguaje natural para transcribir el habla en texto o ejecutar comandos en el dispositivo. Es el método más natural y rápido en las etapas iniciales de la enfermedad, no obstante, su eficacia disminuye drásticamente ante la aparición de la disartria (dificultad para articular palabras), lo que requiere una transición temprana a otros métodos.
-\item \textbf{Seguimiento ocular}: 
-El método de acceso de alta tecnología por excelencia en fases avanzadas. Utiliza cámaras de infrarrojos para rastrear el movimiento de las pupilas, permitiendo al usuario controlar el cursor o seleccionar pictogramas simplemente fijando la mirada o mediante el parpadeo. Requiere una calibración precisa y un buen control de los músculos oculares.
-\item \textbf{Barrido automático o dirigido}: 
- El sistema recorre de forma secuencial las opciones disponibles resaltándolas visualmente. En el barrido automático, el desplazamiento se realiza a una velocidad predefinida y el usuario activa un pulsador cuando aparece la opción deseada. En el barrido dirigido, el usuario controla manualmente el avance entre opciones mediante un interruptor, lo que permite mayor precisión y rapidez, pero requiere conservar motilidad fina.
-\item \textbf{Barrido auditivo}: 
-Variante del acceso por barrido en la que las opciones se presentan mediante estímulos sonoros en lugar de visuales. El dispositivo reproduce verbalmente o mediante señales auditivas cada opción y el usuario selecciona la deseada mediante un pulsador. Este método resulta especialmente útil en personas con limitaciones visuales severas o dificultades para fijar la mirada.
-\item \textbf{Acceso por descarte mediante pulsadores}: 
-Sistema de selección basado en un proceso eliminatorio de opciones. El usuario dispone de pulsadores con los que va descartando grupos de símbolos hasta llegar al objetivo. Este método reduce la exigencia motora y cognitiva en comparación con otros sistemas, siendo adecuado para personas con movilidad muy limitada pero con capacidad de respuesta conservada.
-\item\textbf{Control cefálico}:
-Basado en el rastreo de los movimientos de la cabeza mediante sensores de inercia o cámaras que detectan un punto de referencia. El usuario desplaza el cursor moviendo la cabeza, y la selección se realiza mediante tiempo de espera o un pulsador externo. Es una alternativa eficaz cuando se conserva el control de la musculatura del cuello pero no de las extremidades.
-\item\textbf{Interfaces Cerebro-Computadora}:
-Método de acceso experimental y de última instancia que detecta la actividad eléctrica cerebral (normalmente mediante EEG) para selecionar. No requiere ningún tipo de movimiento muscular. Aunque es más lento que otros métodos, representa la única vía de comunicación para pacientes en estado de congelamiento total (Locked-in syndrome).
-\end{itemize}
-
-\subsection{Organización lingüística del contenido}
-Los SAAC pueden estructurar el vocabulario según distintos principios:
-
-\begin{itemize}
-\item \textbf{Organización semántica por categorías.}  
-El vocabulario se estructura agrupando los elementos según campos semánticos (por ejemplo: comida, personas, acciones, lugares). Además, la disposición espacial suele seguir patrones sintácticos habituales (como sujeto, verbo y complemento) lo que favorece la construcción de frases.
-\item \textbf{Compactación semántica.}  
-Consiste en asignar múltiples significados a un mismo símbolo gráfico en función de su combinación con otros símbolos. Este enfoque permite generar un gran número de mensajes utilizando un número reducido de pictogramas y optimizando el espacio de la interfaz. Requiere aprendizaje progresivo.
-\item \textbf{Organización pragmática basada en funciones comunicativas.}  
-El vocabulario se organiza según la intención comunicativa del usuario, priorizando funciones como saludar, pedir, rechazar, comentar o iniciar conversación. Resulta especialmente útil en etapas iniciales donde el usuario aún no está muy familiarizado.
-\item \textbf{Organización por frecuencia de uso.}  
-Los elementos se disponen priorizando las palabras o mensajes más utilizados en la comunicación diaria. 
-\end{itemize}
+Los SAAC se clasifican generalmente por el nivel tecnológico, el método de acceso, la naturaleza del contenido y su organización semántica.
 
 \section{Criterios técnicos de evaluación de SAAC}
 La elección de un sistema de comunicación asistida debe basarse en criterios objetivos que permitan ajustar la solución a las características individuales del usuario. Entre los principales parámetros evaluados se encuentran:
@@ -118,7 +54,7 @@ La elección de un sistema de comunicación asistida debe basarse en criterios o
  Para poder relacionarlo con su correspondiente característica evaluada en el apartado anterior debemos recopilar información sobre la persona que va a hacer uso del dispositivo. Para ello deberemos realizar una serie de preguntas tales como:
 
 \begin{itemize}
-    \item ¿Cuáles son los niveles cognitivo, visual, auditivo, oral y tecnológico asumibles? ¿Puede fijar la mirada en pantalla y distinguir símbolos? ¿Escucha y entiende con claridad voces sintetizadas?
+    \item ¿Cuáles son los niveles cognitivo, visual, auditivo, oral y tecnológico asumibles? ¿Puede fijar la mirada en pantalla y distinguir símbolos? ¿Escucha y entiende con claridad voces sintetizadas? ¿Está familiarizado con dispositivos electrónicos y/o informáticos?
     \item ¿Qué nivel de motilidad conserva? ¿Qué movimientos voluntarios puede hacer de forma fiable?
     \item ¿Con qué idioma se siente más cómodo comunicándose? ¿Cuál es su plataforma de uso de preferencia? ¿Prefiere tecnología o papel? ¿Le molesta llevar dispositivos? ¿Se siente cómodo utilizando una voz sintetizada?
     \item ¿Cuál es su nivel de resistencia ante tareas que conllevan esfuerzo como fijar la mirada o utilizar pulsadores? ¿Cuánto tiempo puede mantener una acción repetitiva?
@@ -139,4 +75,4 @@ Su funcionamiento puede basarse en reglas lógicas, árboles de decisión o sist
 \section{Estado del arte y trabajos relacionados}
 Actualmente existen guías clínicas y documentos técnicos que recopilan información detallada sobre sistemas de comunicación asistida, la primera y más destacable siendo "Guía para la Comunicación y Autonomía en la ELA" desarrollada por la asociación ELA  Andalucía. Estas guías son completas y clínicamente rigurosas, pero presentan limitaciones desde el punto de vista operativo. Son documentos estáticos que están diseñados para una lectura secuencial. Requieren un tiempo de análisis del que muchas veces no se dispone y exigen un cierto nivel de conocimiento previo. No priorizan ni filtran automáticamente las opciones, causando que el proceso se alargue en el tiempo, produzca frustración e incluso pueda llevar a tomar una decisión subóptima.
 
-En el ámbito académico existen estudios sobre tecnologías de asistencia y accesibilidad comunicativa; sin embargo, se observa una carencia de herramientas interactivas que integren en una única plataforma tanto la comparación técnica de los dispositivos como la evaluación del usuario junto con la recomendación automatizada personalizada. Esta limitación evidencia la necesidad de desarrollar sistemas digitales que faciliten la toma de decisiones de forma rápida, comprensible y basada en criterios objetivos, justificando así la relevancia del presente trabajo.
+En el ámbito académico existen estudios sobre tecnologías de asistencia y accesibilidad comunicativa; sin embargo, se observa una carencia de herramientas interactivas que integren en una única plataforma la evaluación del usuario junto con la recomendación automatizada personalizada. Esta limitación evidencia la necesidad de desarrollar sistemas digitales que faciliten la toma de decisiones de forma rápida, comprensible y basada en criterios objetivos, justificando así la relevancia del presente trabajo.
