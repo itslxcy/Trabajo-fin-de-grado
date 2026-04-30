@@ -209,6 +209,22 @@ small { color: #666; display: block; margin-top: 8px; font-style: italic; font-s
 
 /* Pestaña activa (donde estás actualmente) */
 .nav-tabs a.active {
-    background-color: #ac4caf;
-    color: white;
+    background-color: #8e24aa !important; 
+    color: white !important;
+}
+
+/* Bloque de niveles bajo los sliders */
+.descripcion-niveles {
+    margin-top: 15px;
+    background-color: #fdf5ff; /* Morado muy clarito como tus checkboxes */
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #ac4caf; /* Línea de acento morada */
+}
+
+.descripcion-niveles p {
+    margin: 6px 0;
+    font-size: 0.9em;
+    line-height: 1.4;
+    color: #444;
 }

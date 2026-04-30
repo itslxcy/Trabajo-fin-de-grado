@@ -11,13 +11,14 @@
     <a href="/">Inicio</a>
     <a href="/ELA">Sobre la ELA</a>
     <a href="/SAAC">¿Qué es un SAAC?</a>
-    <a href="/cuestionario">Cuestionario</a>
+    <a href="/cuestionario" class="active">Cuestionario</a>
 </nav>
 
     <h1>Evaluación del Usuario SAAC</h1>
 
     <form action="/recomendar" method="POST">
         
+        <!-- SECCIÓN 1: DATOS GENERALES -->
         <div class="seccion">
             <h2>1. Información básica</h2>
             <div class="pregunta">
@@ -33,34 +34,55 @@
                     </label>
                     {% endfor %}
                 </div>
-                <small>Seleccione todos los idiomas en los que el usuario desee comunicarse.</small>
+                <small>Seleccione los idiomas en los que el usuario se comunica habitualmente.</small>
             </div>
         </div>
 
+        <!-- SECCIÓN 2: CAPACIDADES (SLIDERS) -->
         <div class="seccion">
             <h2>2. Capacidades del Usuario</h2>
             
             {% set caps = [
-                ('vision', 'Nivel visual', '0: Nula, 1: Limitada (Requiere alto contraste o braile), 2: Funcional (Prefiere fuentes grandes), 3: Óptima', 0),
-                ('audicion', 'Nivel auditivo', '0: Sordera, 1: Hipoacusia, 2: Limitada (Dificultad en entornos ruidosos) 3: Perfecta', 0),
-                ('habla', 'Capacidad oral / Habla', '0: Nula, 1: Con dificultad, 2: Comprensible, 3: Fluida', 0),
-                ('cognicion', 'Nivel cognitivo', '0: Muy limitado (Presenta dificultades de comprensión o memoria), 1: Con apoyo (Comprende instrucciones simples pero se distrae con facilidad), 2: Autónomo con pautas (Puede necesitar apoyo en tareas complejas) 3: Sin dificultades', 0),
-                ('tecnologia', 'Nivel tecnológico', '0: Muy limitado (No ha usado dispositivos digitales), 1: Principiante (Domina conceptos básicos pero no menús), 2: Usuario habitual (Navega por internet y utiliza apps con autonomía), 3: Experto (Domina configuración de sistemas y resolución de problemas)', 0),
-                ('resistencia', 'Resistencia a la fatiga', '0: Muy baja (Menos de 10 minutos de atención o esfuerzo físico), 1: Baja (Aguanta periodos cortos y requiere descansos), 2: Estable (Mantiene el ritmo por 1-2 horas), 3: Alta (Capacidad para mantener la concentración y esfuerzo durante periodos prolongados)', 0)
+                ('vision', 'Capacidad visual y de fijación', 
+                 '0: Nula o sin control voluntario de la mirada.|1: Movimientos involuntarios o dificultad física para mantener el foco.|2: Funcional para distinguir símbolos y botones grandes.|3: Precisión total para lectura de texto y botones pequeños.', 0),
+
+                ('audicion', 'Capacidad auditiva', 
+                 '0: Sordera o hipoacusia severa (requiere avisos visuales).|1: Dificultad con voces sintéticas o en entornos con ruido ambiental.|2: Entiende voces sintetizadas en situaciones cotidianas.|3: Excelente (capaz de usar el sonido como guía principal).', 0),
+
+                ('habla', 'Capacidad oral / Habla', 
+                 '0: Comunicación verbal nula.|1: Habla residual difícil de entender para personas externas.|2: Habla comprensible pero con fatiga o lentitud significativa.|3: Habla fluida (uso de SAAC preventivo o por fatiga extrema).', 0),
+
+                ('cognicion', 'Nivel de comprensión y lenguaje', 
+                 '0: Muy limitado (elección entre 2-4 opciones básicas).|1: Uso de símbolos y pictogramas para necesidades del día a día.|2: Nivel lingüístico alto (formación de frases y uso de gramática).|3: Plena (capacidad de lectoescritura y lógica compleja para teclados).', 0),
+
+                ('tecnologia', 'Destreza tecnológica previa', 
+                 '0: Nula (requiere interfaz de "pulsar y hablar" sin menús).|1: Principiante (uso de tablet básica pero sin manejo de configuración).|2: Habitual (uso autónomo de apps, redes sociales e internet).|3: Experto (dominio de configuración de sistemas y resolución de fallos).', 0),
+
+                ('resistencia', 'Resistencia a la fatiga física', 
+                 '0: Crítica (<30s): Agotamiento casi inmediato.|1: Limitada (30s-2min): Requiere descansos tras mensajes cortos.|2: Funcional (2-10min): Permite conversaciones breves o párrafos.|3: Sostenida (>10min): Capacidad para ocio y escritura prolongada.', 0),
+
+                ('independencia', 'Nivel de autonomía comunicativa', 
+                 '0: Requiere interlocutor constante (ej: paneles asistidos o E-TRAN).|1: Necesita ayuda externa para colocar, encender o calibrar el equipo.|2: Puede usar el sistema solo una vez alguien lo pone en marcha.|3: Independencia total: maneja el encendido y el uso sin ayuda alguna.', 0)
             ] %}
 
             {% for id, titulo, desc, defecto in caps %}
-            <div class="pregunta">
-                <label>{{ titulo }}:</label>
-                <div class="slider-wrapper">
+            <div class="pregunta" style="margin-bottom: 30px;">
+                <label><strong>{{ titulo }}:</strong></label>
+                
+                <div class="slider-wrapper" style="margin-top: 10px;">
                     <div class="slider-container">
-                        <input type="range" name="{{ id }}" min="0" max="3" step="1" value="{{ defecto }}" list="tickmarks">
+                        <input type="range" name="{{ id }}" min="0" max="3" step="1" value="{{ defecto }}" list="tickmarks" style="width: 100%;">
                         <div class="escala-numerica">
                             <span>0</span><span>1</span><span>2</span><span>3</span>
                         </div>
                     </div>
                 </div>
-                <small>({{ desc }})</small>
+
+                <div class="descripcion-niveles">
+                    {% for linea in desc.split('|') %}
+                        <p style="margin: 4px 0; font-size: 0.85em; line-height: 1.3; color: #333;">{{ linea }}</p>
+                    {% endfor %}
+                </div>
             </div>
             {% endfor %}
 
@@ -70,10 +92,11 @@
             </datalist>
         </div>
 
+        <!-- SECCIÓN 3: PREFERENCIAS TÉCNICAS -->
         <div class="seccion">
             <h2>3. Interacción y dispositivos</h2>
             <div class="pregunta">
-                <label>Formas de interacción posibles:</label>
+                <label>Formas de interacción posibles (Acceso):</label>
                 <div class="opciones-grid">
                     {% for e in entradas %}
                     <label class="opcion-item">
@@ -94,36 +117,38 @@
             </div>
         </div>
 
+        <!-- SECCIÓN 4: ENTORNO Y RECURSOS -->
         <div class="seccion">
-            <h2>4. Entorno y economía</h2>
+            <h2>4. Entorno de uso y Economía</h2>
+            
             <div class="pregunta">
-                <label>¿Cuenta con ayuda externa para puesta en marcha inicial del SAAC?</label>
+                <label>¿Dónde se utilizará el sistema habitualmente?</label>
+                <select name="entorno_principal" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                    <option value="" disabled selected>Seleccione una opción...</option>
+                    <option value="domicilio">Domicilio (Entorno estable y luz controlada)</option>
+                    <option value="exterior">Exterior frecuente (Requiere pantallas de alto brillo y robustez)</option>
+                    <option value="mixto">Uso mixto (Equilibrio entre portabilidad y autonomía)</option>
+                </select>
+            </div>
+
+            <div class="pregunta">
+                <label>¿Utiliza silla de ruedas de forma habitual?</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="ayuda_inicial" value="true" checked> Sí</label>
-                    <label><input type="radio" name="ayuda_inicial" value="false"> No</label>
+                    <label><input type="radio" name="usa_silla" value="true" required> Sí (Se priorizarán sistemas de anclaje)</label>
+                    <label><input type="radio" name="usa_silla" value="false"> No (Se priorizarán soportes de mesa/suelo)</label>
                 </div>
             </div>
-            <div class="pregunta">
-                <label>¿Cuenta con ayuda externa para el mantenimiento diario del SAAC?</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="ayuda_diaria" value="true" checked> Sí</label>
-                    <label><input type="radio" name="ayuda_diaria" value="false"> No</label>
-                </div>
-            </div>
-            <div class="pregunta">
-                <label>¿Utiliza silla de ruedas?</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="usa_silla" value="true"> Sí</label>
-                    <label><input type="radio" name="usa_silla" value="false" checked> No</label>
-                </div>
-            </div>
+
             <div class="pregunta">
                 <label>Presupuesto máximo disponible (€):</label>
-                <input type="number" name="presupuesto" value="500" min="0">
+                <input type="number" name="presupuesto" value="500" min="0" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                <small>Ayuda a filtrar entre opciones gratuitas, comerciales o hardware dedicado.</small>
             </div>
         </div>
 
-        <button type="submit" class="boton-enviar">Generar informe de recomendación</button>
+        <button type="submit" class="boton-enviar">
+            Generar informe de recomendación
+        </button>
         
     </form>
 </body>
