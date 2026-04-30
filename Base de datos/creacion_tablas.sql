@@ -1,11 +1,9 @@
 -- 1. LIMPIEZA TOTAL DE TABLAS
-DROP TABLE IF EXISTS paciente_entrada CASCADE;
-DROP TABLE IF EXISTS sistema_entrada CASCADE;
-DROP TABLE IF EXISTS sistema_idioma CASCADE;
 DROP TABLE IF EXISTS sistema_plataforma CASCADE;
+DROP TABLE IF EXISTS sistema_idioma CASCADE;
+DROP TABLE IF EXISTS sistema_entrada CASCADE;
 DROP TABLE IF EXISTS sistema_entorno CASCADE;
 DROP TABLE IF EXISTS sistema_requisito_funcional CASCADE;
-DROP TABLE IF EXISTS paciente CASCADE;
 DROP TABLE IF EXISTS saac_sistema CASCADE;
 DROP TABLE IF EXISTS tipo_entrada CASCADE;
 DROP TABLE IF EXISTS idioma CASCADE;
@@ -25,7 +23,7 @@ CREATE TABLE idioma (
     nombre TEXT UNIQUE NOT NULL
 );
 INSERT INTO idioma (nombre) VALUES
-('español'), ('inglés'), ('francés'), ('portugués'), ('gallego'), ('catalán'), ('euskera');
+('español'), ('gallego'), ('catalán'), ('euskera');
 
 CREATE TABLE plataforma (
     id SERIAL PRIMARY KEY,
@@ -59,7 +57,7 @@ CREATE TABLE saac_sistema (
     es_accesorio BOOLEAN DEFAULT FALSE
 );
 
--- 4. TABLA DE REQUISITOS
+-- 4. TABLA DE REQUISITOS FUNCIONALES
 CREATE TABLE sistema_requisito_funcional (
     sistema_id INT PRIMARY KEY REFERENCES saac_sistema(id) ON DELETE CASCADE,
     nivel_visual_min SMALLINT DEFAULT 0,
@@ -94,8 +92,8 @@ CREATE TABLE sistema_plataforma (
     PRIMARY KEY (sistema_id, plataforma_id)
 );
 
--- 6. CARGA DE SISTEMAS (Incluyendo Gafas con Puntero)
-INSERT INTO saac_sistema
+-- 6. CARGA DE SISTEMAS (Actualizado según Propuesta 2026[cite: 1])
+INSERT INTO saac_sistema 
 (nombre, descripcion, coste_min, requiere_financiacion, requiere_interlocutor, tiempo_entrenamiento, fatiga_fisica, velocidad, robustez, escalabilidad, portable, admite_anclaje, es_accesorio)
 VALUES
 ('Panel pictogramas','Tablero físico con símbolos ARASAAC',0,false,true,1,1,1,3,2,true,true, false),
@@ -121,58 +119,72 @@ VALUES
 ('Cboard','Comunicador pictográfico web gratuito',0,false,false,1,1,2,2,3,true,false, false),
 ('Picto4Me','Editor web de tableros',0,false,false,2,1,2,2,3,true,false, false),
 ('LetMeTalk Web','Comunicador web por pictogramas',0,false,false,1,1,2,2,3,true,false, false),
-('TouchChat','App de comunicación avanzada con símbolos',150,false,false, 2,2,3,3,3,true,true, false);
+('TouchChat','App de comunicación avanzada con símbolos',150,false,false, 2,2,3,3,3,true,true, false),
+-- BANCOS DE VOZ SEGÚN DOCUMENTO TUTOR[cite: 1]
+('ModelTalker Gen3', 'Software gratuito de síntesis (Nemours). Requiere ~1600 frases grabadas.', 0, false, false, 3, 2, 3, 3, 3, true, false, true),
+('MyOwnVoice (Acapela)', 'Plataforma Deep Learning. Crea voz personal con <30 min de grabación.', 0, false, false, 3, 2, 3, 3, 3, true, false, true),
+('VocaliD', 'Hibridación de voz (donada + usuario) para mayor naturalidad.', 0, false, false, 3, 2, 3, 3, 3, true, false, true),
+('Bank Your Voice', 'Iniciativa española de preservación para sintetizadores abiertos.', 0, false, false, 3, 2, 3, 3, 3, true, false, true),
+('Praat / Voice Analyst', 'Software de análisis acústico para detección precoz de riesgo bulbar.', 0, false, false, 2, 1, 3, 3, 2, true, false, true);
 
--- 7. REQUISITOS FUNCIONALES
--- Baja tecnología y Punteros
+-- 7. REQUISITOS FUNCIONALES (Detección Precoz[cite: 1])
+-- Voice Banking: Requiere Habla 3 para asegurar inteligibilidad óptima antes del deterioro bulbar[cite: 1]
+INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
+SELECT id, 0, 0, 2, 3, 3 FROM saac_sistema 
+WHERE nombre IN ('ModelTalker Gen3', 'MyOwnVoice (Acapela)', 'VocaliD', 'Bank Your Voice');
+
+-- Análisis acústico preventivo[cite: 1]
+INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
+SELECT id, 1, 0, 2, 2, 2 FROM saac_sistema WHERE nombre = 'Praat / Voice Analyst';
+
+-- Resto de sistemas (Categorías generales)
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 1, 0, 1, 0, 0 FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 'Puntero Láser', 'Gafas con Puntero Láser');
 
--- Mirada Alta Tecnología
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 3, 1, 2, 3, 0 FROM saac_sistema WHERE nombre IN ('Eye tracker', 'Tallk', 'Look to Speak', 'MegaBEE', 'Look to learn');
 
--- Software complejo
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 2, 2, 3, 3, 0 FROM saac_sistema WHERE nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa');
 
--- Apps de Voz
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 0, 3, 2, 2, 3 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text');
 
--- Resto (Asignación automática nivel medio)
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 2, 2, 2, 2, 0 FROM saac_sistema 
 WHERE id NOT IN (SELECT sistema_id FROM sistema_requisito_funcional);
 
 -- 8. RELACIONES DE ENTRADA
--- Entrada Manos (ID 1)
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
-SELECT id, 1 FROM saac_sistema WHERE nombre IN (
-    'Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero Láser',
-    'Asistente de voz AAC', 'Proloquo2Go', 'Speak4Me', 'Grid 3', 'Verbo',
-    'Cboard', 'Picto4Me', 'LetMeTalk Web', 'TouchChat', 'TD Snap'
-);
+SELECT id, 4 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text', 'ModelTalker Gen3', 'MyOwnVoice (Acapela)', 'VocaliD', 'Bank Your Voice', 'Praat / Voice Analyst');
 
--- Entrada Ojos (ID 2)
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
-SELECT id, 2 FROM saac_sistema WHERE nombre IN (
-    'MegaBEE', 'Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look to learn', 'Grid 3'
-);
+SELECT id, 1 FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero Láser', 'Asistente de voz AAC', 'Proloquo2Go', 'Speak4Me', 'Grid 3', 'Verbo', 'Cboard', 'Picto4Me', 'LetMeTalk Web', 'TouchChat', 'TD Snap');
 
--- Entrada Cabeza (ID 3)
+INSERT INTO sistema_entrada (sistema_id, entrada_id)
+SELECT id, 2 FROM saac_sistema WHERE nombre IN ('MegaBEE', 'Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look to learn', 'Grid 3');
+
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, 3 FROM saac_sistema WHERE nombre IN ('Gafas con Puntero Láser', 'SpeakBook');
 
--- Entrada Voz (ID 4)
-INSERT INTO sistema_entrada (sistema_id, entrada_id)
-SELECT id, 4 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text');
-
--- 9. RELACIONES DE IDIOMA
+-- 9. RELACIONES DE IDIOMA (Soporte Español[cite: 1])
 INSERT INTO sistema_idioma (sistema_id, idioma_id)
-SELECT id, 1 FROM saac_sistema;
+SELECT s.id, i.id FROM saac_sistema s, idioma i 
+WHERE s.nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 'Puntero Láser', 'Gafas con Puntero Láser', 'MegaBEE', 'Cboard', 'Picto4Me', 'LetMeTalk Web', 'ModelTalker Gen3', 'MyOwnVoice (Acapela)', 'VocaliD', 'Bank Your Voice', 'Praat / Voice Analyst');
+
+INSERT INTO sistema_idioma (sistema_id, idioma_id)
+SELECT s.id, i.id FROM saac_sistema s, idioma i 
+WHERE s.nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa') AND i.nombre IN ('catalán', 'gallego', 'euskera');
+
+INSERT INTO sistema_idioma (sistema_id, idioma_id)
+SELECT s.id, (SELECT id FROM idioma WHERE nombre = 'español') FROM saac_sistema s ON CONFLICT DO NOTHING;
 
 -- 10. RELACIONES DE PLATAFORMA
+-- ModelTalker es específico de Windows[cite: 1]
+INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
+SELECT id, 1 FROM saac_sistema WHERE nombre = 'ModelTalker Gen3';
+
+-- Resto según disponibilidad
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
 SELECT id, 4 FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero Láser', 'Gafas con Puntero Láser', 'MegaBEE', 'Tablero ETRAN', 'ComuniQa');
 
@@ -186,4 +198,5 @@ INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
 SELECT id, 2 FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'TD Snap', 'Speak4Me', 'TouchChat');
 
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
-SELECT id, 5 FROM saac_sistema WHERE nombre IN ('Cboard','Picto4Me','LetMeTalk Web');
+SELECT id, 5 FROM saac_sistema 
+WHERE nombre IN ('Cboard','Picto4Me','LetMeTalk Web', 'MyOwnVoice (Acapela)', 'VocaliD', 'Bank Your Voice', 'Praat / Voice Analyst');

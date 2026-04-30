@@ -36,7 +36,7 @@ def info_saac():
 
 @app.route('/cuestionario')
 def cuestionario():
-    idiomas = Idioma.query.all()
+    idiomas = Idioma.query.order_by(Idioma.id).all() 
     entradas = TipoEntrada.query.all()
     plataformas = Plataforma.query.all()
     
@@ -45,87 +45,99 @@ def cuestionario():
                            entradas=entradas, 
                            plataformas=plataformas)
 
-@app.route('/recomendar')
+@app.route('/recomendar', methods=['POST'])
 def recomendar():
     # 1. Capturar datos básicos
     nombre = request.form.get('nombre')
+    ids_idiomas = [int(x) for x in request.form.getlist('idioma_ids') if x]
     ids_entradas = [int(x) for x in request.form.getlist('entrada_ids') if x]
     ids_plataformas = [int(x) for x in request.form.getlist('plataforma_ids') if x]
+    
+    # 2. Capturar Entorno y Otros
+    v_entorno = request.form.get('entorno_principal') 
+    v_silla = request.form.get('usa_silla') == 'true'
     
     try:
         v_presupuesto = float(request.form.get('presupuesto', 999999))
     except:
         v_presupuesto = 999999.0
 
-    # 2. Capturar Capacidades
+    # 3. Capturar Capacidades (Niveles 0-3)
     v_vision = int(request.form.get('vision', 3))
+    v_audicion = int(request.form.get('audicion', 3))
+    v_habla = int(request.form.get('habla', 3))
     v_cognicion = int(request.form.get('cognicion', 3))
     v_tecno = int(request.form.get('tecnologia', 3))
+    v_resistencia = int(request.form.get('resistencia', 3))
+    v_independencia = int(request.form.get('independencia', 3))
 
     # --- CONSULTA BASE ---
     consulta = SaacSistema.query.outerjoin(SistemaRequisitoFuncional)
 
-    # FILTRO: Presupuesto
+    # FILTROS ESTÁNDAR
     consulta = consulta.filter(SaacSistema.coste_min <= v_presupuesto)
 
-    # FILTRO: Capacidades (Acepta nivel solicitado o sistemas sin requisitos definidos)
+    if ids_idiomas:
+        consulta = consulta.filter(SaacSistema.idiomas.any(Idioma.id.in_(ids_idiomas)))
+
     consulta = consulta.filter(
         or_(SistemaRequisitoFuncional.nivel_visual_min <= v_vision, SistemaRequisitoFuncional.nivel_visual_min == None),
         or_(SistemaRequisitoFuncional.nivel_cognitivo_min <= v_cognicion, SistemaRequisitoFuncional.nivel_cognitivo_min == None),
-        or_(SistemaRequisitoFuncional.nivel_tecnologico_min <= v_tecno, SistemaRequisitoFuncional.nivel_tecnologico_min == None)
+        or_(SistemaRequisitoFuncional.nivel_tecnologico_min <= v_tecno, SistemaRequisitoFuncional.nivel_tecnologico_min == None),
+        or_(SistemaRequisitoFuncional.nivel_auditivo_min <= v_audicion, SistemaRequisitoFuncional.nivel_auditivo_min == None),
+        or_(SistemaRequisitoFuncional.nivel_habla_min <= v_habla, SistemaRequisitoFuncional.nivel_habla_min == None)
     )
 
-    # FILTRO: Entradas (Selección dinámica)
+    if v_independencia == 0:
+        consulta = consulta.filter(SaacSistema.requiere_interlocutor == True)
+
     if ids_entradas:
         consulta = consulta.filter(SaacSistema.entradas.any(TipoEntrada.id.in_(ids_entradas)))
-
-    # --- NUEVO FILTRO 4: PLATAFORMAS (ESTRICTO) ---
-    # Esto es lo que faltaba. Si el usuario selecciona plataformas, 
-    # solo mostramos sistemas que existan en al menos UNA de ellas
     if ids_plataformas:
         consulta = consulta.filter(SaacSistema.plataformas.any(Plataforma.id.in_(ids_plataformas)))
 
-    # EJECUTAR CONSULTA
     resultados = consulta.all()
 
-    # --- LÓGICA DE RECOMENDACIÓN INTELIGENTE (Post-procesamiento) ---
-    sistemas_finales = [s for s in resultados if not s.es_accesorio]
-    accesorios_brutos = [s for s in resultados if s.es_accesorio]
+    # --- LÓGICA DE POST-PROCESAMIENTO (Protocolo 2026) ---
+    sistemas_finales = []
     accesorios_finales = []
 
-    for acc in accesorios_brutos:
-        nombre_acc = acc.nombre.lower()
+    for s in resultados:
+        s.nota_clinica = ""
+        nombre_low = s.nombre.lower()
         
-        # Caso A: Eye Tracker
-        if "eye tracker" in nombre_acc:
-            if 1 not in ids_entradas:  # Solo si NO puede usar las manos
-                acc.nota_clinica = "Recomendado como acceso principal por mirada para alta discapacidad motora."
-                accesorios_finales.append(acc)
-        
-        # Caso B: Gafas con Puntero (Referencia ELA Andalucía)
-        elif "gafas" in nombre_acc:
-            if 3 in ids_entradas:  # Solo si puede mover la CABEZA
-                acc.nota_clinica = "Eficacia clínica probada (ELA Andalucía): Ideal para control cefálico con tableros físicos."
-                accesorios_finales.append(acc)
-        
-        # Caso C: Puntero Láser Manual
-        elif "puntero" in nombre_acc and "gafas" not in nombre_acc:
-            if 1 in ids_entradas:  # Si puede usar las MANOS
-                acc.nota_clinica = "Soporte de baja tecnología para señalar con precisión sin fatiga táctil."
-                accesorios_finales.append(acc)
-        
-        # Otros accesorios genéricos
-        else:
-            accesorios_finales.append(acc)
+        # A. Implementación Voice Banking (Habla Nivel 3)
+        is_voice_banking = any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid', 'bank your voice'])
+        if is_voice_banking:
+            if v_habla == 3:
+                s.nota_clinica = "URGENTE: Ventana de oportunidad óptima. Iniciar preservación de voz antes de síntomas bulbares para mantener identidad vocal."
+            else:
+                s.nota_clinica = "Recomendado: Preservación de voz para uso en dispositivos SGD/AAC."
 
-    print(f"--- DEBUG: {nombre} ---")
-    print(f"Sistemas: {len(sistemas_finales)} | Accesorios: {len(accesorios_finales)}")
+        # B. Análisis Acústico Preventivo (Audición Nivel 1 o Habla Nivel 3)[cite: 1]
+        if 'praat' in nombre_low or 'voice analyst' in nombre_low:
+            if v_audicion == 1 or v_habla == 3:
+                s.nota_clinica = "Prioritario: Evaluación fonoaudiológica recomendada para detectar cambios acústicos imperceptibles al oído.[cite: 1]"
+
+        # C. Notas de Contexto (Silla/Entorno)
+        if v_silla and s.admite_anclaje:
+            s.nota_clinica += " | Requiere soporte de fijación a silla."
+        
+        if v_entorno == 'exterior' and s.portable:
+            s.nota_clinica += " | Optimizado para movilidad exterior."
+
+        # Clasificación Final
+        if s.es_accesorio:
+            accesorios_finales.append(s)
+        else:
+            sistemas_finales.append(s)
 
     return render_template('recomendacion.html', 
                            sistemas=sistemas_finales, 
                            accesorios=accesorios_finales,
                            nombre_usuario=nombre,
-                           plataformas_seleccionadas=ids_plataformas)
+                           v_habla=v_habla,
+                           v_audicion=v_audicion)
 
 if __name__ == '__main__':
     app.run(debug=True)
