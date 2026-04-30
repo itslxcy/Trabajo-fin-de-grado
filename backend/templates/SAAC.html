@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Sistemas SAAC</title>
+    <title>Sistemas SAAC - ELA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
 </head>
 <body>
@@ -20,86 +20,87 @@
         
         <h2>Definición conceptual</h2>
         <ul>
-            <li><strong>Sistema aumentativo:</strong> Se emplea cuando la persona conserva habla residual pero necesita apoyo para que su comunicación sea eficaz y completa.</li>
-            <li><strong>Sistema alternativo:</strong> Se utiliza cuando la persona carece totalmente de habla y el sistema actúa como sustituto funcional de la misma.</li>
+            <li><strong>Sistema aumentativo:</strong> Apoya el habla residual para que la comunicación sea eficaz.</li>
+            <li><strong>Sistema alternativo:</strong> Sustituye totalmente el habla cuando esta no es funcional.</li>
         </ul>
     </div>
 
     <div class="seccion">
-        <h2>Componentes de un SAAC</h2>
-        <p>Todo sistema de comunicación asistida se compone de varios elementos fundamentales:</p>
-        <table style="margin-top: 15px;">
-            <thead>
-                <tr>
-                    <th>Componente</th>
-                    <th>Descripción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Contenido</strong></td>
-                    <td>Símbolos, pictogramas, letras o palabras que representan los conceptos.</td>
-                </tr>
-                <tr>
-                    <td><strong>Soporte o medio</strong></td>
-                    <td>El elemento físico o digital (tablero de papel, tablet, ordenador).</td>
-                </tr>
-                <tr>
-                    <td><strong>Método de acceso</strong></td>
-                    <td>Cómo el usuario selecciona el contenido (pulsación directa, mirada, ratón de cabeza).</td>
-                </tr>
-                <tr>
-                    <td><strong>Salida</strong></td>
-                    <td>La forma en la que el mensaje se transmite (voz sintetizada, texto en pantalla).</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="seccion">
-        <h2>Organización del contenido</h2>
-        <p>La forma en que se estructuran los símbolos influye directamente en la velocidad de comunicación:</p>
-        <ul>
-            <li><strong>Alfabética:</strong> Basada en teclados para usuarios con lectoescritura preservada.</li>
-            <li><strong>Semántica/Categórica:</strong> Organizada por temas o categorías (comida, sentimientos, acciones).</li>
-            <li><strong>Sintáctica:</strong> Siguiendo el orden lógico de construcción de frases (Sujeto + Verbo + Predicado).</li>
-            <li><strong>Pragmática:</strong> Basada en contextos de uso o situaciones sociales frecuentes (en el médico, en casa, deseos).</li>
-        </ul>
-    </div>
-
-    <div class="seccion">
-        <h2>Tipos generales de SAAC</h2>
-        <ul>
-            <li><strong>Sin ayuda:</strong> Requieren el propio cuerpo del usuario (Gestos, lengua de signos, dactilología).</li>
-            <li><strong>Con ayuda:</strong> Requieren un soporte externo (Tableros de comunicación, comunicadores de voz, software especializado).</li>
-        </ul>
-    </div>
-
-    <div class="seccion">
-        <h2>Criterios técnicos de evaluación</h2>
-        <p>Para elegir el SAAC adecuado, es fundamental evaluar los siguientes parámetros objetivos:</p>
+        <h2>Sistemas de símbolos y metodologías</h2>
+        <p>El lenguaje se organiza mediante diferentes bibliotecas y métodos para optimizar la velocidad comunicativa:</p>
         
-        <div class="opciones-grid" style="margin-top: 10px;">
-            <div class="opcion-item"> Requisitos cognitivos y sensoriales</div>
-            <div class="opcion-item"> Hardware (Mirada, pulsadores)</div>
-            <div class="opcion-item"> Software e idioma</div>
-            <div class="opcion-item"> Interfaz y esfuerzo físico</div>
-            <div class="opcion-item"> Curva de aprendizaje</div>
-            <div class="opcion-item"> Portabilidad y anclaje</div>
-            <div class="opcion-item"> Robustez y fiabilidad</div>
-            <div class="opcion-item"> Coste y mantenimiento</div>
-            <div class="opcion-item"> Nivel de independencia aportado</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <h3>Bibliotecas de símbolos</h3>
+                <ul>
+                    <li><strong>Widgit:</strong> Escritura inteligente con asignación automática de imágenes mientras se escribe.</li>
+                    <li><strong>ARASAAC / SPC:</strong> Pictogramas de alta claridad y uso universal.</li>
+                    <li><strong>Bliss / Benson:</strong> Sistemas para necesidades cognitivas o visuales específicas mediante representación con símbolos o alto contraste.</li>
+                    <li><strong>VSD:</strong> Escenas visuales basadas en fotos reales.</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Metodologías clave</h3>
+                <ul>
+                    <li><strong>Minspeak:</strong> Sistema de iconos que combinandose entre ellos adquieren multi-significado (máxima velocidad).</li>
+                    <li><strong>Alfabética:</strong> Uso de teclados con predicción inteligente.</li>
+                    <li><strong>PODD:</strong> Organización basada en la intención pragmática (no se clasifica por temas sino por intenciones).</li>
+                </ul>
+            </div>
         </div>
-        
-        <p class="nota-clinica" style="margin-top: 15px;">La elección debe ser personalizada y revisada periódicamente según la evolución clínica del usuario.</p>
     </div>
+
+    <div class="seccion">
+    <h2>Clasificación de soluciones disponibles</h2>
+    <p>Para una comunicación robusta en la ELA, se recomienda combinar un sistema de alta tecnología con uno de baja tecnología como respaldo.</p>
+
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+        
+        <!-- Columna 1: Baja Tecnología -->
+        <div class="seccion-sub" style="flex: 1; min-width: 250px;">
+            <h3><strong>Baja Tecnología</strong></h3>
+            <p><small>Soportes físicos y sistemas sin electrónica.</small></p>
+            <ul>
+                <li><strong>Tableros E-TRAN / MegaBEE:</strong> Comunicación visual directa.</li>
+                <li><strong>SpeakBook:</strong> Cuadernos para mirada o puntero.</li>
+                <li><strong>Paneles Físicos:</strong> Tableros alfabéticos y pictográficos.</li>
+            </ul>
+        </div>
+
+        <!-- Columna 2: Alta Tecnología (Software) -->
+        <div class="seccion-sub" style="flex: 1; min-width: 250px;">
+            <h3><strong>Software y apps</strong></h3>
+            <p><small>Programas que gestionan el lenguaje y la voz.</small></p>
+            <ul>
+                <li><strong>Software avanzado:</strong> Grid 3, Verbo, TD Snap, ComuniQa.</li>
+                <li><strong>Apps de mirada:</strong> Look to Speak, Tallk.</li>
+                <li><strong>Comunicadores web:</strong> Cboard, LetMeTalk, Picto4Me.</li>
+                <li><strong>Apps de voz:</strong> Asistente AAC, Speak4Me.</li>
+            </ul>
+        </div>
+
+        <!-- Columna 3: Periféricos y Ayudas -->
+        <div class="seccion-sub" style="flex: 1; min-width: 250px;">
+            <h3><strong>Hardware y periféricos</strong></h3>
+            <p><small>Dispositivos de acceso y complementos técnicos.</small></p>
+            <ul>
+                <li><strong>Seguimiento ocular:</strong> Eye trackers.</li>
+                <li><strong>Punteros:</strong> Puntero láser manual y gafas con puntero (control cefálico).</li>
+                <li><strong>Control de voz:</strong> Voice Access y Speech to Text.</li>
+                <li><strong>Identidad:</strong> Bancos de voz y síntesis personalizada.</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
 
     <div style="text-align: center; margin-top: 40px; margin-bottom: 60px;">
         <p class="nota-clinica" style="margin-bottom: 20px; font-size: 1.1em;">
-            Para acceder al cuestionario de recomendación pulse el siguiente botón:
+            Pulsa el botón para analizar qué combinación de software y hardware se adapta mejor a tu situación actual:
         </p>
         <a href="/cuestionario" class="boton-enviar" style="text-decoration: none; display: inline-block; width: auto; padding: 18px 40px;">
-            Ir al cuestionario de evaluación
+            Iniciar cuestionario de recomendación
         </a>
     </div>
 
