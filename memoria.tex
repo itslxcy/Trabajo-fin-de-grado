@@ -135,7 +135,7 @@
     \@date{}\\
     \vspace{0.5cm}
     %Tutor: \@tutor{}\\ % comenta el que no corresponda
-    Tutores: \@tutor{} -- \@tutorb{}\\
+    Tutores: \@tutor{} \\%-- \@tutorb{}\\
   }%
   \end{center}%
   \null
@@ -143,16 +143,16 @@
   }
 \makeatother
 
-\newcommand{\nombre}{Nombre Alumno/a}
-\newcommand{\nombreTutor}{Nombre Tutor/a 1} 
-\newcommand{\nombreTutorb}{Nombre Tutor/a 2} 
-\newcommand{\dni}{123456A} 
+\newcommand{\nombre}{Lucía Gil Aire}
+\newcommand{\nombreTutor}{Pedro Luis Sánchez Ortega} 
+% \newcommand{\nombreTutorb}{Nombre Tutor/a 2} 
+\newcommand{\dni}{71981152F} 
 
 % Datos de portada
 \title{Título del trabajo}
 \author{\nombre}
 \tutor{\nombreTutor}
-\tutorb{\nombreTutorb}
+%\tutorb{\nombreTutorb}
 \date{\today}
 
 
@@ -169,7 +169,7 @@
 \noindent\includegraphics[width=\textwidth]{CabeceraEPS.png}\vspace{1cm}
 
 \noindent D. \nombreTutor, profesor/a del departamento de departamento, área de área.
-\noindent D. \nombreTutorb, profesor/a del departamento de departamento, área de área.
+%\noindent D. \nombreTutorb, profesor/a del departamento de departamento, área de área.
 
 \noindent Expone/n:
 
@@ -184,27 +184,27 @@ En Burgos, a {\large \today}
 \vfill\vfill\vfill
 
 % Author and supervisor
-\begin{minipage}{0.45\textwidth}
-\begin{flushleft} %\large
-Vº. Bº. del Tutor:\\[2cm]
-D. \nombreTutor
-\end{flushleft}
-\end{minipage}
-\hfill
-\begin{minipage}{0.45\textwidth}
-\begin{flushleft} %\large
-Vº. Bº. del Tutor:\\[2cm]
-D. \nombreTutorb
-\end{flushleft}
-\end{minipage}
-\hfill
+%\begin{minipage}{0.45\textwidth}
+%\begin{flushleft} %\large
+%Vº. Bº. del Tutor:\\[2cm]
+%D. \nombreTutor
+%\end{flushleft}
+%\end{minipage}
+%\hfill
+%\begin{minipage}{0.45\textwidth}
+%\begin{flushleft} %\large
+%Vº. Bº. del Tutor:\\[2cm]
+%D. \nombreTutorb
+%\end{flushleft}
+%\end{minipage}
+%\hfill
 
 \vfill
 
 % para casos con solo un tutor comentar lo anterior
 % y descomentar lo siguiente
-%Vº. Bº. del Tutor:\\[2cm]
-%D. nombre tutor
+Vº. Bº. del Tutor:\\[2cm]
+D. nombre tutor
 
 
 \newpage\null\thispagestyle{empty}\newpage
