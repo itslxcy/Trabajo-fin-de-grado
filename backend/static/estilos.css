@@ -208,15 +208,22 @@ tr:hover { background-color: #fdfaff; }
 
 .boton-volver { 
     display: inline-block; 
+    margin-top: 20px; 
     padding: 12px 25px; 
-    background: #eee; 
-    color: #444; 
+    background: #ac4caf; /* Tu morado principal */
+    color: white; 
     text-decoration: none; 
     border-radius: 8px; 
     font-weight: 600;
-    transition: background 0.3s; 
+    transition: background 0.3s, transform 0.2s; 
+    border: none;
 }
 
+.boton-volver:hover { 
+    background: #8e24aa; /* Un morado un poco más oscuro al pasar el ratón */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(172, 76, 175, 0.2);
+}
 .boton-volver:hover { background: #ddd; }
 
 /* Ayudas de texto pequeño */

@@ -1,6 +1,6 @@
 from extension import bd
 
-#TABLAS DE RELACIÓN (Muchos a Muchos)
+# TABLAS DE RELACIÓN (Muchos a Muchos)
 sistema_entorno = bd.Table('sistema_entorno',
     bd.Column('sistema_id', bd.Integer, bd.ForeignKey('saac_sistema.id', ondelete='CASCADE'), primary_key=True),
     bd.Column('entorno_id', bd.Integer, bd.ForeignKey('entorno_uso.id', ondelete='CASCADE'), primary_key=True)
@@ -26,7 +26,7 @@ paciente_entrada = bd.Table('paciente_entrada',
     bd.Column('entrada_id', bd.Integer, bd.ForeignKey('tipo_entrada.id', ondelete='CASCADE'), primary_key=True)
 )
 
-#TABLAS MAESTRAS
+# TABLAS MAESTRAS
 class TipoEntrada(bd.Model):
     __tablename__ = 'tipo_entrada'
     id = bd.Column(bd.Integer, primary_key=True)
@@ -47,28 +47,23 @@ class EntornoUso(bd.Model):
     id = bd.Column(bd.Integer, primary_key=True)
     nombre = bd.Column(bd.Text, unique=True, nullable=False)
 
-#TABLAS DE DATOS
+# TABLAS DE DATOS
 class SaacSistema(bd.Model):
     __tablename__ = 'saac_sistema'
     id = bd.Column(bd.Integer, primary_key=True)
     nombre = bd.Column(bd.Text, nullable=False)
     descripcion = bd.Column(bd.Text)
     coste_min = bd.Column(bd.Numeric)
-    requiere_financiacion = bd.Column(bd.Boolean, default=False)
+    # Se mantienen solo los campos que existen en la BD actual:
     requiere_interlocutor = bd.Column(bd.Boolean)
-    tiempo_entrenamiento = bd.Column(bd.SmallInteger)
     fatiga_fisica = bd.Column(bd.SmallInteger)
-    velocidad = bd.Column(bd.SmallInteger)
-    robustez = bd.Column(bd.SmallInteger)
-    escalabilidad = bd.Column(bd.SmallInteger)
     portable = bd.Column(bd.Boolean)
     admite_anclaje = bd.Column(bd.Boolean)
-    es_accesorio = bd.Column(bd.Boolean, default=False)
 
-    #Relación con requisitos funcionales (Uno a Uno)
+    # Relación con requisitos funcionales (Uno a Uno)
     requisitos = bd.relationship('SistemaRequisitoFuncional', backref='sistema', uselist=False, cascade="all, delete")
     
-    #Relaciones Muchos a Muchos
+    # Relaciones Muchos a Muchos
     entornos = bd.relationship('EntornoUso', secondary=sistema_entorno, backref='sistemas')
     entradas = bd.relationship('TipoEntrada', secondary=sistema_entrada, backref='sistemas')
     idiomas = bd.relationship('Idioma', secondary=sistema_idioma, backref='sistemas')
@@ -97,10 +92,10 @@ class Paciente(bd.Model):
     usa_silla = bd.Column(bd.Boolean)
     tiene_financiacion = bd.Column(bd.Boolean, default=False)
     
-    #Foreign keys
+    # Foreign keys
     entorno_id = bd.Column(bd.Integer, bd.ForeignKey('entorno_uso.id'))
     idioma_id = bd.Column(bd.Integer, bd.ForeignKey('idioma.id'), nullable=False)
     plataforma_preferida_id = bd.Column(bd.Integer, bd.ForeignKey('plataforma.id'))
 
-    #Relación Muchos a Muchos con Entradas
+    # Relación Muchos a Muchos con Entradas
     entradas = bd.relationship('TipoEntrada', secondary=paciente_entrada, backref='pacientes')

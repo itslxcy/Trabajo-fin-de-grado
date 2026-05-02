@@ -1,5 +1,4 @@
 import os
-import modelos
 from flask import Flask, render_template, request
 from modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma
 from extension import bd
@@ -10,7 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Configuración de la Base de Datos
+# --- CONFIGURACIÓN DE LA BASE DE DATOS ---
 usuario = os.getenv('DB_USER')
 contrasena = os.getenv('DB_PASSWORD')
 host = os.getenv('DB_HOST')
@@ -48,7 +47,7 @@ def cuestionario():
 @app.route('/recomendar', methods=['POST'])
 def recomendar():
     # 1. Capturar datos básicos
-    nombre = request.form.get('nombre')
+    nombre_usuario = request.form.get('nombre')
     ids_idiomas = [int(x) for x in request.form.getlist('idioma_ids') if x]
     ids_entradas = [int(x) for x in request.form.getlist('entrada_ids') if x]
     ids_plataformas = [int(x) for x in request.form.getlist('plataforma_ids') if x]
@@ -74,12 +73,18 @@ def recomendar():
     # --- CONSULTA BASE ---
     consulta = SaacSistema.query.outerjoin(SistemaRequisitoFuncional)
 
-    # FILTROS ESTÁNDAR
+    # 4. FILTROS DE BASE DE DATOS
+    # Filtro Presupuesto
     consulta = consulta.filter(SaacSistema.coste_min <= v_presupuesto)
 
+    # Filtro Fatiga vs Resistencia (Lógica: El sistema no debe cansar más de lo que el usuario aguanta)
+    consulta = consulta.filter(SaacSistema.fatiga_fisica <= v_resistencia)
+
+    # Filtro Idiomas
     if ids_idiomas:
         consulta = consulta.filter(SaacSistema.idiomas.any(Idioma.id.in_(ids_idiomas)))
 
+    # Filtro Requisitos Funcionales (Capacidades)
     consulta = consulta.filter(
         or_(SistemaRequisitoFuncional.nivel_visual_min <= v_vision, SistemaRequisitoFuncional.nivel_visual_min == None),
         or_(SistemaRequisitoFuncional.nivel_cognitivo_min <= v_cognicion, SistemaRequisitoFuncional.nivel_cognitivo_min == None),
@@ -88,9 +93,11 @@ def recomendar():
         or_(SistemaRequisitoFuncional.nivel_habla_min <= v_habla, SistemaRequisitoFuncional.nivel_habla_min == None)
     )
 
+    # Filtro Autonomía (Si no tiene independencia, buscamos sistemas que requieran interlocutor)
     if v_independencia == 0:
         consulta = consulta.filter(SaacSistema.requiere_interlocutor == True)
 
+    # Filtros de Entrada y Plataforma
     if ids_entradas:
         consulta = consulta.filter(SaacSistema.entradas.any(TipoEntrada.id.in_(ids_entradas)))
     if ids_plataformas:
@@ -98,12 +105,22 @@ def recomendar():
 
     resultados = consulta.all()
 
-    # --- LÓGICA DE PROCESAMIENTO ---
+    # --- 5. LÓGICA DE PROCESAMIENTO Y VINCULACIÓN ---
     sistemas_finales = []
     accesorios_referencia = []
     ids_accesorios_vistos = set() 
     
+    # Pre-identificamos hardware clave en los resultados
+    eye_tracker = next((x for x in resultados if x.nombre == 'Eye tracker'), None)
+    soporte_anclaje = next((x for x in resultados if 'Soporte' in x.nombre), None)
+    punto_gafas = next((x for x in resultados if 'Gafas' in x.nombre), None)
+    punto_laser = next((x for x in resultados if x.nombre == 'Puntero Láser'), None)
+
     for s in resultados:
+        # El soporte de anclaje no se muestra como sistema principal, solo como accesorio de referencia
+        if 'Soporte' in s.nombre:
+            continue
+
         s.nota_clinica = ""
         s.accesorio_vinculado = None 
         s.prioridad_entorno = 0 # 0: Óptimo, 1: Con advertencias
@@ -114,71 +131,64 @@ def recomendar():
             s.nota_clinica = "URGENTE: Ventana de oportunidad óptima. Iniciar preservación de voz antes de síntomas bulbares."
         
         if 'praat' in nombre_low or 'voice analyst' in nombre_low:
-            s.nota_clinica = "Prioritario: Evaluación fonoaudiológica recomendada para detectar cambios acústicos imperceptibles."
+            s.nota_clinica = "Prioritario: Evaluación fonoaudiológica recomendada para detectar cambios acústicos."
 
         # B. Vinculación de Periféricos Inteligente
-        if not s.es_accesorio:
-            # B.1. Vinculación de Eye Tracker
+        # No vinculamos accesorios a otros accesorios (evitamos bucles)
+        es_hardware_puro = any(p in nombre_low for p in ['eye tracker', 'puntero', 'gafas', 'soporte'])
+        
+        if not es_hardware_puro:
+            # B.1. Software de mirada -> Necesita Eye Tracker
             if s.nombre in ['Grid 3', 'Verbo', 'TD Snap', 'Tallk', 'Look to learn']:
-                s.accesorio_vinculado = next((x for x in resultados if x.nombre == 'Eye tracker'), None)
+                s.accesorio_vinculado = eye_tracker
             
-            # B.2. Vinculación de Punteros (Cefálica vs Manual)
+            # B.2. Paneles físicos -> Necesitan Punteros
             if s.nombre in ['Panel alfabético', 'Panel pictogramas', 'SpeakBook']:
+                # Si el usuario tiene poca resistencia o pide acceso cefálico, priorizamos gafas
                 if 3 in ids_entradas or v_resistencia <= 1:
-                    s.accesorio_vinculado = next((x for x in resultados if 'Gafas' in x.nombre), None)
-                if not s.accesorio_vinculado:
-                    s.accesorio_vinculado = next((x for x in resultados if x.nombre == 'Puntero Láser'), None)
+                    s.accesorio_vinculado = punto_gafas
+                else:
+                    s.accesorio_vinculado = punto_laser
 
-            # C. Notas de Contexto, Soporte y Priorización
+            # C. Contexto de Silla y Entorno
             if v_silla and s.admite_anclaje:
                 s.nota_clinica += " | Requiere soporte de fijación a silla."
-                
-                # Buscamos el soporte en los resultados para incluirlo en la tabla de referencia final
-                soporte = next((x for x in resultados if 'Soporte' in x.nombre), None)
-                if soporte and soporte.id not in ids_accesorios_vistos:
-                    accesorios_referencia.append(soporte)
-                    ids_accesorios_vistos.add(soporte.id)
+                if soporte_anclaje and soporte_anclaje.id not in ids_accesorios_vistos:
+                    accesorios_referencia.append(soporte_anclaje)
+                    ids_accesorios_vistos.add(soporte_anclaje.id)
             
             if v_entorno == 'exterior':
-                # 1. Identificamos si es un sistema de mirada (con problemas IR)
                 es_sistema_mirada = s.accesorio_vinculado and s.accesorio_vinculado.nombre == 'Eye tracker'
                 
                 if es_sistema_mirada:
-                    s.nota_clinica += " | ADVERTENCIA: El seguimiento ocular puede perder precisión bajo luz solar directa."
-                    s.prioridad_entorno = 1 # Bajamos prioridad por limitación técnica
+                    s.nota_clinica += " | ADVERTENCIA: El seguimiento ocular pierde precisión bajo luz solar directa."
+                    s.prioridad_entorno = 1 
                 
-                # 2. Solo marcamos como optimizado si es realmente portable y NO tiene fallos de precisión por luz
                 if s.portable and not es_sistema_mirada:
                     s.nota_clinica += " | Optimizado para movilidad exterior."
                 
-                # 3. Si el sistema no es portable en absoluto, bajamos su prioridad en la lista
                 if not s.portable:
                     s.prioridad_entorno = 1
 
             sistemas_finales.append(s)
 
-    # Ordenar: primero los de prioridad 0 (sin problemas de entorno)
+    # Ordenar: primero los óptimos para el entorno seleccionado
     sistemas_finales.sort(key=lambda x: x.prioridad_entorno)
 
-    # D. Recopilación de hardware único para la tabla de referencia
+    # D. Recopilar accesorios finales para la tabla de costes de referencia
     for s in sistemas_finales:
         acc = s.accesorio_vinculado
         if acc and acc.id not in ids_accesorios_vistos:
-            nombre_acc_low = acc.nombre.lower()
-            es_software_o_banco = any(kw in nombre_acc_low for kw in 
-                                    ['modeltalker', 'myownvoice', 'vocalid', 'bank your voice', 'praat', 'analyst'])
-            
-            if not es_software_o_banco:
-                accesorios_referencia.append(acc)
-                ids_accesorios_vistos.add(acc.id)
+            accesorios_referencia.append(acc)
+            ids_accesorios_vistos.add(acc.id)
 
     return render_template('recomendacion.html', 
                            sistemas=sistemas_finales, 
                            accesorios_referencia=accesorios_referencia,
-                           nombre_usuario=nombre)
+                           nombre_usuario=nombre_usuario)
 
 if __name__ == '__main__':
     app.run(debug=True)
-
+    
 #python backend/app.py
 #http://127.0.0.1:5000
