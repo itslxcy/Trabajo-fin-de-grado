@@ -11,8 +11,7 @@
     <!-- Línea explicativa solicitada -->
     <p style="margin-bottom: 30px; color: #555;">
         A continuación se muestran los sistemas de comunicación recomendados. 
-        Si corresponde, también se recomendará un sistema periférico que combinar con este. Las descripciones de estos se encuentran en la tabla del final de la página.
-    </p>
+        Si corresponde, también se recomendará un sistema periférico que combinar con este, cuya descripción se podrá ver más abajo.
 
     <div class="seccion-tabla">
         <h2>Sistemas recomendados y periféricos necesarios</h2>
@@ -83,6 +82,33 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+    {% endif %}
+
+    {% if bancos_voz %}
+    <div class="seccion-informativa" style="margin-top: 50px; padding: 20px; border-radius: 10px; background-color: #f9f2fa;">
+        <h2 style="color: #ac4caf; margin-top: 0;">Preservación de la identidad vocal</h2>
+        <p>Se ha detectado que su nivel de habla actual permite realizar un proceso de Voice Banking. Esta es una oportunidad crítica para grabar su voz y crear una síntesis personalizada para utilizarla en el futuro.</p>
+        
+        <table class="tabla-recomendacion">
+            <thead>
+                <tr>
+                    <th>Método de Preservación</th>
+                    <th>Descripción</th>
+                    <th>Coste aprox.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for banco in bancos_voz %}
+                <tr>
+                    <td><strong>{{ banco.nombre }}</strong></td>
+                    <td>{{ banco.descripcion }}</td>
+                    <td>{{ "Gratis" if banco.coste_min == 0 else banco.coste_min ~ " €" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p style="color: #d32f2f; font-weight: bold; font-size: 0.95em; margin-top: 15px;">* Se recomienda iniciar estos procesos lo antes posible, incluso si aún no necesitas un comunicador.</p>
     </div>
     {% endif %}
 

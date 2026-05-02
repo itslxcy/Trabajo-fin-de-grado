@@ -128,7 +128,7 @@ VALUES
 -- BANCOS DE VOZ Y ANÁLISIS
 ('ModelTalker Gen3', 'Sistema de síntesis de voz personalizada.', 0,false,2,true,false),
 ('MyOwnVoice (Acapela)', 'Servicio basado en Deep Learning para crear una voz digital idéntica.', 0,false,1,true,false),
-('VocaliD', 'Hibridación de voz para mayor naturalidad.', 0,false,1,true,false),
+('VocaliD', 'Hibridación de voz entre la del usuario y una donada.', 0,false,1,true,false),
 ('Bank Your Voice', 'Iniciativa española de preservación para sintetizadores abiertos.', 0,false,1,true,false),
 ('Praat / Voice Analyst', 'Herramientas de análisis acústico utilizadas en logopedia.', 0,false,1,true,false);
 
@@ -148,12 +148,12 @@ SELECT id, 0, 3, 2, 2, 3 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Spe
 
 -- Voice Banking
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
-SELECT id, 0, 0, 2, 3, 3 FROM saac_sistema 
+SELECT id, 0, 1, 2, 0, 3 FROM saac_sistema 
 WHERE nombre IN ('ModelTalker Gen3', 'MyOwnVoice (Acapela)', 'VocaliD', 'Bank Your Voice');
 
 -- Análisis acústico preventivo
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
-SELECT id, 1, 0, 2, 2, 2 FROM saac_sistema WHERE nombre = 'Praat / Voice Analyst';
+SELECT id, 1, 1, 2, 0, 2 FROM saac_sistema WHERE nombre = 'Praat / Voice Analyst';
 
 -- Soporte físico y resto
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)

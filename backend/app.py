@@ -74,17 +74,12 @@ def recomendar():
     consulta = SaacSistema.query.outerjoin(SistemaRequisitoFuncional)
 
     # 4. FILTROS DE BASE DE DATOS
-    # Filtro Presupuesto
     consulta = consulta.filter(SaacSistema.coste_min <= v_presupuesto)
-
-    # Filtro Fatiga vs Resistencia (Lógica: El sistema no debe cansar más de lo que el usuario aguanta)
     consulta = consulta.filter(SaacSistema.fatiga_fisica <= v_resistencia)
 
-    # Filtro Idiomas
     if ids_idiomas:
         consulta = consulta.filter(SaacSistema.idiomas.any(Idioma.id.in_(ids_idiomas)))
 
-    # Filtro Requisitos Funcionales (Capacidades)
     consulta = consulta.filter(
         or_(SistemaRequisitoFuncional.nivel_visual_min <= v_vision, SistemaRequisitoFuncional.nivel_visual_min == None),
         or_(SistemaRequisitoFuncional.nivel_cognitivo_min <= v_cognicion, SistemaRequisitoFuncional.nivel_cognitivo_min == None),
@@ -93,11 +88,9 @@ def recomendar():
         or_(SistemaRequisitoFuncional.nivel_habla_min <= v_habla, SistemaRequisitoFuncional.nivel_habla_min == None)
     )
 
-    # Filtro Autonomía (Si no tiene independencia, buscamos sistemas que requieran interlocutor)
     if v_independencia == 0:
         consulta = consulta.filter(SaacSistema.requiere_interlocutor == True)
 
-    # Filtros de Entrada y Plataforma
     if ids_entradas:
         consulta = consulta.filter(SaacSistema.entradas.any(TipoEntrada.id.in_(ids_entradas)))
     if ids_plataformas:
@@ -108,74 +101,66 @@ def recomendar():
     # --- 5. LÓGICA DE PROCESAMIENTO Y VINCULACIÓN ---
     sistemas_finales = []
     accesorios_referencia = []
+    bancos_voz_informativa = [] # Lista para la tabla informativa de Voice Banking
     ids_accesorios_vistos = set() 
     
-    # Pre-identificamos hardware clave en los resultados
+    # Pre-identificamos hardware clave
     eye_tracker = next((x for x in resultados if x.nombre == 'Eye tracker'), None)
     soporte_anclaje = next((x for x in resultados if 'Soporte' in x.nombre), None)
     punto_gafas = next((x for x in resultados if 'Gafas' in x.nombre), None)
     punto_laser = next((x for x in resultados if x.nombre == 'Puntero Láser'), None)
 
     for s in resultados:
-        # El soporte de anclaje no se muestra como sistema principal, solo como accesorio de referencia
-        if 'Soporte' in s.nombre:
+        nombre_low = s.nombre.lower()
+
+        # A. Separar Voice Banking y Análisis Acústico (Si el habla es >= 2)
+        es_preservacion = any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid', 'bank your voice', 'praat', 'analyst'])
+        if es_preservacion:
+            if v_habla >= 2:
+                bancos_voz_informativa.append(s)
+            continue # No añadir a la tabla de sistemas principales
+
+        # B. No mostrar accesorios puros como sistemas principales
+        if any(p in nombre_low for p in ['eye tracker', 'puntero', 'gafas', 'soporte']):
             continue
 
         s.nota_clinica = ""
         s.accesorio_vinculado = None 
-        s.prioridad_entorno = 0 # 0: Óptimo, 1: Con advertencias
-        nombre_low = s.nombre.lower()
+        s.prioridad_entorno = 0 
         
-        # A. Notas Clínicas Preventivas
-        if any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid', 'bank your voice']):
-            s.nota_clinica = "URGENTE: Ventana de oportunidad óptima. Iniciar preservación de voz antes de síntomas bulbares."
+        # B.1. Vinculación inteligente de periféricos
+        if s.nombre in ['Grid 3', 'Verbo', 'TD Snap', 'Tallk', 'Look to learn']:
+            s.accesorio_vinculado = eye_tracker
         
-        if 'praat' in nombre_low or 'voice analyst' in nombre_low:
-            s.nota_clinica = "Prioritario: Evaluación fonoaudiológica recomendada para detectar cambios acústicos."
+        if s.nombre in ['Panel alfabético', 'Panel pictogramas', 'SpeakBook']:
+            if 3 in ids_entradas or v_resistencia <= 1:
+                s.accesorio_vinculado = punto_gafas
+            else:
+                s.accesorio_vinculado = punto_laser
 
-        # B. Vinculación de Periféricos Inteligente
-        # No vinculamos accesorios a otros accesorios (evitamos bucles)
-        es_hardware_puro = any(p in nombre_low for p in ['eye tracker', 'puntero', 'gafas', 'soporte'])
+        # C. Contexto de Silla y Entorno
+        if v_silla and s.admite_anclaje:
+            s.nota_clinica += " | Requiere soporte de fijación a silla."
+            if soporte_anclaje and soporte_anclaje.id not in ids_accesorios_vistos:
+                accesorios_referencia.append(soporte_anclaje)
+                ids_accesorios_vistos.add(soporte_anclaje.id)
         
-        if not es_hardware_puro:
-            # B.1. Software de mirada -> Necesita Eye Tracker
-            if s.nombre in ['Grid 3', 'Verbo', 'TD Snap', 'Tallk', 'Look to learn']:
-                s.accesorio_vinculado = eye_tracker
-            
-            # B.2. Paneles físicos -> Necesitan Punteros
-            if s.nombre in ['Panel alfabético', 'Panel pictogramas', 'SpeakBook']:
-                # Si el usuario tiene poca resistencia o pide acceso cefálico, priorizamos gafas
-                if 3 in ids_entradas or v_resistencia <= 1:
-                    s.accesorio_vinculado = punto_gafas
-                else:
-                    s.accesorio_vinculado = punto_laser
+        if v_entorno == 'exterior':
+            es_sistema_mirada = s.accesorio_vinculado and s.accesorio_vinculado.nombre == 'Eye tracker'
+            if es_sistema_mirada:
+                s.nota_clinica += " | ADVERTENCIA: El seguimiento ocular pierde precisión bajo luz solar directa."
+                s.prioridad_entorno = 1 
+            if s.portable and not es_sistema_mirada:
+                s.nota_clinica += " | Optimizado para movilidad exterior."
+            if not s.portable:
+                s.prioridad_entorno = 1
 
-            # C. Contexto de Silla y Entorno
-            if v_silla and s.admite_anclaje:
-                s.nota_clinica += " | Requiere soporte de fijación a silla."
-                if soporte_anclaje and soporte_anclaje.id not in ids_accesorios_vistos:
-                    accesorios_referencia.append(soporte_anclaje)
-                    ids_accesorios_vistos.add(soporte_anclaje.id)
-            
-            if v_entorno == 'exterior':
-                es_sistema_mirada = s.accesorio_vinculado and s.accesorio_vinculado.nombre == 'Eye tracker'
-                
-                if es_sistema_mirada:
-                    s.nota_clinica += " | ADVERTENCIA: El seguimiento ocular pierde precisión bajo luz solar directa."
-                    s.prioridad_entorno = 1 
-                
-                if s.portable and not es_sistema_mirada:
-                    s.nota_clinica += " | Optimizado para movilidad exterior."
-                
-                if not s.portable:
-                    s.prioridad_entorno = 1
+        sistemas_finales.append(s)
 
-            sistemas_finales.append(s)
-
-    # Ordenar: primero los óptimos para el entorno seleccionado
+    # Ordenar resultados
     sistemas_finales.sort(key=lambda x: x.prioridad_entorno)
 
-    # D. Recopilar accesorios finales para la tabla de costes de referencia
+    # D. Recopilar accesorios únicos para la tabla de referencia
     for s in sistemas_finales:
         acc = s.accesorio_vinculado
         if acc and acc.id not in ids_accesorios_vistos:
@@ -185,6 +170,7 @@ def recomendar():
     return render_template('recomendacion.html', 
                            sistemas=sistemas_finales, 
                            accesorios_referencia=accesorios_referencia,
+                           bancos_voz=bancos_voz_informativa, # Nueva variable para el HTML
                            nombre_usuario=nombre_usuario)
 
 if __name__ == '__main__':
