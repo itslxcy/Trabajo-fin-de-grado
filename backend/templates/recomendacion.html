@@ -2,81 +2,92 @@
 <html lang="es-ES">
 <head>
     <meta charset="UTF-8">
-    <title>Resultados de Recomendación - TFG</title>
+    <title>Resultados de recomendación - TFG</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
-
 </head>
 <body>
     <h1>Resultados para: {{ nombre_usuario }}</h1>
+    
+    <!-- Línea explicativa solicitada -->
+    <p style="margin-bottom: 30px; color: #555;">
+        A continuación se muestran los sistemas de comunicación recomendados. 
+        Si corresponde, también se recomendará un sistema periférico que combinar con este. Las descripciones de estos se encuentran en la tabla del final de la página.
+    </p>
 
     <div class="seccion-tabla">
-        <h2>Sistemas principales recomendados</h2>
+        <h2>Sistemas recomendados y periféricos necesarios</h2>
         {% if sistemas %}
         <table>
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Descripción</th>
+                    <th>Descripción / Nota Clínica</th>
                     <th>Coste aprox.</th>
-                    <th>Disponible en tus plataformas</th>
+                    <th>Plataformas</th>
+                    <th>Periférico sugerido</th>
                 </tr>
             </thead>
             <tbody>
                 {% for sistema in sistemas %}
                 <tr>
                     <td><strong>{{ sistema.nombre }}</strong></td>
-                    <td>{{ sistema.descripcion }}</td>
+                    <td>
+                        {{ sistema.descripcion }}
+                        {% if sistema.nota_clinica %}
+                            <div class="nota-clinica" style="color: #d9534f; font-style: italic; margin-top: 5px;">
+                                <strong>Nota:</strong> {{ sistema.nota_clinica }}
+                            </div>
+                        {% endif %}
+                    </td>
                     <td class="precio">{{ sistema.coste_min }} €</td>
                     <td class="plataformas-texto">
-                        {% set found = namespace(any=false, first=true) %}
                         {% for p in sistema.plataformas %}
-                            {% if not plataformas_seleccionadas or p.id in plataformas_seleccionadas %}
-                                {% if not found.first %}, {% endif %}
-                                {{ p.nombre }}
-                                {% set found.any = true %}
-                                {% set found.first = false %}
-                            {% endif %}
+                            {{ p.nombre }}{% if not loop.last %}, {% endif %}
                         {% endfor %}
-                        
-                        {% if not found.any %}
-                            <small style="color: #999;">No disponible para tus plataformas</small>
+                    </td>
+                    <td>
+                        {% if sistema.accesorio_vinculado %}
+                            <div class="periferico-box" style="background: #f0f7ff; border-left: 3px solid #007bff; padding: 5px;">
+                                <strong>{{ sistema.accesorio_vinculado.nombre }}</strong><br>
+                                <small>+{{ sistema.accesorio_vinculado.coste_min }} €</small>
+                            </div>
+                        {% else %}
+                            <small style="color: #999;">No requiere hardware adicional</small>
                         {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        {% else %}
-        <p class="no-resultados">No se han encontrado sistemas que cumplan todos los requisitos.</p>
         {% endif %}
     </div>
 
-    <div class="seccion-tabla">
-        <h2>Accesorios y periféricos sugeridos</h2>
-        {% if accesorios %}
+    {% if accesorios_referencia %}
+    <div class="seccion-tabla" style="margin-top: 50px;">
+        <h2>Descripción de periféricos y hardware</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Accesorio</th>
-                    <th>Justificación clínica</th>
-                    <th style="width: 120px;">Coste</th>
+                    <th>Periférico</th>
+                    <th>Descripción técnica del dispositivo</th>
+                    <th>Coste</th>
                 </tr>
             </thead>
             <tbody>
-                {% for accesorio in accesorios %}
+                {% for acc in accesorios_referencia %}
                 <tr>
-                    <td><strong>{{ accesorio.nombre }}</strong></td>
-                    <td class="nota-clinica">{{ accesorio.nota_clinica if accesorio.nota_clinica else 'Accesorio complementario para el acceso al sistema.' }}</td>
-                    <td class="precio">{{ accesorio.coste_min }} €</td>
+                    <td><strong>{{ acc.nombre }}</strong></td>
+                    <td>{{ acc.descripcion }}</td>
+                    <td class="precio">{{ acc.coste_min }} €</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        {% else %}
-        <p>No se requieren periféricos específicos para las capacidades seleccionadas.</p>
-        {% endif %}
     </div>
+    {% endif %}
 
-    <a href="/cuestionario" class="boton-volver">← Volver al cuestionario</a>
+    <div style="margin-top: 40px;">
+        <a href="/cuestionario" class="boton-volver">← Volver al cuestionario</a>
+    </div>
 </body>
 </html>

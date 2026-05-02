@@ -3,86 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Información SAAC</title>
+    <title>Inicio - Recomendador SAAC</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
 </head>
 <body>
     <nav class="nav-tabs">
-    <a href="/" class="active">Inicio</a>
-    <a href="/ELA">Sobre la ELA</a>
-    <a href="/SAAC">¿Qué es un SAAC?</a>
-    <a href="/cuestionario">Cuestionario</a>
-</nav>
+        <a href="/" class="active">Inicio</a>
+        <a href="/ELA">Sobre la ELA</a>
+        <a href="/SAAC">¿Qué es un SAAC?</a>
+        <a href="/cuestionario">Cuestionario</a>
+    </nav>
 
     <h1>¿Qué es este recomendador?</h1>
     
     <div class="seccion">
-        <p>Esta es una página diseñada como Trabajo de Fin de Grado de Ingeniería de la salud. <p>
-            <p>En la parte superior encontrará varias pestañas con descripciones acerca del ELA y los SAAC. Dirijase a cualquiera de ellas para más información. </p>
-            </p> A su vez, puede dirigirse a la pestaña de <strong>Cuestionario</strong>, introducir los datos del usuario y obtener una recomendación personalizada sobre el SAAC que mejor se ajusta a su situación. </p>
+        <p>Esta es una página diseñada como Trabajo de Fin de Grado de Ingeniería de la Salud.</p>
+        <p>En la parte superior encontrará varias pestañas con descripciones acerca de la ELA y los SAAC. Diríjase a cualquiera de ellas para más información.</p>
+        <p>A su vez, puede dirigirse a la pestaña de <strong>Cuestionario</strong>, introducir los datos del usuario y obtener una recomendación personalizada sobre el SAAC que mejor se ajusta a su situación.</p>
     </div>
 
-<div class="seccion">
-    <h2>Criterios de evaluación para el cuestionario</h2>
-    <p>Al realizar la evaluación, la base de datos cruza los siguientes factores para recomendar la mejor opción:</p>
+    <div class="seccion">
+        <h2>Criterios de evaluación para el cuestionario</h2>
+        <p>Al realizar la evaluación, el sistema cruza los siguientes factores para recomendar la mejor opción:</p>
 
-    <div class="opciones-grid" style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
-        
-        <!-- Ítem 1 -->
-        <div class="opcion-item" style="border-left: 3px solid #ddd; padding-left: 15px;">
-            <div style="font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9em; color: #555;">Método de Acceso</div>
-            <div style="line-height: 1.4;">Táctil, mirada, pulsador, control oral...</div>
-        </div>
-        
-        <!-- Ítem 2 -->
-        <div class="opcion-item" style="border-left: 3px solid #ddd; padding-left: 15px;">
-            <div style="font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9em; color: #555;">Nivel de Fatiga</div>
-            <div style="line-height: 1.4;">Esfuerzo físico requerido y resistencia muscular actual.</div>
-        </div>
-        
-        <!-- Ítem 3 -->
-        <div class="opcion-item" style="border-left: 3px solid #ddd; padding-left: 15px;">
-            <div style="font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9em; color: #555;">Entorno de Uso</div>
-            <div style="line-height: 1.4;">Uso en cama, silla de ruedas (necesidad de anclajes) o exteriores.</div>
-        </div>
+        <!-- He quitado los estilos manuales y usado una estructura más limpia -->
+        <div class="grid-soluciones" style="margin-top: 30px;">
+            
+            <div class="columna-solucion columna-hardware" style="border-top: 3px solid #ddd; padding: 15px;">
+                <span style="font-weight: bold; color: #ac4caf; text-transform: uppercase; font-size: 0.85em;">Método de Acceso</span>
+                <p style="font-size: 0.9em; margin-top: 5px;">Táctil, mirada, pulsador, control oral...</p>
+            </div>
+            
+            <div class="columna-solucion columna-hardware" style="border-top: 3px solid #ddd; padding: 15px;">
+                <span style="font-weight: bold; color: #ac4caf; text-transform: uppercase; font-size: 0.85em;">Nivel de Fatiga</span>
+                <p style="font-size: 0.9em; margin-top: 5px;">Esfuerzo físico requerido y resistencia muscular actual.</p>
+            </div>
+            
+            <div class="columna-solucion columna-hardware" style="border-top: 3px solid #ddd; padding: 15px;">
+                <span style="font-weight: bold; color: #ac4caf; text-transform: uppercase; font-size: 0.85em;">Entorno de Uso</span>
+                <p style="font-size: 0.9em; margin-top: 5px;">Uso en cama, silla de ruedas (anclajes) o exteriores.</p>
+            </div>
 
-        <!-- Ítem 4 -->
-        <div class="opcion-item" style="border-left: 3px solid #ddd; padding-left: 15px;">
-            <div style="font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9em; color: #555;">Capacidad Sensorial</div>
-            <div style="line-height: 1.4;">Evaluación visual (contraste. tamaño de fuente), auditiva y tecnológica.</div>
-        </div>
-        
-        <!-- Ítem 5 -->
-        <div class="opcion-item" style="border-left: 3px solid #ddd; padding-left: 15px;">
-            <div style="font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9em; color: #555;">Nivel Cognitivo</div>
-            <div style="line-height: 1.4;">Comprensión para elegir el tipo de metodología de comunicación (Bliss, Minspeak, etc.).</div>
-        </div>
-        
-        <!-- Ítem 6 -->
-        <div class="opcion-item" style="border-left: 3px solid #ddd; padding-left: 15px;">
-            <div style="font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9em; color: #555;">Idioma y Alfabetización</div>
-            <div style="line-height: 1.4;">Idioma nativo y nivel de lectoescritura preservado.</div>
-        </div>
+            <div class="columna-solucion columna-hardware" style="border-top: 3px solid #ddd; padding: 15px;">
+                <span style="font-weight: bold; color: #ac4caf; text-transform: uppercase; font-size: 0.85em;">Capacidad Sensorial</span>
+                <p style="font-size: 0.9em; margin-top: 5px;">Evaluación visual, auditiva y tecnológica.</p>
+            </div>
+            
+            <div class="columna-solucion columna-hardware" style="border-top: 3px solid #ddd; padding: 15px;">
+                <span style="font-weight: bold; color: #ac4caf; text-transform: uppercase; font-size: 0.85em;">Nivel Cognitivo</span>
+                <p style="font-size: 0.9em; margin-top: 5px;">Metodología de comunicación adecuada al usuario.</p>
+            </div>
+            
+            <div class="columna-solucion columna-hardware" style="border-top: 3px solid #ddd; padding: 15px;">
+                <span style="font-weight: bold; color: #ac4caf; text-transform: uppercase; font-size: 0.85em;">Alfabetización</span>
+                <p style="font-size: 0.9em; margin-top: 5px;">Idioma nativo y nivel de lectoescritura preservado.</p>
+            </div>
 
-        <!-- Ítem 7 -->
-        <div class="opcion-item" style="border-left: 3px solid #ddd; padding-left: 15px;">
-            <div style="font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9em; color: #555;">Plataforma</div>
-            <div style="line-height: 1.4;">Windows, Android, iOS, Web o hardware propio.</div>
-        </div>
-        
-        <!-- Ítem 8 -->
-        <div class="opcion-item" style="border-left: 3px solid #ddd; padding-left: 15px;">
-            <div style="font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9em; color: #555;">Independencia</div>
-            <div style="line-height: 1.4;">Uso autónomo o necesidad de ayuda para configuración.</div>
-        </div>
-        
-        <!-- Ítem 9 -->
-        <div class="opcion-item" style="border-left: 3px solid #ddd; padding-left: 15px;">
-            <div style="font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9em; color: #555;">Coste y Soporte</div>
-            <div style="line-height: 1.4;">Presupuesto disponible y mantenimiento técnico requerido.</div>
-        </div>
+            <div class="columna-solucion columna-hardware" style="border-top: 3px solid #ddd; padding: 15px;">
+                <span style="font-weight: bold; color: #ac4caf; text-transform: uppercase; font-size: 0.85em;">Plataforma</span>
+                <p style="font-size: 0.9em; margin-top: 5px;">Windows, Android, iOS, Web o hardware propio.</p>
+            </div>
+            
+            <div class="columna-solucion columna-hardware" style="border-top: 3px solid #ddd; padding: 15px;">
+                <span style="font-weight: bold; color: #ac4caf; text-transform: uppercase; font-size: 0.85em;">Independencia</span>
+                <p style="font-size: 0.9em; margin-top: 5px;">Uso autónomo o necesidad de apoyo para configuración.</p>
+            </div>
+            
+            <div class="columna-solucion columna-hardware" style="border-top: 3px solid #ddd; padding: 15px;">
+                <span style="font-weight: bold; color: #ac4caf; text-transform: uppercase; font-size: 0.85em;">Coste</span>
+                <p style="font-size: 0.9em; margin-top: 5px;">Presupuesto disponible y mantenimiento técnico.</p>
+            </div>
 
+        </div>
     </div>
-</div>
 </body>
 </html>

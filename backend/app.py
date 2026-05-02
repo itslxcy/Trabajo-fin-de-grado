@@ -98,49 +98,87 @@ def recomendar():
 
     resultados = consulta.all()
 
-    # --- LÓGICA DE POST-PROCESAMIENTO (Protocolo 2026) ---
+    # --- LÓGICA DE PROCESAMIENTO ---
     sistemas_finales = []
-    accesorios_finales = []
-
+    accesorios_referencia = []
+    ids_accesorios_vistos = set() 
+    
     for s in resultados:
         s.nota_clinica = ""
+        s.accesorio_vinculado = None 
+        s.prioridad_entorno = 0 # 0: Óptimo, 1: Con advertencias
         nombre_low = s.nombre.lower()
         
-        # A. Implementación Voice Banking (Habla Nivel 3)
-        is_voice_banking = any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid', 'bank your voice'])
-        if is_voice_banking:
-            if v_habla == 3:
-                s.nota_clinica = "URGENTE: Ventana de oportunidad óptima. Iniciar preservación de voz antes de síntomas bulbares para mantener identidad vocal."
-            else:
-                s.nota_clinica = "Recomendado: Preservación de voz para uso en dispositivos SGD/AAC."
-
-        # B. Análisis Acústico Preventivo (Audición Nivel 1 o Habla Nivel 3)[cite: 1]
-        if 'praat' in nombre_low or 'voice analyst' in nombre_low:
-            if v_audicion == 1 or v_habla == 3:
-                s.nota_clinica = "Prioritario: Evaluación fonoaudiológica recomendada para detectar cambios acústicos imperceptibles al oído.[cite: 1]"
-
-        # C. Notas de Contexto (Silla/Entorno)
-        if v_silla and s.admite_anclaje:
-            s.nota_clinica += " | Requiere soporte de fijación a silla."
+        # A. Notas Clínicas Preventivas
+        if any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid', 'bank your voice']):
+            s.nota_clinica = "URGENTE: Ventana de oportunidad óptima. Iniciar preservación de voz antes de síntomas bulbares."
         
-        if v_entorno == 'exterior' and s.portable:
-            s.nota_clinica += " | Optimizado para movilidad exterior."
+        if 'praat' in nombre_low or 'voice analyst' in nombre_low:
+            s.nota_clinica = "Prioritario: Evaluación fonoaudiológica recomendada para detectar cambios acústicos imperceptibles."
 
-        # Clasificación Final
-        if s.es_accesorio:
-            accesorios_finales.append(s)
-        else:
+        # B. Vinculación de Periféricos Inteligente
+        if not s.es_accesorio:
+            # B.1. Vinculación de Eye Tracker
+            if s.nombre in ['Grid 3', 'Verbo', 'TD Snap', 'Tallk', 'Look to learn']:
+                s.accesorio_vinculado = next((x for x in resultados if x.nombre == 'Eye tracker'), None)
+            
+            # B.2. Vinculación de Punteros (Cefálica vs Manual)
+            if s.nombre in ['Panel alfabético', 'Panel pictogramas', 'SpeakBook']:
+                if 3 in ids_entradas or v_resistencia <= 1:
+                    s.accesorio_vinculado = next((x for x in resultados if 'Gafas' in x.nombre), None)
+                if not s.accesorio_vinculado:
+                    s.accesorio_vinculado = next((x for x in resultados if x.nombre == 'Puntero Láser'), None)
+
+            # C. Notas de Contexto, Soporte y Priorización
+            if v_silla and s.admite_anclaje:
+                s.nota_clinica += " | Requiere soporte de fijación a silla."
+                
+                # Buscamos el soporte en los resultados para incluirlo en la tabla de referencia final
+                soporte = next((x for x in resultados if 'Soporte' in x.nombre), None)
+                if soporte and soporte.id not in ids_accesorios_vistos:
+                    accesorios_referencia.append(soporte)
+                    ids_accesorios_vistos.add(soporte.id)
+            
+            if v_entorno == 'exterior':
+                # 1. Identificamos si es un sistema de mirada (con problemas IR)
+                es_sistema_mirada = s.accesorio_vinculado and s.accesorio_vinculado.nombre == 'Eye tracker'
+                
+                if es_sistema_mirada:
+                    s.nota_clinica += " | ADVERTENCIA: El seguimiento ocular puede perder precisión bajo luz solar directa."
+                    s.prioridad_entorno = 1 # Bajamos prioridad por limitación técnica
+                
+                # 2. Solo marcamos como optimizado si es realmente portable y NO tiene fallos de precisión por luz
+                if s.portable and not es_sistema_mirada:
+                    s.nota_clinica += " | Optimizado para movilidad exterior."
+                
+                # 3. Si el sistema no es portable en absoluto, bajamos su prioridad en la lista
+                if not s.portable:
+                    s.prioridad_entorno = 1
+
             sistemas_finales.append(s)
+
+    # Ordenar: primero los de prioridad 0 (sin problemas de entorno)
+    sistemas_finales.sort(key=lambda x: x.prioridad_entorno)
+
+    # D. Recopilación de hardware único para la tabla de referencia
+    for s in sistemas_finales:
+        acc = s.accesorio_vinculado
+        if acc and acc.id not in ids_accesorios_vistos:
+            nombre_acc_low = acc.nombre.lower()
+            es_software_o_banco = any(kw in nombre_acc_low for kw in 
+                                    ['modeltalker', 'myownvoice', 'vocalid', 'bank your voice', 'praat', 'analyst'])
+            
+            if not es_software_o_banco:
+                accesorios_referencia.append(acc)
+                ids_accesorios_vistos.add(acc.id)
 
     return render_template('recomendacion.html', 
                            sistemas=sistemas_finales, 
-                           accesorios=accesorios_finales,
-                           nombre_usuario=nombre,
-                           v_habla=v_habla,
-                           v_audicion=v_audicion)
+                           accesorios_referencia=accesorios_referencia,
+                           nombre_usuario=nombre)
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
+
 #python backend/app.py
 #http://127.0.0.1:5000
