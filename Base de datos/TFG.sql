@@ -39,7 +39,7 @@ CREATE TABLE entorno_uso (
 INSERT INTO entorno_uso (nombre) VALUES 
 ('Interior/Cama'), ('Interior/Silla'), ('Exterior/Luz Solar'), ('Exterior/Movimiento');
 
--- 3. TABLA DE SISTEMAS SAAC (Estructura simplificada)
+-- 3. TABLA DE SISTEMAS SAAC (Estructura con nuevo parámetro enlace_info)
 CREATE TABLE saac_sistema (
     id SERIAL PRIMARY KEY,
     nombre TEXT NOT NULL,
@@ -48,7 +48,8 @@ CREATE TABLE saac_sistema (
     requiere_interlocutor BOOLEAN,
     fatiga_fisica SMALLINT,
     portable BOOLEAN, 
-    admite_anclaje BOOLEAN
+    admite_anclaje BOOLEAN,
+    enlace_info TEXT
 );
 
 -- 4. TABLA DE REQUISITOS FUNCIONALES
@@ -86,82 +87,76 @@ CREATE TABLE sistema_plataforma (
     PRIMARY KEY (sistema_id, plataforma_id)
 );
 
--- 6. CARGA DE SISTEMAS (Valores corregidos según lógica clínica y estructura nueva)
+-- 6. CARGA DE SISTEMAS (Incluyendo URLs de información/compra)
 INSERT INTO saac_sistema 
-(nombre, descripcion, coste_min, requiere_interlocutor, fatiga_fisica, portable, admite_anclaje)
+(nombre, descripcion, coste_min, requiere_interlocutor, fatiga_fisica, portable, admite_anclaje, enlace_info)
 VALUES
 -- SISTEMAS DE BAJA TECNOLOGÍA
-('Panel pictogramas','Tablero físico que utiliza símbolos pictográficos (ARASAAC) para representar conceptos, acciones o necesidades básicas.',0,true,3,true,true),
-('Panel alfabético','Tablero de comunicación directa mediante el deletreo, diseñado para usuarios con lectoescritura preservada.',0,true,3,true,true),
-('SpeakBook','Cuaderno de comunicación diseñado para la selección mediante la mirada o puntero.',0,true,2,true,true),
-('Tablero ETRAN','Panel transparente que permite la comunicación mediante la dirección de la mirada.',90,true,1,true,true),
-('MegaBEE','Dispositivo de baja tecnología con pantalla que permite escribir mensajes con la mirada.',770,true,1,true,true),
+('Panel pictogramas','Tablero físico que utiliza símbolos pictográficos (ARASAAC) para representar conceptos, acciones o necesidades básicas.',0,true,3,true,true, 'https://arasaac.org/'),
+('Panel alfabético','Tablero de comunicación directa mediante el deletreo, diseñado para usuarios con lectoescritura preservada.',0,true,3,true,true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf'),
+('SpeakBook','Cuaderno de comunicación diseñado para la selección mediante la mirada o puntero.',0,true,2,true,true, 'https://acecentre.org.uk/resources/speakbook'),
+('Tablero ETRAN','Panel transparente que permite la comunicación mediante la dirección de la mirada.',90,true,1,true,true, 'https://qinera.com/es/tienda/comunicadores-sencillos/comunicador-tipo-etran'),
+('MegaBEE','Dispositivo de baja tecnología con pantalla que permite escribir mensajes con la mirada.',770,true,1,true,true, 'https://assistive.co.nz/product/megabee/'),
 
 -- SOFTWARE Y APPS
-('Look to Speak','Aplicación que utiliza la cámara frontal para permitir al usuario seleccionar frases preestablecidas mediante movimientos oculares.',0,false,1,true,true),
-('Tallk','Herramienta que utiliza algoritmos de seguimiento ocular a través de la cámara de la tablet.',0,false,1,true,true),
-('Grid 3','Software integral que permite desde el uso de pictogramas hasta el control del entorno y acceso a redes sociales.',300,false,1,true,true),
-('Verbo','Software de comunicación dinámico que permite crear tableros personalizados con salida de voz.',40,false,1,true,true),
-('Proloquo2Go','Aplicación de comunicación simbólica basada en el lenguaje natural, altamente personalizable.',300,false,2,true,true),
-('TD Snap','Software centrado en símbolos y alfabetización, diseñado para una navegación rápida y eficiente.',60,false,1,true,true),
-('Look to learn','Software diseñado para el entrenamiento y aprendizaje del control ocular como paso previo a la comunicación avanzada.',520,true,1,true,true),
-('TouchChat','Herramienta que combina símbolos y texto, con opciones de predicción de palabras.',150,false,2,true,true),
+('Look to Speak','Aplicación que utiliza la cámara frontal para permitir al usuario seleccionar frases preestablecidas mediante movimientos oculares.',0,false,1,true,true, 'https://play.google.com/store/apps/details?id=com.androidexperiments.looktospeak&hl=es'),
+('Tallk','Herramienta que utiliza algoritmos de seguimiento ocular a través de la cámara de la tablet.',0,false,1,true,true, 'https://play.google.com/store/apps/details?id=com.irisbond.tallk&hl=es'),
+('Grid 3','Software integral que permite desde el uso de pictogramas hasta el control del entorno y acceso a redes sociales.',300,false,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/grid-3'),
+('Verbo','Software de comunicación dinámico que permite crear tableros personalizados con salida de voz.',40,false,1,true,true, 'https://www.bjadaptaciones.com/software/verbo'),
+('Proloquo2Go','Aplicación de comunicación simbólica basada en el lenguaje natural, altamente personalizable.',300,false,2,true,true, 'https://www.assistiveware.com/es/productos/proloquo2go'),
+('TD Snap','Software centrado en símbolos y alfabetización, diseñado para una navegación rápida y eficiente.',60,false,1,true,true, 'https://es.tobiidynavox.com/pages/td-snap'),
+('Look to learn','Software diseñado para el entrenamiento y aprendizaje del control ocular como paso previo a la comunicación avanzada.',520,true,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/look-to-learn-1-licencia-electronica'),
+('TouchChat','Herramienta que combina símbolos y texto, con opciones de predicción de palabras.',150,false,2,true,true, 'https://touchchatapp.com/'),
 
 -- ACCESO POR VOZ
-('Asistente de voz AAC','Aplicación que convierte voz a texto.',0,false,1,true,false),
-('Speak4Me','App que permite guardar frases usadas habitualmente para reproducirlas con rapidez.',0,false,1,true,false),
-('Voice Access','Herramienta de Google que te permite controlar todo tu teléfono usando solo comandos de voz.',0,false,1,true,false),
-('Speech to Text','Sistema de dictado y conversión de voz a texto.',0,false,1,true,false),
+('Asistente de voz AAC','Aplicación que convierte voz a texto.',0,false,1,true,false, 'https://play.google.com/store/apps/details?id=nl.asoft.speechassistant&hl=es'),
+('Speak4Me','App que permite guardar frases usadas habitualmente para reproducirlas con rapidez.',0,false,1,true,false, 'https://speak4me.io/'),
+('Voice Access','Herramienta de Google que te permite controlar todo tu teléfono usando solo comandos de voz.',0,false,1,true,false, 'https://play.google.com/store/apps/details?id=com.google.android.apps.accessibility.voiceaccess&hl=es'),
+('Speech to Text','Sistema de dictado y conversión de voz a texto.',0,false,1,true,false, 'https://play.google.com/store/apps/details?id=com.maruar.voicememo'),
 
 -- SOLUCIONES WEB Y PACKS
-('Cboard','Comunicador pictográfico basado en web que ofrece soporte en la nube y síntesis de voz.',0,false,2,true,false),
-('Picto4Me','Página web para diseñar tus propios tableros para imprimirlos o utilizarlos digitalmente.',0,false,2,true,false),
-('LetMeTalk Web','Comunicador web por pictogramas',0,false,2,true,false),
-('ComuniQa','Pack completo con tablet configurada y los programas necesarios.',4000,false,1,true,true),
+('Cboard','Comunicador pictográfico basado en web que ofrece soporte en la nube y síntesis de voz.',0,false,2,true,false, 'https://www.cboard.io/es/'),
+('Picto4Me','Página web para diseñar tus propios tableros para imprimirlos o utilizarlos digitalmente.',0,false,2,true,false, 'https://www.picto4.me/site?lang=es'),
+('LetMeTalk Web','Comunicador web por pictogramas',0,false,2,true,false, 'https://www.letmetalk.info/'),
+('ComuniQa','Pack completo con tablet configurada y los programas necesarios.',4000,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-td-snap'),
 
 -- PERIFÉRICOS
-('Eye tracker','Cámara que se conecta al ordenador y convierte el movimiento de los ojos en el puntero del ratón.',260,false,1,false,true),
-('Puntero Láser','Dispositivo de apoyo manual o adaptado para la señalización directa.',99,true,3,true,false),
-('Gafas con Puntero Láser', 'Soporte de puntero láser en montura oftálmica para facilitar el acceso mediante control cefálico.', 120,true,2,true,false),
-('Soporte de anclaje articulado', 'Brazo mecánico ajustable para la fijación robusta de dispositivos a sillas de ruedas.', 250,false,0,false,true),
+('Eye tracker','Cámara que se conecta al ordenador y convierte el movimiento de los ojos en el puntero del ratón.',260,false,1,false,true, 'https://qinera.com/es/tienda/lectores-oculares/tobii-pceye-5'),
+('Puntero Láser','Dispositivo de apoyo manual o adaptado para la señalización directa.',99,true,3,true,false, 'https://www.bjadaptaciones.com/'),
+('Gafas con Puntero Láser', 'Soporte de puntero láser en montura oftálmica para facilitar el acceso mediante control cefálico.', 120,true,2,true,false, 'https://www.elaandalucia.es/gafas-puntero-laser-todas-las-unidades-hospitalarias-ela-andalucia/'),
+('Soporte de anclaje articulado', 'Brazo mecánico ajustable para la fijación robusta de dispositivos a sillas de ruedas.', 250,false,0,false,true, 'https://qinera.com/es/tienda/comunicacion-aumentativa/soportes-y-brazos-caa'),
 
 -- BANCOS DE VOZ Y ANÁLISIS
-('ModelTalker Gen3', 'Sistema de síntesis de voz personalizada.', 0,false,2,true,false),
-('MyOwnVoice (Acapela)', 'Servicio basado en Deep Learning para crear una voz digital idéntica.', 0,false,1,true,false),
-('VocaliD', 'Hibridación de voz entre la del usuario y una donada.', 0,false,1,true,false),
-('Bank Your Voice', 'Iniciativa española de preservación para sintetizadores abiertos.', 0,false,1,true,false),
-('Praat / Voice Analyst', 'Herramientas de análisis acústico utilizadas en logopedia.', 0,false,1,true,false);
+('ModelTalker Gen3', 'Sistema de síntesis de voz personalizada.', 0,false,2,true,false, 'https://modeltalker.org/'),
+('MyOwnVoice (Acapela)', 'Servicio basado en Deep Learning para crear una voz digital idéntica.', 0,false,1,true,false, 'https://mov.acapela-group.com/es/home-es/'),
+('VocaliD', 'Hibridación de voz entre la del usuario y una donada.', 0,false,1,true,false, 'https://webcatalog.io/es/apps/vocalid'),
+('Bank Your Voice', 'Iniciativa española de preservación para sintetizadores abiertos.', 0,false,1,true,false, 'https://www.fundacionlukas.org/'),
+('Praat / Voice Analyst', 'Herramientas de análisis acústico utilizadas en logopedia.', 0,false,1,true,false, 'https://www.fon.hum.uva.nl/praat/');
 
 -- 7. REQUISITOS FUNCIONALES
--- ACCESO OCULAR Y BAJA TECNOLOGÍA (Tecnología Nivel 0)
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 3, 1, 2, 0, 0 FROM saac_sistema 
 WHERE nombre IN ('Eye tracker', 'Tallk', 'Look to Speak', 'MegaBEE', 'Look to learn', 'Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 'Puntero Láser', 'Gafas con Puntero Láser');
 
--- SOFTWARE AVANZADO (Tecnología Nivel 3)
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 2, 2, 3, 3, 0 FROM saac_sistema WHERE nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa');
 
--- CONTROL POR VOZ
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 0, 3, 2, 2, 3 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text');
 
--- Voice Banking
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 0, 1, 2, 0, 3 FROM saac_sistema 
 WHERE nombre IN ('ModelTalker Gen3', 'MyOwnVoice (Acapela)', 'VocaliD', 'Bank Your Voice');
 
--- Análisis acústico preventivo
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 1, 1, 2, 0, 2 FROM saac_sistema WHERE nombre = 'Praat / Voice Analyst';
 
--- Soporte físico y resto
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 0, 0, 0, 0, 0 FROM saac_sistema 
 WHERE nombre = 'Soporte de anclaje articulado' 
    OR id NOT IN (SELECT sistema_id FROM sistema_requisito_funcional);
 
--- 8. RELACIONES DE ENTRADA (Se mantiene igual)
+-- 8. RELACIONES DE ENTRADA
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, 4 FROM saac_sistema WHERE nombre IN ('Voice Access', 'Speech to Text', 'ModelTalker Gen3', 'MyOwnVoice (Acapela)', 'VocaliD', 'Bank Your Voice', 'Praat / Voice Analyst');
 

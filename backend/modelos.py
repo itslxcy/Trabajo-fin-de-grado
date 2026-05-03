@@ -54,11 +54,11 @@ class SaacSistema(bd.Model):
     nombre = bd.Column(bd.Text, nullable=False)
     descripcion = bd.Column(bd.Text)
     coste_min = bd.Column(bd.Numeric)
-    # Se mantienen solo los campos que existen en la BD actual:
     requiere_interlocutor = bd.Column(bd.Boolean)
     fatiga_fisica = bd.Column(bd.SmallInteger)
     portable = bd.Column(bd.Boolean)
     admite_anclaje = bd.Column(bd.Boolean)
+    enlace_info = bd.Column(bd.Text)
 
     # Relación con requisitos funcionales (Uno a Uno)
     requisitos = bd.relationship('SistemaRequisitoFuncional', backref='sistema', uselist=False, cascade="all, delete")

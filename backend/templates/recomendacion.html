@@ -8,10 +8,10 @@
 <body>
     <h1>Resultados para: {{ nombre_usuario }}</h1>
     
-    <!-- Línea explicativa solicitada -->
     <p style="margin-bottom: 30px; color: #555;">
         A continuación se muestran los sistemas de comunicación recomendados. 
-        Si corresponde, también se recomendará un sistema periférico que combinar con este, cuya descripción se podrá ver más abajo.
+        Si corresponde, también se recomendará un sistema periférico para combinar con este.
+    </p>
 
     <div class="seccion-tabla">
         <h2>Sistemas recomendados y periféricos necesarios</h2>
@@ -24,6 +24,7 @@
                     <th>Coste aprox.</th>
                     <th>Plataformas</th>
                     <th>Periférico sugerido</th>
+                    <th>Más información</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,6 +55,14 @@
                             <small style="color: #999;">No requiere hardware adicional</small>
                         {% endif %}
                     </td>
+                    <td>
+                        <!-- CORREGIDO: Usamos 'sistema' en lugar de 's' -->
+                        {% if sistema.enlace_info %}
+                            <a href="{{ sistema.enlace_info }}" target="_blank" style="background-color: #4CAF50; color: white; padding: 5px 10px; text-decoration: none; border-radius: 5px; font-size: 0.8em;">Ver producto</a>
+                        {% else %}
+                            <span style="color: gray; font-size: 0.8em;">No disponible</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -62,22 +71,29 @@
     </div>
 
     {% if accesorios_referencia %}
-    <div class="seccion-tabla" style="margin-top: 50px;">
-        <h2>Descripción de periféricos y hardware</h2>
+    <!-- CORREGIDO: Aplicamos estilos verdes aquí -->
+    <div class="seccion-tabla" style="margin-top: 50px; border: 2px solid #2e7d32; border-radius: 10px; padding: 10px; background-color: #e8f5e9;">
+        <h2 style="color: #1b5e20;">Descripción de periféricos y hardware</h2>
         <table>
             <thead>
-                <tr>
+                <tr style="background-color: #2e7d32; color: white;">
                     <th>Periférico</th>
-                    <th>Descripción técnica del dispositivo</th>
+                    <th>Descripción técnica</th>
                     <th>Coste</th>
+                    <th>Enlace</th>
                 </tr>
             </thead>
             <tbody>
                 {% for acc in accesorios_referencia %}
                 <tr>
-                    <td><strong>{{ acc.nombre }}</strong></td>
+                    <td style="color: #1b5e20;"><strong>{{ acc.nombre }}</strong></td>
                     <td>{{ acc.descripcion }}</td>
                     <td class="precio">{{ acc.coste_min }} €</td>
+                    <td>
+                        {% if acc.enlace_info %}
+                            <a href="{{ acc.enlace_info }}" target="_blank" style="color: #2e7d32; font-weight: bold; text-decoration: underline;">Consultar</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -86,16 +102,17 @@
     {% endif %}
 
     {% if bancos_voz %}
-    <div class="seccion-informativa" style="margin-top: 50px; padding: 20px; border-radius: 10px; background-color: #f9f2fa;">
+    <div class="seccion-informativa" style="margin-top: 50px; padding: 20px; border-radius: 10px; border: 2px solid #ac4caf; background-color: #f9f2fa;">
         <h2 style="color: #ac4caf; margin-top: 0;">Preservación de la identidad vocal</h2>
-        <p>Se ha detectado que su nivel de habla actual permite realizar un proceso de Voice Banking. Esta es una oportunidad crítica para grabar su voz y crear una síntesis personalizada para utilizarla en el futuro.</p>
+        <p>Se ha detectado que su nivel de habla actual permite realizar un proceso de Voice Banking.</p>
         
         <table class="tabla-recomendacion">
             <thead>
                 <tr>
-                    <th>Método de Preservación</th>
+                    <th>Método</th>
                     <th>Descripción</th>
-                    <th>Coste aprox.</th>
+                    <th>Coste</th>
+                    <th>Web</th>
                 </tr>
             </thead>
             <tbody>
@@ -104,6 +121,11 @@
                     <td><strong>{{ banco.nombre }}</strong></td>
                     <td>{{ banco.descripcion }}</td>
                     <td>{{ "Gratis" if banco.coste_min == 0 else banco.coste_min ~ " €" }}</td>
+                    <td>
+                        {% if banco.enlace_info %}
+                            <a href="{{ banco.enlace_info }}" target="_blank" style="color: #ac4caf; font-weight: bold;">Web oficial</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

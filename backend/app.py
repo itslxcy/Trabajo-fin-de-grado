@@ -170,7 +170,7 @@ def recomendar():
     return render_template('recomendacion.html', 
                            sistemas=sistemas_finales, 
                            accesorios_referencia=accesorios_referencia,
-                           bancos_voz=bancos_voz_informativa, # Nueva variable para el HTML
+                           bancos_voz=bancos_voz_informativa,
                            nombre_usuario=nombre_usuario)
 
 if __name__ == '__main__':
