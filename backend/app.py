@@ -70,10 +70,8 @@ def recomendar():
     v_resistencia = int(request.form.get('resistencia', 3))
     v_independencia = int(request.form.get('independencia', 3))
 
-    # --- CONSULTA BASE ---
+    # --- 4. CONSULTA Y FILTROS ---
     consulta = SaacSistema.query.outerjoin(SistemaRequisitoFuncional)
-
-    # 4. FILTROS DE BASE DE DATOS
     consulta = consulta.filter(SaacSistema.coste_min <= v_presupuesto)
     consulta = consulta.filter(SaacSistema.fatiga_fisica <= v_resistencia)
 
@@ -101,66 +99,81 @@ def recomendar():
     # --- 5. LÓGICA DE PROCESAMIENTO Y VINCULACIÓN ---
     sistemas_finales = []
     accesorios_referencia = []
-    bancos_voz_informativa = [] # Lista para la tabla informativa de Voice Banking
+    bancos_voz_informativa = []
     ids_accesorios_vistos = set() 
     
-    # Pre-identificamos hardware clave
-    eye_tracker = next((x for x in resultados if x.nombre == 'Eye tracker'), None)
-    soporte_anclaje = next((x for x in resultados if 'Soporte' in x.nombre), None)
-    punto_gafas = next((x for x in resultados if 'Gafas' in x.nombre), None)
-    punto_laser = next((x for x in resultados if x.nombre == 'Puntero Láser'), None)
+    # Mapeo de periféricos para vinculación rápida
+    perifericos = {
+        'eye_tracker': next((x for x in resultados if 'Eye tracker' in x.nombre), None),
+        'soporte': next((x for x in resultados if 'Soporte' in x.nombre), None),
+        'gafas': next((x for x in resultados if 'Gafas' in x.nombre), None),
+        'laser': next((x for x in resultados if x.nombre == 'Puntero Láser'), None),
+        'pufo': next((x for x in resultados if 'soplido' in x.nombre.lower()), None),
+        'pedal': next((x for x in resultados if 'pedal' in x.nombre.lower()), None),
+        'spec': next((x for x in resultados if 'Spec' in x.nombre), None),
+        'chin': next((x for x in resultados if 'Chin' in x.nombre), None)
+    }
 
     for s in resultados:
         nombre_low = s.nombre.lower()
 
-        # A. Separar Voice Banking y Análisis Acústico (Si el habla es >= 2)
-        es_preservacion = any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid', 'bank your voice', 'praat', 'analyst'])
-        if es_preservacion:
+        # A. Separar Bancos de Voz
+        es_banco = any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid'])
+        if es_banco:
             if v_habla >= 2:
                 bancos_voz_informativa.append(s)
-            continue # No añadir a la tabla de sistemas principales
+            continue 
 
-        # B. No mostrar accesorios puros como sistemas principales
-        if any(p in nombre_low for p in ['eye tracker', 'puntero', 'gafas', 'soporte']):
+        # B. No mostrar hardware como sistema principal
+        es_hardware = any(kw in nombre_low for kw in ['tracker', 'puntero', 'gafas', 'soporte', 'conmutador', 'pedal', 'spec', 'chin', 'pufo'])
+        if es_hardware:
             continue
 
         s.nota_clinica = ""
         s.accesorio_vinculado = None 
         s.prioridad_entorno = 0 
         
-        # B.1. Vinculación inteligente de periféricos
-        if s.nombre in ['Grid 3', 'Verbo', 'TD Snap', 'Tallk', 'Look to learn']:
-            s.accesorio_vinculado = eye_tracker
-        
-        if s.nombre in ['Panel alfabético', 'Panel pictogramas', 'SpeakBook']:
-            if 3 in ids_entradas or v_resistencia <= 1:
-                s.accesorio_vinculado = punto_gafas
-            else:
-                s.accesorio_vinculado = punto_laser
+        # C. Vinculación Inteligente de Accesorios
+        # C.1. Sistemas de Mirada (Software)
+        if s.nombre in ['Grid 3', 'Verbo', 'TD Snap', 'Tallk', 'Look to learn', 'Communicator 5']:
+            if 2 in ids_entradas: # Si eligió Ojos
+                s.accesorio_vinculado = perifericos['eye_tracker']
+            
+            # C.2. Si eligió Pulsador para estos softwares
+            elif 5 in ids_entradas:
+                if v_resistencia <= 1: 
+                    s.accesorio_vinculado = perifericos['pufo'] # Soplido por fatiga alta
+                elif v_resistencia == 2:
+                    s.accesorio_vinculado = perifericos['chin'] # Barbilla por fatiga media
+                else:
+                    s.accesorio_vinculado = perifericos['spec'] # Presión por fatiga baja
 
-        # C. Contexto de Silla y Entorno
+        # C.3. Paneles físicos
+        if s.nombre in ['Panel alfabético', 'Panel pictogramas', 'SpeakBook']:
+            if 3 in ids_entradas: # Si eligió Cabeza
+                s.accesorio_vinculado = perifericos['gafas']
+            else:
+                s.accesorio_vinculado = perifericos['laser']
+
+        # D. Silla y Entorno
         if v_silla and s.admite_anclaje:
-            s.nota_clinica += " | Requiere soporte de fijación a silla."
-            if soporte_anclaje and soporte_anclaje.id not in ids_accesorios_vistos:
-                accesorios_referencia.append(soporte_anclaje)
-                ids_accesorios_vistos.add(soporte_anclaje.id)
+            s.nota_clinica += "Requiere soporte de fijación a silla."
+            if perifericos['soporte'] and perifericos['soporte'].id not in ids_accesorios_vistos:
+                accesorios_referencia.append(perifericos['soporte'])
+                ids_accesorios_vistos.add(perifericos['soporte'].id)
         
         if v_entorno == 'exterior':
-            es_sistema_mirada = s.accesorio_vinculado and s.accesorio_vinculado.nombre == 'Eye tracker'
+            es_sistema_mirada = s.accesorio_vinculado and 'tracker' in s.accesorio_vinculado.nombre.lower()
             if es_sistema_mirada:
-                s.nota_clinica += " | ADVERTENCIA: El seguimiento ocular pierde precisión bajo luz solar directa."
+                s.nota_clinica += " | ADVERTENCIA: La mirada pierde precisión con luz solar."
                 s.prioridad_entorno = 1 
-            if s.portable and not es_sistema_mirada:
-                s.nota_clinica += " | Optimizado para movilidad exterior."
             if not s.portable:
                 s.prioridad_entorno = 1
 
         sistemas_finales.append(s)
 
-    # Ordenar resultados
+    # Ordenar y recopilar accesorios únicos para la tabla verde
     sistemas_finales.sort(key=lambda x: x.prioridad_entorno)
-
-    # D. Recopilar accesorios únicos para la tabla de referencia
     for s in sistemas_finales:
         acc = s.accesorio_vinculado
         if acc and acc.id not in ids_accesorios_vistos:

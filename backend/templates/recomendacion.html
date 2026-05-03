@@ -71,27 +71,31 @@
     </div>
 
     {% if accesorios_referencia %}
-    <!-- CORREGIDO: Aplicamos estilos verdes aquí -->
-    <div class="seccion-tabla" style="margin-top: 50px; border: 2px solid #2e7d32; border-radius: 10px; padding: 10px; background-color: #e8f5e9;">
-        <h2 style="color: #1b5e20;">Descripción de periféricos y hardware</h2>
+    <div class="seccion-tabla" style="margin-top: 50px;">
+        <h2>Descripción de periféricos y hardware sugerido</h2>
+        <p style="color: #666; margin-bottom: 15px;">
+            Los siguientes dispositivos son necesarios para el uso de los sistemas recomendados anteriormente:
+        </p>
         <table>
             <thead>
-                <tr style="background-color: #2e7d32; color: white;">
+                <tr>
                     <th>Periférico</th>
                     <th>Descripción técnica</th>
-                    <th>Coste</th>
-                    <th>Enlace</th>
+                    <th>Coste aprox.</th>
+                    <th>Más información</th>
                 </tr>
             </thead>
             <tbody>
                 {% for acc in accesorios_referencia %}
                 <tr>
-                    <td style="color: #1b5e20;"><strong>{{ acc.nombre }}</strong></td>
+                    <td><strong>{{ acc.nombre }}</strong></td>
                     <td>{{ acc.descripcion }}</td>
                     <td class="precio">{{ acc.coste_min }} €</td>
                     <td>
                         {% if acc.enlace_info %}
-                            <a href="{{ acc.enlace_info }}" target="_blank" style="color: #2e7d32; font-weight: bold; text-decoration: underline;">Consultar</a>
+                            <a href="{{ acc.enlace_info }}" target="_blank" style="color: #4CAF50; font-weight: bold; text-decoration: underline;">Consultar</a>
+                        {% else %}
+                            <span style="color: #999; font-size: 0.8em;">No disponible</span>
                         {% endif %}
                     </td>
                 </tr>
