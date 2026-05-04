@@ -95,44 +95,44 @@ VALUES
 ('Panel pictogramas','Tablero físico que utiliza símbolos pictográficos (ARASAAC) para representar conceptos, acciones o necesidades básicas.',0,true,3,true,true, 'https://arasaac.org/'),
 ('Panel alfabético','Tablero de comunicación directa mediante el deletreo, diseñado para usuarios con lectoescritura preservada.',0,true,3,true,true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf'),
 ('SpeakBook','Cuaderno de comunicación diseñado para la selección mediante la mirada o puntero.',0,true,2,true,true, 'https://acecentre.org.uk/resources/speakbook'),
-('Tablero ETRAN','Panel transparente que permite la comunicación mediante la dirección de la mirada.',90,true,1,true,true, 'https://qinera.com/es/tienda/comunicadores-sencillos/comunicador-tipo-etran'),
-('MegaBEE','Dispositivo de baja tecnología con pantalla que permite escribir mensajes con la mirada.',770,true,1,true,true, 'https://assistive.co.nz/product/megabee/'),
-('QuickTalker 23','Comunicador portátil con 23 casillas para mensajes grabados, ideal para comunicación por presión directa.',250,false,3,true,false, 'https://qinera.com/es/tienda/comunicadores-sencillos/quick-talker-23'),
+('Tablero ETRAN','Panel transparente que permite la comunicación mediante la dirección de la mirada.',0,true,1,true,true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf'),
+('QuickTalker 23','Comunicador portátil con 23 casillas para mensajes grabados, ideal para comunicación por presión directa.',275,false,3,true,false, 'https://qinera.com/es/tienda/comunicadores-sencillos/quick-talker-23'),
 
 -- SOFTWARE Y APPS
 ('Look to Speak','Uso de mirada a través de cámara frontal para selección de frases preestablecidas.',0,false,1,true,true, 'https://play.google.com/store/apps/details?id=com.androidexperiments.looktospeak&hl=es'),
 ('Tallk','Seguimiento ocular a través de la cámara de la tablet (Samsung).',0,false,1,true,true, 'https://play.google.com/store/apps/details?id=com.irisbond.tallk&hl=es'),
-('Grid 3','Software integral para comunicación, control del entorno y acceso a Windows.',300,false,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/grid-3'),
-('Verbo','Software de comunicación dinámico con salida de voz y creación de tableros.',40,false,1,true,true, 'https://www.bjadaptaciones.com/software/verbo'),
-('Proloquo2Go','Comunicación simbólica para iOS basada en lenguaje natural.',300,false,2,true,true, 'https://www.assistiveware.com/es/productos/proloquo2go'),
-('TD Snap','Software centrado en símbolos y alfabetización navegación rápida.',60,false,1,true,true, 'https://es.tobiidynavox.com/pages/td-snap'),
-('Communicator 5','Software de comunicación eficiente para usuarios de texto y símbolos.',600,false,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/communicator-5'),
-('Boardmaker 7','Plataforma estándar para crear materiales de comunicación basados en símbolos.',200,true,2,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/boardmaker-7'),
-('Look to learn','Software de entrenamiento para el aprendizaje del control ocular.',520,true,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/look-to-learn-1-licencia-electronica'),
-('TouchChat','Herramienta con símbolos, texto y predicción de palabras.',150,false,2,true,true, 'https://touchchatapp.com/'),
-('LetMeTalk','App de comunicación mediante pictogramas gratuita.',0,false,2,true,false, 'https://www.letmetalk.info/es'),
+('Grid 3','Software integral para comunicación, control del entorno y acceso a Windows.',682,false,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/grid-3'),
+('Verbo','Software de comunicación dinámico con salida de voz y creación de tableros.',399,false,1,true,true, 'https://api.eneso.es/verbo'),
+('Proloquo2Go','Comunicación simbólica para iOS basada en lenguaje natural.',299.99,false,2,true,true, 'https://www.assistiveware.com/es/productos/proloquo2go'),
+('TD Snap','Software centrado en símbolos y alfabetización navegación rápida.',0,false,1,true,true, 'https://apps.apple.com/es/app/td-snap/id1072799231'),
+('Communicator 5','Software de comunicación eficiente para usuarios de texto y símbolos.',621.50,false,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/communicator-5'),
+('Boardmaker 7','Plataforma estándar para crear materiales de comunicación basados en símbolos.',412.50,true,2,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/boardmaker-7'),
+('Look to learn','Software de entrenamiento para el aprendizaje del control ocular.',520.30,true,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/look-to-learn-1-licencia-electronica'),
+('TouchChat','Herramienta con símbolos, texto y predicción de palabras.',149.99,false,2,true,true, 'https://touchchatapp.com/'),
+('LetMeTalk','App de comunicación mediante pictogramas gratuita.',0,false,2,true,false, 'https://apps.apple.com/us/app/letmetalk-talker-saac-caa-sac/id919990138?l=es-MX'),
 
 -- ACCESO POR VOZ Y PACKS
 ('Asistente de voz AAC','Conversión de voz a texto.',0,false,1,true,false, 'https://play.google.com/store/apps/details?id=nl.asoft.speechassistant&hl=es'),
 ('Speak4Me','App para reproducir frases rápidas guardadas.',0,false,1,true,false, 'https://speak4me.io/'),
-('ComuniQa (TD Snap)','Pack tablet + seguimiento ocular + software TD Snap.',4000,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-td-snap'),
-('ComuniQa (Grid 3)','Pack tablet + seguimiento ocular + software Grid 3.',4000,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-grid-3'),
-('TD Pilot','Comunicador ocular de alta gama integrado para iPad.',7000,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/TD-Pilot'),
+('ComuniQa (TD Snap)','Pack tablet + seguimiento ocular + software TD Snap.',4785,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-td-snap'),
+('ComuniQa (Grid 3)','Pack tablet + seguimiento ocular + software Grid 3.',4950,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-grid-3'),
+('ComuniQa (Communicator 5)','Pack tablet + seguimiento ocular + software Communicator 5.',4950,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-communicator5'),
+('TD Pilot','Comunicador ocular de alta gama integrado para iPad.',11830.50,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/TD-Pilot'),
 
 -- PERIFÉRICOS
-('Eye tracker','Lector ocular para control de dispositivos por mirada.',260,false,1,false,true, 'https://qinera.com/es/tienda/lectores-oculares/tobii-pceye-5'),
+('Eye tracker','Lector ocular para control de dispositivos por mirada.',0,false,1,false,true, 'https://www.irisbond.com/comunicacion-aumentativa-alternativa/consigue-tu-comunicador-prescripcion-medica/'),
 ('Puntero Láser','Señalización directa para tableros físicos.',99,true,3,true,false, NULL),
-('Gafas con Puntero Láser', 'Puntero láser adaptado para control cefálico.', 120,true,2,true,false, 'https://www.elaandalucia.es/gafas-puntero-laser-todas-las-unidades-hospitalarias-ela-andalucia/'),
-('Soporte de anclaje articulado', 'Brazo mecánico para fijación de dispositivos a silla.', 250,false,0,false,true, 'https://qinera.com/es/tienda/comunicacion-aumentativa/soportes-y-brazos-caa'),
-('Conmutador por soplido (Pufo)', 'Sensor de alta sensibilidad que detecta soplidos suaves para activar el comunicador.', 350, false, 0, true, true, 'https://qinera.com/es/tienda/acceso-a-dispositivos-y-conmutadores/quha-pufo-con-kit-de-montaje-de-cabeza'),
-('Conmutador de pedal', 'Pulsador robusto diseñado para ser activado con el pie.', 115, false, 2, true, false, 'https://qinera.com/es/tienda/ratones-y-pulsadores/conmutador-de-pedal'),
-('Conmutador Spec Amarillo', 'Pulsador de pequeño tamaño y fácil activación por presión física mínima.', 75, false, 2, true, true, 'http://qinera.com/es/tienda/conmutadores/conmutador-spec-amarillo'),
-('BJOY Chin Plus', 'Conmutador de barbilla de alta precisión tipo joystick para control de cursor.', 550, false, 1, true, true, 'https://qinera.com/es/tienda/ratones-y-pulsadores/bjoy-chin-plus'),
+('Gafas con Puntero Láser', 'Puntero láser adaptado para control cefálico.', 45,true,2,true,false, 'https://www.elaandalucia.es/gafas-puntero-laser-todas-las-unidades-hospitalarias-ela-andalucia/'),
+('Soporte de anclaje articulado', 'Brazo mecánico para fijación de dispositivos a silla.', 687.50,false,0,false,true, 'https://qinera.com/es/tienda/comunicacion-aumentativa/soportes-y-brazos-caa'),
+('Conmutador por soplido (Pufo)', 'Sensor de alta sensibilidad que detecta soplidos suaves para activar el comunicador.', 391.60, false, 0, true, true, 'https://qinera.com/es/tienda/acceso-a-dispositivos-y-conmutadores/quha-pufo-con-kit-de-montaje-de-cabeza'),
+('Conmutador de pedal', 'Pulsador robusto diseñado para ser activado con el pie.', 51.70, false, 2, true, false, 'https://qinera.com/es/tienda/ratones-y-pulsadores/conmutador-de-pedal'),
+('Conmutador Spec Amarillo', 'Pulsador de pequeño tamaño y fácil activación por presión física mínima.', 73.70, false, 2, true, true, 'http://qinera.com/es/tienda/conmutadores/conmutador-spec-amarillo'),
+('BJOY Chin Plus', 'Conmutador de barbilla de alta precisión tipo joystick para control de cursor.', 645.70, false, 1, true, true, 'https://qinera.com/es/tienda/ratones-y-pulsadores/bjoy-chin-plus'),
 
 -- BANCOS DE VOZ
 ('ModelTalker Gen3', 'Síntesis de voz personalizada.', 0,false,2,true,false, 'https://modeltalker.org/'),
-('MyOwnVoice (Acapela)', 'Voz digital idéntica mediante Deep Learning.', 0,false,1,true,false, 'https://mov.acapela-group.com/es/home-es/'),
-('VocaliD', 'Hibridación de voz personalizada.', 0,false,1,true,false, 'https://vocalid.ai/');
+('MyOwnVoice (Acapela)', 'Voz digital idéntica creada mediante Deep Learning (Suscripción anual).', 99,false,1,true,false, 'https://mov.acapela-group.com/es/home-es/'),
+('VocaliD', 'Hibridación de voz entre la tuya y una donada.', 9000,false,1,true,false, 'https://vocalid.ai/');
 
 -- 7. REQUISITOS FUNCIONALES
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
@@ -141,7 +141,7 @@ WHERE nombre IN ('Eye tracker', 'Tallk', 'Look to Speak', 'MegaBEE', 'Look to le
 
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 2, 2, 3, 3, 0 FROM saac_sistema 
-WHERE nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'Communicator 5', 'TD Pilot');
+WHERE nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'ComuniQa (Communicator 5)','Communicator 5', 'TD Pilot');
 
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 1, 1, 2, 2, 0 FROM saac_sistema 
@@ -163,7 +163,7 @@ WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero
 
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, (SELECT id FROM tipo_entrada WHERE nombre = 'ojos') FROM saac_sistema 
-WHERE nombre IN ('MegaBEE', 'Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look to learn', 'Grid 3', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'TD Pilot', 'Communicator 5');
+WHERE nombre IN ('MegaBEE', 'Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look to learn', 'Grid 3', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'ComuniQa (Communicator 5)', 'TD Pilot', 'Communicator 5');
 
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, (SELECT id FROM tipo_entrada WHERE nombre = 'pulsador') FROM saac_sistema 
@@ -184,7 +184,7 @@ WHERE s.nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'Communicator 5', 'TD Pilot') A
 -- 10. RELACIONES DE PLATAFORMA
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
 SELECT id, (SELECT id FROM plataforma WHERE nombre = 'Hardware Propio') FROM saac_sistema 
-WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero Láser', 'MegaBEE', 'Tablero ETRAN', 'QuickTalker 23', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'Soporte de anclaje articulado', 'Conmutador de pedal', 'Conmutador Spec Amarillo', 'BJOY Chin Plus');
+WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero Láser', 'MegaBEE', 'Tablero ETRAN', 'QuickTalker 23', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'ComuniQa (Communicator 5)', 'Soporte de anclaje articulado', 'Conmutador de pedal', 'Conmutador Spec Amarillo', 'BJOY Chin Plus');
 
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
 SELECT id, (SELECT id FROM plataforma WHERE nombre = 'Windows') FROM saac_sistema 
