@@ -55,11 +55,6 @@ def recomendar():
     # 2. Capturar Entorno y Otros
     v_entorno = request.form.get('entorno_principal') 
     v_silla = request.form.get('usa_silla') == 'true'
-    
-    try:
-        v_presupuesto = float(request.form.get('presupuesto', 999999))
-    except:
-        v_presupuesto = 999999.0
 
     # 3. Capturar Capacidades (Niveles 0-3)
     v_vision = int(request.form.get('vision', 3))
@@ -70,9 +65,8 @@ def recomendar():
     v_resistencia = int(request.form.get('resistencia', 3))
     v_independencia = int(request.form.get('independencia', 3))
 
-    # --- 4. CONSULTA Y FILTROS ---
+    # --- 4. CONSULTA Y FILTROS (Sin Presupuesto) ---
     consulta = SaacSistema.query.outerjoin(SistemaRequisitoFuncional)
-    consulta = consulta.filter(SaacSistema.coste_min <= v_presupuesto)
     consulta = consulta.filter(SaacSistema.fatiga_fisica <= v_resistencia)
 
     if ids_idiomas:
@@ -169,12 +163,11 @@ def recomendar():
             accesorios_referencia.append(acc)
             ids_accesorios_vistos.add(acc.id)
 
-    # --- LÓGICA DE GUARDADO COMPLETA ---
+    # --- LÓGICA DE GUARDADO ---
+    nuevo_historial_id = None
     try:
-        # Traducción de IDs a nombres para el historial
         nombres_entradas = [e.nombre for e in TipoEntrada.query.filter(TipoEntrada.id.in_(ids_entradas)).all()]
         nombres_plats = [p.nombre for p in Plataforma.query.filter(Plataforma.id.in_(ids_plataformas)).all()]
-
         nombres_sist = [s.nombre for s in sistemas_finales]
         nombres_acc = [acc.nombre for acc in accesorios_referencia]
         nombres_banc = [b.nombre for b in bancos_voz_informativa]
@@ -189,7 +182,6 @@ def recomendar():
             "tecnologia": v_tecno,
             "resistencia": v_resistencia,
             "independencia": v_independencia,
-            "presupuesto": v_presupuesto,
             "silla": v_silla,
             "entorno": v_entorno,
             "plataformas_nombres": nombres_plats,
@@ -204,17 +196,53 @@ def recomendar():
 
         bd.session.add(nuevo_historial)
         bd.session.commit()
-        print(f"✅ Historial completo guardado para: {nombre_usuario}")
+        nuevo_historial_id = nuevo_historial.id
 
-    except Exception as e:
+    except Exception:
         bd.session.rollback()
-        print(f"❌ Error al guardar historial detallado: {e}")
 
     return render_template('recomendacion.html', 
                            sistemas=sistemas_finales, 
                            accesorios_referencia=accesorios_referencia,
                            bancos_voz=bancos_voz_informativa,
-                           nombre_usuario=nombre_usuario)
+                           nombre_usuario=nombre_usuario,
+                           historial_id=nuevo_historial_id)
+
+@app.route('/guardar-feedback', methods=['POST'])
+def guardar_feedback():
+    from sqlalchemy.orm.attributes import flag_modified
+    
+    h_id = request.form.get('historial_id')
+    
+    # Capturamos los datos
+    feedback_dict = {
+        "usa_actualmente": request.form.get('usa_actual'),
+        "satisfaccion": request.form.get('satisfaccion_actual'),
+        "considera_otro": request.form.get('opcion_cambio'),
+        "motivo_abandono_pasado": request.form.get('motivo_cambio'),
+        "adecuacion_general": request.form.get('valoracion_general'),
+        "comentarios": request.form.get('comentarios_adicionales')
+    }
+    
+    
+    if h_id:
+        try:
+            registro_db = HistorialRecomendacion.query.get(h_id)
+            if registro_db:
+                # REASIGNACIÓN DIRECTA para asegurar que SQLAlchemy vea el cambio
+                registro_db.feedback = feedback_dict 
+                # Marcamos como modificado explícitamente
+                flag_modified(registro_db, "feedback")
+                bd.session.commit()
+                print(f"Feedback guardado para el ID: {h_id}") # Debug en consola
+        except Exception as e:
+            print(f"Error al guardar: {e}")
+            bd.session.rollback()
+
+        print(f"ID recibido: {h_id}")
+        print(f"Datos del formulario: {request.form}")
+    
+    return render_template("gracias_feedback.html")
 
 @app.route('/admin/historial')
 def ver_historial():
@@ -226,7 +254,7 @@ def limpiar_historial():
     try:
         HistorialRecomendacion.query.delete()
         bd.session.commit()
-    except Exception as e:
+    except Exception:
         bd.session.rollback()
     return redirect(url_for('ver_historial'))
 

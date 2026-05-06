@@ -1,29 +1,30 @@
-<table class="tabla-historial" style="width: 100%; border-collapse: collapse; background: white; font-family: Arial, sans-serif; color: #333;">
+<table class="tabla-historial" style="width: 100%; border-collapse: collapse; background: white; font-family: 'Segoe UI', Arial, sans-serif; color: #333; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden;">
     <thead style="background-color: #2c3e50; color: white;">
         <tr>
-            <th style="padding: 12px; text-align: center;">Sesión</th>
-            <th style="padding: 12px;">Paciente</th>
-            <th style="padding: 12px;">Perfil clínico</th>
-            <th style="padding: 12px;">Recomendación</th>
+            <th style="padding: 12px; text-align: center; font-size: 0.85em; text-transform: uppercase;">Sesión</th>
+            <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Paciente</th>
+            <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Perfil clínico</th>
+            <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Recomendación</th>
+            <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Opinión / Feedback</th>
         </tr>
     </thead>
     <tbody>
         {% for r in registros %}
-        <tr style="border-bottom: 1px solid #eee;">
+        <tr style="border-bottom: 1px solid #eee; transition: background 0.3s;">
             <!-- FECHA Y HORA -->
-            <td style="padding: 15px; text-align: center; vertical-align: middle;">
-                <span style="font-size: 0.9em; color: #666;">{{ r.fecha.strftime('%d/%m/%Y') }}</span><br>
-                <strong>{{ r.fecha.strftime('%H:%M') }}</strong>
+            <td style="padding: 15px; text-align: center; vertical-align: middle; background-color: #fcfcfc;">
+                <span style="font-size: 0.85em; color: #7f8c8d;">{{ r.fecha.strftime('%d/%m/%Y') }}</span><br>
+                <strong style="font-size: 1.1em; color: #2c3e50;">{{ r.fecha.strftime('%H:%M') }}</strong>
             </td>
 
             <!-- NOMBRE -->
             <td style="padding: 15px; vertical-align: middle; border-left: 1px solid #eee;">
-                <strong style="text-transform: uppercase;">{{ r.nombre_paciente }}</strong>
+                <strong style="text-transform: uppercase; color: #ac4caf;">{{ r.nombre_paciente }}</strong>
             </td>
 
             <!-- PERFIL CLÍNICO -->
             <td style="padding: 15px; border-left: 1px solid #eee;">
-                <div style="display: flex; gap: 20px; font-size: 0.9em;">
+                <div style="display: flex; gap: 20px; font-size: 0.85em;">
                     <div style="flex: 1;">
                         <div style="margin-bottom: 4px;"><strong>Visión:</strong> {{ r.input_usuario.get('vision', 'N/A') }}</div>
                         <div style="margin-bottom: 4px;"><strong>Cognición:</strong> {{ r.input_usuario.get('cognicion', 'N/A') }}</div>
@@ -33,49 +34,61 @@
                     <div style="flex: 1;">
                         <div style="margin-bottom: 4px;"><strong>Resistencia:</strong> {{ r.input_usuario.get('resistencia', 'N/A') }}</div>
                         <div style="margin-bottom: 4px;"><strong>Tecnología:</strong> {{ r.input_usuario.get('tecnologia', 'N/A') }}</div>
-                        <div style="margin-bottom: 4px;"><strong>Independencia.:</strong> {{ r.input_usuario.get('independencia', 'N/A') }}</div>
-                        <div style="margin-bottom: 4px;"><strong>Presupuesto.:</strong> {{ r.input_usuario.get('presupuesto', 'N/A') }}€</div>
+                        <div style="margin-bottom: 4px;"><strong>Independencia:</strong> {{ r.input_usuario.get('independencia', 'N/A') }}</div>
                     </div>
                 </div>
                 
-                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee; font-size: 0.9em;">
-                    <strong>Silla:</strong> {{ 'Sí' if r.input_usuario.get('silla') else 'No' }} | 
-                    <strong>Entorno:</strong> {{ r.input_usuario.get('entorno', 'N/A') }}<br>
-                    <div style="margin-top: 5px;">
-                        <strong>Acceso:</strong> {{ r.input_usuario.get('entradas_nombres', []) | join(', ') }}
-                    </div>
-                    <div>
-                        <strong>Plataformas:</strong> {{ r.input_usuario.get('plataformas_nombres', []) | join(', ') }}
+                <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #ddd; font-size: 0.85em;">
+                    <strong> Silla:</strong> {{ 'Sí' if r.input_usuario.get('silla') else 'No' }} | 
+                    <strong> Entorno:</strong> {{ r.input_usuario.get('entorno', 'N/A') }}<br>
+                    <div style="margin-top: 4px;">
+                        <strong> Acceso:</strong> {{ r.input_usuario.get('entradas_nombres', []) | join(', ') }}<br>
+                        <strong> Plataformas:</strong> {{ r.input_usuario.get('plataformas_nombres', []) | join(', ') }}
                     </div>
                 </div>
             </td>
 
             <!-- RECOMENDACIÓN TÉCNICA -->
-            <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.9em;">
+            <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em;">
                 {% set partes = r.sistemas_recomendados.split('|') %}
                 
-                <!-- Sistemas -->
-                <div style="margin-bottom: 10px;">
-                    <div style="font-weight: bold; margin-bottom: 2px;">Sistemas Principales:</div>
+                <div style="margin-bottom: 8px;">
+                    <div style="font-weight: bold; color: #2980b9; text-transform: uppercase; font-size: 0.75em;">Sistemas:</div>
                     {{ partes[0].replace('SISTEMAS:', '').strip() }}
                 </div>
 
-                <!-- Hardware -->
                 {% if partes|length > 1 and partes[1].replace('ACCESORIOS:', '').strip() != "" %}
-                <div style="margin-bottom: 10px;">
-                    <div style="font-weight: bold; margin-bottom: 2px;">Hardware Necesario:</div>
+                <div style="margin-bottom: 8px;">
+                    <div style="font-weight: bold; color: #27ae60; text-transform: uppercase; font-size: 0.75em;">Hardware:</div>
                     {{ partes[1].replace('ACCESORIOS:', '').strip() }}
                 </div>
                 {% endif %}
 
-                <!-- Bancos -->
                 {% if partes|length > 2 and partes[2].replace('BANCOS:', '').strip() != "" %}
                 <div>
-                    <div style="font-weight: bold; margin-bottom: 2px;">Preservación de Voz:</div>
+                    <div style="font-weight: bold; color: #e67e22; text-transform: uppercase; font-size: 0.75em;">Voz:</div>
                     {{ partes[2].replace('BANCOS:', '').strip() }}
                 </div>
                 {% endif %}
             </td>
+
+            <!-- OPINIÓN / FEEDBACK -->
+            <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; background-color: #f9f9f9;">
+                {% if r.feedback %}
+                    <strong>Calificación:</strong> {{ r.feedback.get('adecuacion_general') }}/3 <br>
+                    <strong>Usa actual:</strong> {{ r.feedback.get('usa_actualmente') }} <br>
+                    <strong>Satisfacción:</strong> {{ r.feedback.get('satisfaccion') }} <br>
+                    <strong>Considera otro:</strong> {{ r.feedback.get('considera_otro') }} <br>
+                    <strong>Abandono:</strong> {{ r.feedback.get('motivo_abandono_pasado') }}
+                {% if r.feedback.get('comentarios') %}
+                    <div style="margin-top: 8px; padding-top: 5px; border-top: 1px solid #ddd; font-style: italic; color: #555;">
+                        <strong>Sugerencia:</strong> {{ r.feedback.get('comentarios') }}
+                    </div>
+                {% endif %}
+            {% else %}
+                <span style="color: #bbb;">Sin respuesta aún</span>
+            {% endif %}
+        </td>
         </tr>
         {% endfor %}
     </tbody>

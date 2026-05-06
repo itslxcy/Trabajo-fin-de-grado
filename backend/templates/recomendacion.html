@@ -13,6 +13,7 @@
         Si corresponde, también se recomendará un sistema periférico para combinar con este.
     </p>
 
+    <!-- TABLA PRINCIPAL -->
     <div class="seccion-tabla">
         <h2>Sistemas recomendados y periféricos necesarios</h2>
         {% if sistemas %}
@@ -21,7 +22,6 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción / Nota Clínica</th>
-                    <th>Plataformas</th>
                     <th>Periférico sugerido</th>
                     <th>Más información</th>
                 </tr>
@@ -33,16 +33,15 @@
                     <td>
                         {{ sistema.descripcion }}
                         {% if sistema.nota_clinica %}
-                            <div class="nota-clinica" style="color: #d9534f; font-style: italic; margin-top: 5px;">
+                            <div class="nota-clinica">
                                 <strong>Nota:</strong> {{ sistema.nota_clinica }}
                             </div>
                         {% endif %}
                     </td>
                     <td>
                         {% if sistema.accesorio_vinculado %}
-                            <div class="periferico-box" style="background: #f0f7ff; border-left: 3px solid #007bff; padding: 5px;">
+                            <div class="periferico-box">
                                 <strong>{{ sistema.accesorio_vinculado.nombre }}</strong><br>
-                                <small>+{{ sistema.accesorio_vinculado.coste_min }} €</small>
                             </div>
                         {% else %}
                             <small style="color: #999;">No requiere hardware adicional</small>
@@ -50,7 +49,7 @@
                     </td>
                     <td>
                         {% if sistema.enlace_info %}
-                            <a href="{{ sistema.enlace_info }}" target="_blank" style="background-color: #4CAF50; color: white; padding: 5px 10px; text-decoration: none; border-radius: 5px; font-size: 0.8em;">Ver producto</a>
+                            <a href="{{ sistema.enlace_info }}" target="_blank" class="boton-volver" style="padding: 5px 10px; font-size: 0.8em; margin:0;">Ver producto</a>
                         {% else %}
                             <span style="color: gray; font-size: 0.8em;">No disponible</span>
                         {% endif %}
@@ -59,11 +58,17 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+            <!-- MENSAJE DE NO RESULTADOS ADAPTADO A TU ESTILO -->
+            <div class="no-resultados">
+                <strong>Aviso:</strong> No se han encontrado sistemas adecuados con todos los filtros seleccionados.
+            </div>
         {% endif %}
     </div>
 
+    <!-- TABLA PERIFÉRICOS -->
     {% if accesorios_referencia %}
-    <div class="seccion-tabla" style="margin-top: 50px;">
+    <div class="seccion-tabla">
         <h2>Descripción de periféricos y hardware sugerido</h2>
         <p style="color: #666; margin-bottom: 15px;">
             Los siguientes dispositivos son necesarios para el uso de los sistemas recomendados anteriormente:
@@ -83,7 +88,7 @@
                     <td>{{ acc.descripcion }}</td>
                     <td>
                         {% if acc.enlace_info %}
-                            <a href="{{ acc.enlace_info }}" target="_blank" style="color: #4CAF50; font-weight: bold; text-decoration: underline;">Consultar</a>
+                            <a href="{{ acc.enlace_info }}" target="_blank" style="color: #ac4caf; font-weight: bold; text-decoration: underline;">Consultar</a>
                         {% else %}
                             <span style="color: #999; font-size: 0.8em;">No disponible</span>
                         {% endif %}
@@ -95,12 +100,13 @@
     </div>
     {% endif %}
 
+    <!-- BANCOS DE VOZ -->
     {% if bancos_voz %}
-    <div class="seccion-informativa" style="margin-top: 50px; padding: 20px; border-radius: 10px; border: 2px solid #ac4caf; background-color: #f9f2fa;">
+    <div class="seccion" style="border: 2px solid #ac4caf; background-color: #f9f2fa;">
         <h2 style="color: #ac4caf; margin-top: 0;">Preservación de la identidad vocal</h2>
         <p>Se ha detectado que su nivel de habla actual permite realizar un proceso de Voice Banking.</p>
         
-        <table class="tabla-recomendacion">
+        <table>
             <thead>
                 <tr>
                     <th>Método</th>
@@ -122,12 +128,89 @@
                 {% endfor %}
             </tbody>
         </table>
-        <p style="color: #d32f2f; font-weight: bold; font-size: 0.95em; margin-top: 15px;">* Se recomienda iniciar estos procesos lo antes posible, incluso si aún no necesitas un comunicador.</p>
+        <p class="nota-clinica" style="color: #d32f2f; font-weight: bold; margin-top: 15px;">* Se recomienda iniciar estos procesos lo antes posible, incluso si aún no necesitas un comunicador.</p>
     </div>
     {% endif %}
 
-    <div style="margin-top: 40px;">
-        <a href="/cuestionario" class="boton-volver">← Volver al cuestionario</a>
+    <section class="seccion" id="feedback-section">
+    <h3 style="color: #ac4caf; border-bottom: 2px solid #f3e5f5; padding-bottom: 10px;">Ayúdenos a mejorar: Validación de la recomendación</h3>
+    
+    <div style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ffeeba; font-size: 0.9em;">
+        <strong> Aviso importante:</strong> Este apartado de feedback debe ser cumplimentado exclusivamente por <strong>personas con ELA o sus cuidadores directos</strong>. Por favor, si usted es un tutor o evaluador externo, <strong>no responda a este cuestionario</strong>, ya que la validez de los datos se vería comprometida y los resultados del estudio no reflejarían la experiencia real del usuario final.
     </div>
-</body>
-</html>
+
+    <form action="/guardar-feedback" method="POST">
+        <input type="hidden" name="historial_id" value="{{ historial_id }}">
+
+        <!-- 1. Radio buttons obligatorios -->
+        <div class="pregunta">
+            <label class="feedback-label">1. ¿Usa actualmente alguno de los SAACs que se le ha recomendado? *</label>
+            <div class="radio-group">
+                <div class="opcion-item">
+                    <input type="radio" name="usa_actual" value="si" id="si" required> <label for="si">Sí</label>
+                </div>
+                <div class="opcion-item">
+                    <input type="radio" name="usa_actual" value="no" id="no" required> <label for="no">No</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Satisfacción obligatoria -->
+        <div class="pregunta">
+            <label class="feedback-label">2. ¿Está satisfecho con dicho sistema? *</label>
+            <select name="satisfaccion_actual" required>
+                <option value="" disabled selected>Seleccione una opción...</option>
+                <option value="n/a">No aplica</option>
+                <option value="muy_satisfecho">Satisfecho, aunque abierto a informarme sobre otras opciones</option>
+                <option value="insatisfecho">Insatisfecho (busco alternativas)</option>
+            </select>
+        </div>
+
+        <!-- 3. Considera otro (Con espacio en blanco y obligatorio) -->
+        <div class="pregunta">
+            <label class="feedback-label">3. ¿Considera usar algún otro de los sistemas recomendados? *</label>
+            <select name="opcion_cambio" required>
+                <option value="" disabled selected>Seleccione una opción...</option>
+                <option value="n/a">No, ya que la recomendación es buena pero el sistema que utilizo actualmente me funciona muy bien</option>
+                <option value="posible">Es posible, encuentro interesante alguna de las otras opciones</option>
+                <option value="no_considero">No, ya que no considero que las otras opciones sean buenas</option>
+            </select>
+        </div>
+
+        <!-- 4. Motivo cambio (Con espacio en blanco y obligatorio) -->
+        <div class="pregunta">
+            <label class="feedback-label">4. ¿Se le ha recomendado algún sistema que usó en el pasado? Si es así, ¿por qué dejó de usarlo? *</label>
+            <select name="motivo_cambio" required>
+                <option value="" disabled selected>Seleccione una opción...</option>
+                <option value="n/a">No se me ha recomendado ningún SAAC que utilizara en el pasado</option>
+                <option value="progresion">Sí, y lo dejé por la progresión de la enfermedad</option>
+                <option value="incomodidad">Sí, y lo dejé por incomodidad (ej: fatiga)</option>
+                <option value="fluidez">Sí, y lo dejé por falta de fluidez</option>
+                <option value="entorno">Sí, y lo dejé porque no se ajustaba a mi entorno</option>
+                <option value="aprendizaje">Sí, y lo dejé por dificultad de aprendizaje/configuración</option>
+                <option value="autonomia">Sí, y lo dejé por falta de autonomía</option>
+                <option value="plataforma">Sí, y lo dejé por cambio de plataforma (ej: de Android a iOS)</option>
+                <option value="otros">Otras razones</option>
+            </select>
+        </div>
+
+        <!-- 5. Valoración (Slider) -->
+        <div class="pregunta">
+            <label class="feedback-label">5. En general, ¿la recomendación le parece adecuada?</label>
+            <div class="slider-wrapper">
+                <input type="range" name="valoracion_general" min="1" max="10" value="1" step="1">
+                <div class="escala-pasos">
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Sugerencias (Opcional) -->
+        <div class="pregunta">
+            <label class="feedback-label">6. ¿Tiene alguna sugerencia o información adicional? (Opcional)</label>
+            <textarea name="comentarios_adicionales" rows="4" placeholder="Escriba aquí sus comentarios..."></textarea>
+        </div>
+
+        <button type="submit" class="boton-enviar">Enviar Feedback</button>
+    </form>
+</section>

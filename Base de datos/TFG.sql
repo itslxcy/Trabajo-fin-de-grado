@@ -95,7 +95,7 @@ VALUES
 -- SISTEMAS DE BAJA TECNOLOGÍA
 ('Panel pictogramas','Tablero físico que utiliza símbolos pictográficos (ARASAAC) para representar conceptos, acciones o necesidades básicas.',true,3,true,true, 'https://arasaac.org/'),
 ('Panel alfabético','Tablero de comunicación directa mediante el deletreo, diseñado para usuarios con lectoescritura preservada.',true,3,true,true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf'),
-('SpeakBook','Cuaderno de comunicación diseñado para la selección mediante la mirada o puntero.',true,2,true,true, 'https://acecentre.org.uk/resources/speakbook'),
+('SpeakBook','Cuaderno de comunicación diseñado para la selección mediante la mirada o puntero.',true,2,true,true, 'https://aulaabierta.arasaac.org/materiales-caa-tableros-de-comunicacion'),
 ('Tablero ETRAN','Panel transparente que permite la comunicación mediante la dirección de la mirada.',true,1,true,true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf'),
 ('QuickTalker 23','Comunicador portátil con 23 casillas para mensajes grabados, ideal para comunicación por presión directa.',false,3,true,false, 'https://qinera.com/es/tienda/comunicadores-sencillos/quick-talker-23'),
 
@@ -205,7 +205,8 @@ CREATE TABLE historial_recomendacion (
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     nombre_paciente VARCHAR(100),
     input_usuario JSONB, 
-    sistemas_recomendados TEXT
+    sistemas_recomendados TEXT,
+	feedback JSON
 );
 
---DELETE FROM historial_recomendacion WHERE id = 1;
+-- DELETE FROM historial_recomendacion WHERE id = 1;
