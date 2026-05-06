@@ -1,6 +1,6 @@
 import os
-from flask import Flask, render_template, request
-from modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma
+from flask import Flask, render_template, request, redirect, url_for
+from modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma, HistorialRecomendacion
 from extension import bd
 from dotenv import load_dotenv
 from sqlalchemy import or_
@@ -102,7 +102,6 @@ def recomendar():
     bancos_voz_informativa = []
     ids_accesorios_vistos = set() 
     
-    # Mapeo de periféricos para vinculación rápida
     perifericos = {
         'eye_tracker': next((x for x in resultados if 'Eye tracker' in x.nombre), None),
         'soporte': next((x for x in resultados if 'Soporte' in x.nombre), None),
@@ -116,15 +115,12 @@ def recomendar():
 
     for s in resultados:
         nombre_low = s.nombre.lower()
-
-        # A. Separar Bancos de Voz
         es_banco = any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid'])
         if es_banco:
             if v_habla >= 2:
                 bancos_voz_informativa.append(s)
             continue 
 
-        # B. No mostrar hardware como sistema principal
         es_hardware = any(kw in nombre_low for kw in ['tracker', 'puntero', 'gafas', 'soporte', 'conmutador', 'pedal', 'spec', 'chin', 'pufo'])
         if es_hardware:
             continue
@@ -133,29 +129,23 @@ def recomendar():
         s.accesorio_vinculado = None 
         s.prioridad_entorno = 0 
         
-        # C. Vinculación Inteligente de Accesorios
-        # C.1. Sistemas de Mirada (Software)
         if s.nombre in ['Grid 3', 'Verbo', 'TD Snap', 'Tallk', 'Look to learn', 'Communicator 5']:
-            if 2 in ids_entradas: # Si eligió Ojos
+            if 2 in ids_entradas: 
                 s.accesorio_vinculado = perifericos['eye_tracker']
-            
-            # C.2. Si eligió Pulsador para estos softwares
             elif 5 in ids_entradas:
                 if v_resistencia <= 1: 
-                    s.accesorio_vinculado = perifericos['pufo'] # Soplido por fatiga alta
+                    s.accesorio_vinculado = perifericos['pufo']
                 elif v_resistencia == 2:
-                    s.accesorio_vinculado = perifericos['chin'] # Barbilla por fatiga media
+                    s.accesorio_vinculado = perifericos['chin']
                 else:
-                    s.accesorio_vinculado = perifericos['spec'] # Presión por fatiga baja
+                    s.accesorio_vinculado = perifericos['spec']
 
-        # C.3. Paneles físicos
         if s.nombre in ['Panel alfabético', 'Panel pictogramas', 'SpeakBook']:
-            if 3 in ids_entradas: # Si eligió Cabeza
+            if 3 in ids_entradas:
                 s.accesorio_vinculado = perifericos['gafas']
             else:
                 s.accesorio_vinculado = perifericos['laser']
 
-        # D. Silla y Entorno
         if v_silla and s.admite_anclaje:
             s.nota_clinica += "Requiere soporte de fijación a silla."
             if perifericos['soporte'] and perifericos['soporte'].id not in ids_accesorios_vistos:
@@ -163,8 +153,8 @@ def recomendar():
                 ids_accesorios_vistos.add(perifericos['soporte'].id)
         
         if v_entorno == 'exterior':
-            es_sistema_mirada = s.accesorio_vinculado and 'tracker' in s.accesorio_vinculado.nombre.lower()
-            if es_sistema_mirada:
+            es_mirada = s.accesorio_vinculado and 'tracker' in s.accesorio_vinculado.nombre.lower()
+            if es_mirada:
                 s.nota_clinica += " | ADVERTENCIA: La mirada pierde precisión con luz solar."
                 s.prioridad_entorno = 1 
             if not s.portable:
@@ -172,7 +162,6 @@ def recomendar():
 
         sistemas_finales.append(s)
 
-    # Ordenar y recopilar accesorios únicos para la tabla verde
     sistemas_finales.sort(key=lambda x: x.prioridad_entorno)
     for s in sistemas_finales:
         acc = s.accesorio_vinculado
@@ -180,14 +169,70 @@ def recomendar():
             accesorios_referencia.append(acc)
             ids_accesorios_vistos.add(acc.id)
 
+    # --- LÓGICA DE GUARDADO COMPLETA ---
+    try:
+        # Traducción de IDs a nombres para el historial
+        nombres_entradas = [e.nombre for e in TipoEntrada.query.filter(TipoEntrada.id.in_(ids_entradas)).all()]
+        nombres_plats = [p.nombre for p in Plataforma.query.filter(Plataforma.id.in_(ids_plataformas)).all()]
+
+        nombres_sist = [s.nombre for s in sistemas_finales]
+        nombres_acc = [acc.nombre for acc in accesorios_referencia]
+        nombres_banc = [b.nombre for b in bancos_voz_informativa]
+        
+        resumen_final = f"SISTEMAS: {', '.join(nombres_sist)} | ACCESORIOS: {', '.join(nombres_acc)} | BANCOS: {', '.join(nombres_banc)}"
+        
+        datos_entrada = {
+            "vision": v_vision,
+            "audicion": v_audicion,
+            "habla": v_habla,
+            "cognicion": v_cognicion,
+            "tecnologia": v_tecno,
+            "resistencia": v_resistencia,
+            "independencia": v_independencia,
+            "presupuesto": v_presupuesto,
+            "silla": v_silla,
+            "entorno": v_entorno,
+            "plataformas_nombres": nombres_plats,
+            "entradas_nombres": nombres_entradas
+        }
+
+        nuevo_historial = HistorialRecomendacion(
+            nombre_paciente=nombre_usuario,
+            input_usuario=datos_entrada,
+            sistemas_recomendados=resumen_final
+        )
+
+        bd.session.add(nuevo_historial)
+        bd.session.commit()
+        print(f"✅ Historial completo guardado para: {nombre_usuario}")
+
+    except Exception as e:
+        bd.session.rollback()
+        print(f"❌ Error al guardar historial detallado: {e}")
+
     return render_template('recomendacion.html', 
                            sistemas=sistemas_finales, 
                            accesorios_referencia=accesorios_referencia,
                            bancos_voz=bancos_voz_informativa,
                            nombre_usuario=nombre_usuario)
 
+@app.route('/admin/historial')
+def ver_historial():
+    registros = HistorialRecomendacion.query.order_by(HistorialRecomendacion.fecha.desc()).all()
+    return render_template('admin_historial.html', registros=registros)
+
+@app.route('/admin/limpiar-historial', methods=['POST'])
+def limpiar_historial():
+    try:
+        HistorialRecomendacion.query.delete()
+        bd.session.commit()
+    except Exception as e:
+        bd.session.rollback()
+    return redirect(url_for('ver_historial'))
+
 if __name__ == '__main__':
     app.run(debug=True)
     
 #python backend/app.py
 #http://127.0.0.1:5000
+#http://127.0.0.1:5000/admin/historial

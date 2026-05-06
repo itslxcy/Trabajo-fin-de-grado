@@ -1,4 +1,5 @@
--- 1. LIMPIEZA TOTAL DE TABLAS
+-- 1. LIMPIEZA TOTAL DE TABLAS (Incluyendo el nuevo historial)
+DROP TABLE IF EXISTS historial_recomendacion CASCADE;
 DROP TABLE IF EXISTS sistema_plataforma CASCADE;
 DROP TABLE IF EXISTS sistema_idioma CASCADE;
 DROP TABLE IF EXISTS sistema_entrada CASCADE;
@@ -116,23 +117,23 @@ VALUES
 ('Speak4Me','App para reproducir frases rápidas guardadas.',0,false,1,true,false, 'https://speak4me.io/'),
 ('ComuniQa (TD Snap)','Pack tablet + seguimiento ocular + software TD Snap.',4785,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-td-snap'),
 ('ComuniQa (Grid 3)','Pack tablet + seguimiento ocular + software Grid 3.',4950,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-grid-3'),
-('ComuniQa (Communicator 5)','Pack tablet + seguimiento ocular + software Communicator 5.',4950,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-communicator5'),
-('TD Pilot','Comunicador ocular de alta gama integrado para iPad.',11830.50,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/TD-Pilot'),
+('ComuniQa (Communicator 5)','Pack tablet + seguimiento ocular completo.',4950,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-grid-3'),
+('TD Pilot','Comunicador ocular de alta gama integrado para iPad.',7000,false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/TD-Pilot'),
 
 -- PERIFÉRICOS
 ('Eye tracker','Lector ocular para control de dispositivos por mirada.',0,false,1,false,true, 'https://www.irisbond.com/comunicacion-aumentativa-alternativa/consigue-tu-comunicador-prescripcion-medica/'),
 ('Puntero Láser','Señalización directa para tableros físicos.',99,true,3,true,false, NULL),
-('Gafas con Puntero Láser', 'Puntero láser adaptado para control cefálico.', 45,true,2,true,false, 'https://www.elaandalucia.es/gafas-puntero-laser-todas-las-unidades-hospitalarias-ela-andalucia/'),
-('Soporte de anclaje articulado', 'Brazo mecánico para fijación de dispositivos a silla.', 687.50,false,0,false,true, 'https://qinera.com/es/tienda/comunicacion-aumentativa/soportes-y-brazos-caa'),
-('Conmutador por soplido (Pufo)', 'Sensor de alta sensibilidad que detecta soplidos suaves para activar el comunicador.', 391.60, false, 0, true, true, 'https://qinera.com/es/tienda/acceso-a-dispositivos-y-conmutadores/quha-pufo-con-kit-de-montaje-de-cabeza'),
-('Conmutador de pedal', 'Pulsador robusto diseñado para ser activado con el pie.', 51.70, false, 2, true, false, 'https://qinera.com/es/tienda/ratones-y-pulsadores/conmutador-de-pedal'),
-('Conmutador Spec Amarillo', 'Pulsador de pequeño tamaño y fácil activación por presión física mínima.', 73.70, false, 2, true, true, 'http://qinera.com/es/tienda/conmutadores/conmutador-spec-amarillo'),
-('BJOY Chin Plus', 'Conmutador de barbilla de alta precisión tipo joystick para control de cursor.', 645.70, false, 1, true, true, 'https://qinera.com/es/tienda/ratones-y-pulsadores/bjoy-chin-plus'),
+('Gafas con Puntero Láser', 'Puntero láser adaptado para control cefálico.', 120,true,2,true,false, 'https://www.elaandalucia.es/gafas-puntero-laser-todas-las-unidades-hospitalarias-ela-andalucia/'),
+('Soporte de anclaje articulado', 'Brazo mecánico para fijación de dispositivos a silla.', 250,false,0,false,true, 'https://qinera.com/es/tienda/comunicacion-aumentativa/soportes-y-brazos-caa'),
+('Conmutador por soplido (Pufo)', 'Sensor que detecta soplidos suaves para activar el comunicador.', 350, false, 0, true, true, 'https://qinera.com/es/tienda/acceso-a-dispositivos-y-conmutadores/quha-pufo-con-kit-de-montaje-de-cabeza'),
+('Conmutador de pedal', 'Pulsador robusto diseñado para ser activado con el pie.', 115, false, 2, true, false, 'https://qinera.com/es/tienda/ratones-y-pulsadores/conmutador-de-pedal'),
+('Conmutador Spec Amarillo', 'Pulsador de fácil activación por presión física mínima.', 75, false, 2, true, true, 'http://qinera.com/es/tienda/conmutadores/conmutador-spec-amarillo'),
+('BJOY Chin Plus', 'Conmutador de barbilla de alta precisión tipo joystick.', 550, false, 1, true, true, 'https://qinera.com/es/tienda/ratones-y-pulsadores/bjoy-chin-plus'),
 
 -- BANCOS DE VOZ
 ('ModelTalker Gen3', 'Síntesis de voz personalizada.', 0,false,2,true,false, 'https://modeltalker.org/'),
-('MyOwnVoice (Acapela)', 'Voz digital idéntica creada mediante Deep Learning (Suscripción anual).', 99,false,1,true,false, 'https://mov.acapela-group.com/es/home-es/'),
-('VocaliD', 'Hibridación de voz entre la tuya y una donada.', 9000,false,1,true,false, 'https://vocalid.ai/');
+('MyOwnVoice (Acapela)', 'Voz digital idéntica mediante suscripción anual (99€/año).', 99,false,1,true,false, 'https://mov.acapela-group.com/es/home-es/'),
+('VocaliD', 'Hibridación de voz personalizada.', 0,false,1,true,false, 'https://vocalid.ai/');
 
 -- 7. REQUISITOS FUNCIONALES
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
@@ -141,7 +142,7 @@ WHERE nombre IN ('Eye tracker', 'Tallk', 'Look to Speak', 'MegaBEE', 'Look to le
 
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 2, 2, 3, 3, 0 FROM saac_sistema 
-WHERE nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'ComuniQa (Communicator 5)','Communicator 5', 'TD Pilot');
+WHERE nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'ComuniQa (Communicator 5)', 'Communicator 5', 'TD Pilot');
 
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_cognitivo_min, nivel_tecnologico_min, nivel_habla_min)
 SELECT id, 1, 1, 2, 2, 0 FROM saac_sistema 
@@ -163,11 +164,11 @@ WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero
 
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, (SELECT id FROM tipo_entrada WHERE nombre = 'ojos') FROM saac_sistema 
-WHERE nombre IN ('MegaBEE', 'Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look to learn', 'Grid 3', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'ComuniQa (Communicator 5)', 'TD Pilot', 'Communicator 5');
+WHERE nombre IN ('MegaBEE', 'Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look to learn', 'Grid 3', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'TD Pilot', 'Communicator 5');
 
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, (SELECT id FROM tipo_entrada WHERE nombre = 'pulsador') FROM saac_sistema 
-WHERE nombre IN ('QuickTalker 23', 'Conmutador de pedal', 'Conmutador por soplido (Pufo)', 'BJOY Chin Plus', 'Grid 3', 'Communicator 5');
+WHERE nombre IN ('QuickTalker 23', 'Conmutador de pedal', 'Conmutador por soplido (Pufo)', 'BJOY Chin Plus', 'Grid 3', 'Communicator 5', 'ComuniQa (Communicator 5)');
 
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, (SELECT id FROM tipo_entrada WHERE nombre = 'cabeza') FROM saac_sistema 
@@ -197,3 +198,14 @@ WHERE nombre IN ('Proloquo2Go', 'TD Snap', 'TD Pilot', 'Boardmaker 7', 'LetMeTal
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
 SELECT id, (SELECT id FROM plataforma WHERE nombre = 'Android') FROM saac_sistema 
 WHERE nombre IN ('Look to Speak', 'Tallk', 'LetMeTalk');
+
+-- 11. TABLA HISTORIAL
+CREATE TABLE historial_recomendacion (
+    id SERIAL PRIMARY KEY,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    nombre_paciente VARCHAR(100),
+    input_usuario JSONB, 
+    sistemas_recomendados TEXT
+);
+
+-- DELETE FROM historial_recomendacion WHERE id = 1;

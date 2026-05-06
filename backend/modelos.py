@@ -1,3 +1,4 @@
+from datetime import datetime
 from extension import bd
 
 # TABLAS DE RELACIÓN (Muchos a Muchos)
@@ -99,3 +100,15 @@ class Paciente(bd.Model):
 
     # Relación Muchos a Muchos con Entradas
     entradas = bd.relationship('TipoEntrada', secondary=paciente_entrada, backref='pacientes')
+
+# NUEVA TABLA PARA GUARDAR LOS RESULTADOS DE LOS TESTS
+class HistorialRecomendacion(bd.Model):
+    __tablename__ = 'historial_recomendacion'
+    id = bd.Column(bd.Integer, primary_key=True)
+    fecha = bd.Column(bd.DateTime, default=datetime.utcnow)
+    nombre_paciente = bd.Column(bd.String(100))
+    input_usuario = bd.Column(bd.JSON) 
+    sistemas_recomendados = bd.Column(bd.Text)
+
+    def __repr__(self):
+        return f'<Recomendacion {self.nombre_paciente} - {self.fecha}>'
