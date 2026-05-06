@@ -21,7 +21,6 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción / Nota Clínica</th>
-                    <th>Coste aprox.</th>
                     <th>Plataformas</th>
                     <th>Periférico sugerido</th>
                     <th>Más información</th>
@@ -39,12 +38,6 @@
                             </div>
                         {% endif %}
                     </td>
-                    <td class="precio">{{ sistema.coste_min }} €</td>
-                    <td class="plataformas-texto">
-                        {% for p in sistema.plataformas %}
-                            {{ p.nombre }}{% if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    </td>
                     <td>
                         {% if sistema.accesorio_vinculado %}
                             <div class="periferico-box" style="background: #f0f7ff; border-left: 3px solid #007bff; padding: 5px;">
@@ -56,7 +49,6 @@
                         {% endif %}
                     </td>
                     <td>
-                        <!-- CORREGIDO: Usamos 'sistema' en lugar de 's' -->
                         {% if sistema.enlace_info %}
                             <a href="{{ sistema.enlace_info }}" target="_blank" style="background-color: #4CAF50; color: white; padding: 5px 10px; text-decoration: none; border-radius: 5px; font-size: 0.8em;">Ver producto</a>
                         {% else %}
@@ -81,7 +73,6 @@
                 <tr>
                     <th>Periférico</th>
                     <th>Descripción técnica</th>
-                    <th>Coste aprox.</th>
                     <th>Más información</th>
                 </tr>
             </thead>
@@ -90,7 +81,6 @@
                 <tr>
                     <td><strong>{{ acc.nombre }}</strong></td>
                     <td>{{ acc.descripcion }}</td>
-                    <td class="precio">{{ acc.coste_min }} €</td>
                     <td>
                         {% if acc.enlace_info %}
                             <a href="{{ acc.enlace_info }}" target="_blank" style="color: #4CAF50; font-weight: bold; text-decoration: underline;">Consultar</a>
@@ -115,7 +105,6 @@
                 <tr>
                     <th>Método</th>
                     <th>Descripción</th>
-                    <th>Coste</th>
                     <th>Web</th>
                 </tr>
             </thead>
@@ -124,7 +113,6 @@
                 <tr>
                     <td><strong>{{ banco.nombre }}</strong></td>
                     <td>{{ banco.descripcion }}</td>
-                    <td>{{ "Gratis" if banco.coste_min == 0 else banco.coste_min ~ " €" }}</td>
                     <td>
                         {% if banco.enlace_info %}
                             <a href="{{ banco.enlace_info }}" target="_blank" style="color: #ac4caf; font-weight: bold;">Web oficial</a>

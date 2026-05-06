@@ -54,7 +54,6 @@ class SaacSistema(bd.Model):
     id = bd.Column(bd.Integer, primary_key=True)
     nombre = bd.Column(bd.Text, nullable=False)
     descripcion = bd.Column(bd.Text)
-    coste_min = bd.Column(bd.Numeric)
     requiere_interlocutor = bd.Column(bd.Boolean)
     fatiga_fisica = bd.Column(bd.SmallInteger)
     portable = bd.Column(bd.Boolean)
@@ -83,7 +82,6 @@ class Paciente(bd.Model):
     __tablename__ = 'paciente'
     id = bd.Column(bd.Integer, primary_key=True)
     nombre = bd.Column(bd.Text)
-    presupuesto = bd.Column(bd.Numeric)
     vision = bd.Column(bd.SmallInteger)
     audicion = bd.Column(bd.SmallInteger)
     cognicion = bd.Column(bd.SmallInteger)
