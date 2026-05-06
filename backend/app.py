@@ -56,7 +56,7 @@ def recomendar():
     v_entorno = request.form.get('entorno_principal') 
     v_silla = request.form.get('usa_silla') == 'true'
 
-    # 3. Capturar Capacidades (Niveles 0-3)
+    # 3. Capturar Capacidades (Niveles 0-3 o 1-10 según tu ajuste)
     v_vision = int(request.form.get('vision', 3))
     v_audicion = int(request.form.get('audicion', 3))
     v_habla = int(request.form.get('habla', 3))
@@ -65,7 +65,7 @@ def recomendar():
     v_resistencia = int(request.form.get('resistencia', 3))
     v_independencia = int(request.form.get('independencia', 3))
 
-    # --- 4. CONSULTA Y FILTROS (Sin Presupuesto) ---
+    # --- 4. CONSULTA Y FILTROS ---
     consulta = SaacSistema.query.outerjoin(SistemaRequisitoFuncional)
     consulta = consulta.filter(SaacSistema.fatiga_fisica <= v_resistencia)
 
@@ -90,31 +90,35 @@ def recomendar():
 
     resultados = consulta.all()
 
-    # --- 5. LÓGICA DE PROCESAMIENTO Y VINCULACIÓN ---
+    # --- 5. LÓGICA DE PROCESAMIENTO, VINCULACIÓN Y PRIORIDAD ---
     sistemas_finales = []
     accesorios_referencia = []
     bancos_voz_informativa = []
     ids_accesorios_vistos = set() 
     
+    # Pre-cargar periféricos comunes para vinculación rápida
+    perifericos_db = SaacSistema.query.all()
     perifericos = {
-        'eye_tracker': next((x for x in resultados if 'Eye tracker' in x.nombre), None),
-        'soporte': next((x for x in resultados if 'Soporte' in x.nombre), None),
-        'gafas': next((x for x in resultados if 'Gafas' in x.nombre), None),
-        'laser': next((x for x in resultados if x.nombre == 'Puntero Láser'), None),
-        'pufo': next((x for x in resultados if 'soplido' in x.nombre.lower()), None),
-        'pedal': next((x for x in resultados if 'pedal' in x.nombre.lower()), None),
-        'spec': next((x for x in resultados if 'Spec' in x.nombre), None),
-        'chin': next((x for x in resultados if 'Chin' in x.nombre), None)
+        'eye_tracker': next((x for x in perifericos_db if 'Eye tracker' in x.nombre), None),
+        'soporte': next((x for x in perifericos_db if 'Soporte' in x.nombre), None),
+        'gafas': next((x for x in perifericos_db if 'Gafas' in x.nombre), None),
+        'laser': next((x for x in perifericos_db if x.nombre == 'Puntero Láser'), None),
+        'pufo': next((x for x in perifericos_db if 'soplido' in x.nombre.lower()), None),
+        'spec': next((x for x in perifericos_db if 'Spec' in x.nombre), None),
+        'chin': next((x for x in perifericos_db if 'Chin' in x.nombre), None)
     }
 
     for s in resultados:
         nombre_low = s.nombre.lower()
+        
+        # Filtro de Bancos de Voz
         es_banco = any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid'])
         if es_banco:
             if v_habla >= 2:
                 bancos_voz_informativa.append(s)
             continue 
 
+        # Evitar duplicar hardware en la lista de sistemas principales
         es_hardware = any(kw in nombre_low for kw in ['tracker', 'puntero', 'gafas', 'soporte', 'conmutador', 'pedal', 'spec', 'chin', 'pufo'])
         if es_hardware:
             continue
@@ -123,23 +127,30 @@ def recomendar():
         s.accesorio_vinculado = None 
         s.prioridad_entorno = 0 
         
+        # Jerarquía de Esfuerzo Clínico (IDs: 1:Manos, 2:Ojos, 3:Cabeza, 4:Voz, 5:Pulsador)
+        # Menor valor = Aparece primero
+        ids_s = [e.id for e in s.entradas]
+        if 1 in ids_s: s.peso_esfuerzo = 1    # Manos
+        elif 4 in ids_s: s.peso_esfuerzo = 2 # Voz
+        elif 3 in ids_s: s.peso_esfuerzo = 3 # Cabeza
+        elif 5 in ids_s: s.peso_esfuerzo = 4 # Pulsador
+        elif 2 in ids_s: s.peso_esfuerzo = 5 # Ojos
+        else: s.peso_esfuerzo = 10
+
+        # Vinculación lógica de accesorios
         if s.nombre in ['Grid 3', 'Verbo', 'TD Snap', 'Tallk', 'Look to learn', 'Communicator 5']:
             if 2 in ids_entradas: 
                 s.accesorio_vinculado = perifericos['eye_tracker']
             elif 5 in ids_entradas:
-                if v_resistencia <= 1: 
-                    s.accesorio_vinculado = perifericos['pufo']
-                elif v_resistencia == 2:
-                    s.accesorio_vinculado = perifericos['chin']
-                else:
-                    s.accesorio_vinculado = perifericos['spec']
+                if v_resistencia <= 1: s.accesorio_vinculado = perifericos['pufo']
+                elif v_resistencia == 2: s.accesorio_vinculado = perifericos['chin']
+                else: s.accesorio_vinculado = perifericos['spec']
 
         if s.nombre in ['Panel alfabético', 'Panel pictogramas', 'SpeakBook']:
-            if 3 in ids_entradas:
-                s.accesorio_vinculado = perifericos['gafas']
-            else:
-                s.accesorio_vinculado = perifericos['laser']
+            if 3 in ids_entradas: s.accesorio_vinculado = perifericos['gafas']
+            else: s.accesorio_vinculado = perifericos['laser']
 
+        # Notas por entorno y silla
         if v_silla and s.admite_anclaje:
             s.nota_clinica += "Requiere soporte de fijación a silla."
             if perifericos['soporte'] and perifericos['soporte'].id not in ids_accesorios_vistos:
@@ -147,8 +158,7 @@ def recomendar():
                 ids_accesorios_vistos.add(perifericos['soporte'].id)
         
         if v_entorno == 'exterior':
-            es_mirada = s.accesorio_vinculado and 'tracker' in s.accesorio_vinculado.nombre.lower()
-            if es_mirada:
+            if s.accesorio_vinculado and 'tracker' in s.accesorio_vinculado.nombre.lower():
                 s.nota_clinica += " | ADVERTENCIA: La mirada pierde precisión con luz solar."
                 s.prioridad_entorno = 1 
             if not s.portable:
@@ -156,36 +166,28 @@ def recomendar():
 
         sistemas_finales.append(s)
 
-    sistemas_finales.sort(key=lambda x: x.prioridad_entorno)
+    # ORDENACIÓN FINAL: 1º Por comodidad de entrada, 2º Por adecuación al entorno
+    sistemas_finales.sort(key=lambda x: (x.peso_esfuerzo, x.prioridad_entorno))
+
+    # Recolectar accesorios vinculados para la tabla inferior
     for s in sistemas_finales:
         acc = s.accesorio_vinculado
         if acc and acc.id not in ids_accesorios_vistos:
             accesorios_referencia.append(acc)
             ids_accesorios_vistos.add(acc.id)
 
-    # --- LÓGICA DE GUARDADO ---
+    # --- 6. GUARDADO EN HISTORIAL ---
     nuevo_historial_id = None
     try:
         nombres_entradas = [e.nombre for e in TipoEntrada.query.filter(TipoEntrada.id.in_(ids_entradas)).all()]
         nombres_plats = [p.nombre for p in Plataforma.query.filter(Plataforma.id.in_(ids_plataformas)).all()]
-        nombres_sist = [s.nombre for s in sistemas_finales]
-        nombres_acc = [acc.nombre for acc in accesorios_referencia]
-        nombres_banc = [b.nombre for b in bancos_voz_informativa]
-        
-        resumen_final = f"SISTEMAS: {', '.join(nombres_sist)} | ACCESORIOS: {', '.join(nombres_acc)} | BANCOS: {', '.join(nombres_banc)}"
+        resumen_final = f"SISTEMAS: {', '.join([s.nombre for s in sistemas_finales])} | ACCESORIOS: {', '.join([a.nombre for a in accesorios_referencia])} | BANCOS: {', '.join([b.nombre for b in bancos_voz_informativa])}"
         
         datos_entrada = {
-            "vision": v_vision,
-            "audicion": v_audicion,
-            "habla": v_habla,
-            "cognicion": v_cognicion,
-            "tecnologia": v_tecno,
-            "resistencia": v_resistencia,
-            "independencia": v_independencia,
-            "silla": v_silla,
-            "entorno": v_entorno,
-            "plataformas_nombres": nombres_plats,
-            "entradas_nombres": nombres_entradas
+            "vision": v_vision, "audicion": v_audicion, "habla": v_habla,
+            "cognicion": v_cognicion, "tecnologia": v_tecno, "resistencia": v_resistencia,
+            "independencia": v_independencia, "silla": v_silla, "entorno": v_entorno,
+            "plataformas_nombres": nombres_plats, "entradas_nombres": nombres_entradas
         }
 
         nuevo_historial = HistorialRecomendacion(
@@ -193,11 +195,9 @@ def recomendar():
             input_usuario=datos_entrada,
             sistemas_recomendados=resumen_final
         )
-
         bd.session.add(nuevo_historial)
         bd.session.commit()
         nuevo_historial_id = nuevo_historial.id
-
     except Exception:
         bd.session.rollback()
 
@@ -211,36 +211,25 @@ def recomendar():
 @app.route('/guardar-feedback', methods=['POST'])
 def guardar_feedback():
     from sqlalchemy.orm.attributes import flag_modified
-    
     h_id = request.form.get('historial_id')
     
-    # Capturamos los datos
-    feedback_dict = {
-        "usa_actualmente": request.form.get('usa_actual'),
-        "satisfaccion": request.form.get('satisfaccion_actual'),
-        "considera_otro": request.form.get('opcion_cambio'),
-        "motivo_abandono_pasado": request.form.get('motivo_cambio'),
-        "adecuacion_general": request.form.get('valoracion_general'),
-        "comentarios": request.form.get('comentarios_adicionales')
-    }
-    
-    
     if h_id:
+        feedback_dict = {
+            "usa_actualmente": request.form.get('usa_actual'),
+            "satisfaccion": request.form.get('satisfaccion_actual'),
+            "considera_otro": request.form.get('opcion_cambio'),
+            "motivo_abandono_pasado": request.form.get('motivo_cambio'),
+            "adecuacion_general": request.form.get('valoracion_general'),
+            "comentarios": request.form.get('comentarios_adicionales')
+        }
         try:
             registro_db = HistorialRecomendacion.query.get(h_id)
             if registro_db:
-                # REASIGNACIÓN DIRECTA para asegurar que SQLAlchemy vea el cambio
                 registro_db.feedback = feedback_dict 
-                # Marcamos como modificado explícitamente
                 flag_modified(registro_db, "feedback")
                 bd.session.commit()
-                print(f"Feedback guardado para el ID: {h_id}") # Debug en consola
-        except Exception as e:
-            print(f"Error al guardar: {e}")
+        except Exception:
             bd.session.rollback()
-
-        print(f"ID recibido: {h_id}")
-        print(f"Datos del formulario: {request.form}")
     
     return render_template("gracias_feedback.html")
 
