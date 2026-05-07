@@ -31,14 +31,7 @@
                 <tr>
                     <td><strong>{{ sistema.nombre }}</strong></td>
                     <td>
-                    <!-- Si el sistema admite Ojos (2) y Pulsador (5), le ponemos el distintivo -->
-                    {% if sistema.entradas|length > 2 %}
-                        <br><span style="display: inline-block; margin-top: 5px; padding: 2px 8px; background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; border-radius: 12px; font-size: 0.75em; font-weight: bold;">
-                            ⭐ Sistema Escalable
-                        </span>
-                    {% endif %}
-                </td>
-                    <td>
+
                         {{ sistema.descripcion }}
                         {% if sistema.nota_clinica %}
                             <div class="nota-clinica">

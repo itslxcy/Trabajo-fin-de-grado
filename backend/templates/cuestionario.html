@@ -22,10 +22,6 @@
         <div class="seccion">
             <h2>1. Información básica</h2>
             <div class="pregunta">
-                <label>ID del usuario:</label>
-                <input type="text" name="nombre" placeholder="Ej: Lucía Gil" required>
-            </div>
-            <div class="pregunta">
                 <label>Idiomas de comunicación:</label>
                 <div class="opciones-grid">
                     {% for i in idiomas %}
@@ -51,9 +47,6 @@
 
                 ('habla', 'Capacidad oral / Habla', 
                  '0: Comunicación verbal nula.|1: Habla residual difícil de entender para personas externas.|2: Habla comprensible pero con fatiga o lentitud significativa.|3: Habla fluida (uso de SAAC preventivo o por fatiga extrema).', 0),
-
-                ('cognicion', 'Nivel de comprensión y lenguaje', 
-                 '0: Muy limitado (elección entre 2-4 opciones básicas).|1: Uso de símbolos y pictogramas para necesidades del día a día.|2: Nivel lingüístico alto (formación de frases y uso de gramática).|3: Plena (capacidad de lectoescritura y lógica compleja para teclados).', 0),
 
                 ('tecnologia', 'Destreza tecnológica previa', 
                  '0: Nula (requiere interfaz de "pulsar y hablar" sin menús).|1: Principiante (uso de tablet básica pero sin manejo de configuración).|2: Habitual (uso autónomo de apps, redes sociales e internet).|3: Experto (dominio de configuración de sistemas y resolución de fallos).', 0),
@@ -97,6 +90,9 @@
             <h2>3. Interacción y dispositivos</h2>
             <div class="pregunta">
                 <label>Formas de interacción posibles (Acceso):</label>
+                <small style="color: #666; margin-bottom: 5px; display: block;">
+                (Seleccione aquella/s formas en las que pueda/prefiera interactuar con el sistema.)
+            </small>
                 <div class="opciones-grid">
                     {% for e in entradas %}
                     <label class="opcion-item">
@@ -106,7 +102,31 @@
                 </div>
             </div>
             <div class="pregunta">
+    <label>Forma de comunicación preferida:</label>
+    <small style="color: #666; margin-bottom: 5px; display: block;">
+        (Seleccione aquella/s opciones en las que prefiera expresarse.)
+    </small>
+    
+                <div class="opciones-grid">
+                    <label class="opcion-item">
+                        <!-- Cambiado a checkbox y value 3 -->
+                        <input type="checkbox" name="alfabetizacion_ids" value="3"> 
+                        <span>Alfabeto</span>
+                    </label>
+
+                    <label class="opcion-item">
+                        <!-- Cambiado a checkbox y value 1 (Pictogramas suele ser nivel 1 en tu lógica) -->
+                        <input type="checkbox" name="alfabetizacion_ids" value="1"> 
+                        <span>Pictogramas</span>
+                    </label>
+
+                </div>
+            </div>
+            <div class="pregunta">
                 <label>Plataformas o dispositivos preferidos:</label>
+                <small style="color: #666; margin-bottom: 5px; display: block;">
+                (Seleccione aquella/s plataformas de las que ya disponga o que prefiera utilizar.)
+            </small>
                 <div class="opciones-grid">
                     {% for p in plataformas %}
                     <label class="opcion-item">
@@ -138,6 +158,14 @@
                     <label><input type="radio" name="usa_silla" value="false"> No (Se priorizarán soportes de mesa/suelo)</label>
                 </div>
             </div>
+
+            <div class="pregunta" style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 5px solid #2ecc71;">
+            <p style="margin: 0; color: #2c3e50; font-size: 0.9em;">
+                <strong> Privacidad garantizada:</strong> 
+                Este estudio es totalmente anónimo. No se recogen nombres, correos ni datos personales. 
+                Al hacer clic en el botón de abajo, se le asignará un código ID aleatorio para procesar sus datos clínicos.
+            </p>
+        </div>
 
         <button type="submit" class="boton-enviar">
             Generar informe de recomendación

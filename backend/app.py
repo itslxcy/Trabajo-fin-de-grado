@@ -1,4 +1,6 @@
 import os
+import string
+import random
 from flask import Flask, render_template, request, redirect, url_for
 from modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma, HistorialRecomendacion
 from extension import bd
@@ -21,6 +23,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 bd.init_app(app)
 
+# --- FUNCIÓN PARA ANONIMIZACIÓN AUTOMÁTICA ---
+def generar_id_anonimo():
+    """Genera un código único aleatorio de 6 caracteres para anonimizar al usuario."""
+    caracteres = string.ascii_uppercase + string.digits
+    codigo = ''.join(random.choice(caracteres) for _ in range(6))
+    return f"PAC-{codigo}"
+
+# --- RUTAS DE NAVEGACIÓN ---
+
 @app.route('/')
 def informar():
     return render_template("informacion.html")
@@ -34,16 +45,19 @@ def info_saac():
     return render_template("SAAC.html")
 
 @app.route('/cuestionario')
-def cuestionario():
+def cuestionary():
     idiomas = Idioma.query.order_by(Idioma.id).all() 
     entradas = TipoEntrada.query.all()
     plataformas = Plataforma.query.all()
     return render_template('cuestionario.html', idiomas=idiomas, entradas=entradas, plataformas=plataformas)
 
+# --- LÓGICA DE RECOMENDACIÓN ---
+
 @app.route('/recomendar', methods=['POST'])
 def recomendar():
-    # 1. Capturar datos
-    nombre_usuario = request.form.get('nombre')
+    # 1. Capturar datos del formulario (Anonimizando el nombre automáticamente)
+    nombre_usuario = generar_id_anonimo() 
+    
     ids_idiomas = [int(x) for x in request.form.getlist('idioma_ids') if x]
     ids_entradas = [int(x) for x in request.form.getlist('entrada_ids') if x]
     ids_plataformas = [int(x) for x in request.form.getlist('plataforma_ids') if x]
@@ -54,20 +68,36 @@ def recomendar():
     v_habla = int(request.form.get('habla', 3))
     v_resistencia = int(request.form.get('resistencia', 3))
     v_independencia = int(request.form.get('independencia', 3))
+    
+    # NUEVO: Captura de Alfabetización (sustituye a v_cognicion)
+    ids_alfabetizacion = [int(x) for x in request.form.getlist('alfabetizacion_ids') if x]
+    v_alfabetizacion = max(ids_alfabetizacion) if ids_alfabetizacion else 3
+    
+    v_tecnologia = int(request.form.get('tecnologia', 3))
+    v_audicion = int(request.form.get('audicion', 3))
 
-    # --- 2. CONSULTA BASE ---
+    # --- 2. BÚSQUEDA PREVENTIVA DE VOICE BANKING ---
+    bancos_voz_informativa = []
+    if v_habla >= 2:
+        bancos_voz_informativa = SaacSistema.query.filter(
+            or_(
+                SaacSistema.nombre.ilike('%voice%'),
+                SaacSistema.nombre.ilike('%banking%'),
+                SaacSistema.nombre.ilike('%vocalid%'),
+                SaacSistema.nombre.ilike('%model%'),
+                SaacSistema.nombre.ilike('%myownvoice%')
+            )
+        ).all()
+
+    # --- 3. CONSULTA FILTRADA PARA SISTEMAS SAAC ---
     consulta = SaacSistema.query.outerjoin(SistemaRequisitoFuncional)
     consulta = consulta.filter(SaacSistema.fatiga_fisica <= v_resistencia)
 
-    if ids_idiomas:
-        consulta = consulta.filter(SaacSistema.idiomas.any(Idioma.id.in_(ids_idiomas)))
-
-    # Filtros de niveles funcionales
     campos = [
         (SistemaRequisitoFuncional.nivel_visual_min, v_vision),
-        (SistemaRequisitoFuncional.nivel_cognitivo_min, int(request.form.get('cognicion', 3))),
-        (SistemaRequisoteFuncional.nivel_tecnologico_min, int(request.form.get('tecnologia', 3))),
-        (SistemaRequisitoFuncional.nivel_auditivo_min, int(request.form.get('audicion', 3))),
+        (SistemaRequisitoFuncional.nivel_cognitivo_min, v_alfabetizacion), 
+        (SistemaRequisitoFuncional.nivel_tecnologico_min, v_tecnologia),
+        (SistemaRequisitoFuncional.nivel_auditivo_min, v_audicion),
         (SistemaRequisitoFuncional.nivel_habla_min, v_habla)
     ]
     for columna, valor in campos:
@@ -76,6 +106,8 @@ def recomendar():
     if v_independencia == 0:
         consulta = consulta.filter(SaacSistema.requiere_interlocutor == True)
 
+    if ids_idiomas:
+        consulta = consulta.filter(SaacSistema.idiomas.any(Idioma.id.in_(ids_idiomas)))
     if ids_entradas:
         consulta = consulta.filter(SaacSistema.entradas.any(TipoEntrada.id.in_(ids_entradas)))
     if ids_plataformas:
@@ -83,10 +115,9 @@ def recomendar():
 
     resultados = consulta.all()
 
-    # --- 3. PROCESAMIENTO Y VINCULACIÓN ---
+    # --- 4. PROCESAMIENTO DE RESULTADOS Y PERIFÉRICOS ---
     sistemas_finales = []
     accesorios_referencia = []
-    bancos_voz_informativa = []
     ids_acc_vistos = set() 
     
     todos_sist = SaacSistema.query.all()
@@ -96,80 +127,49 @@ def recomendar():
         'ipad': next((x for x in todos_sist if 'iPad' in x.nombre), None),
         'tablet': next((x for x in todos_sist if 'Tablet Android' in x.nombre), None),
         'laptop': next((x for x in todos_sist if 'Ordenador Portátil' in x.nombre), None),
-        'pufo': next((x for x in todos_sist if 'soplido' in x.nombre.lower()), None),
-        'alexa': next((x for x in todos_sist if 'Alexa' in x.nombre), None),
-        'ir_hub': next((x for x in todos_sist if 'Hub Infrarrojos' in x.nombre), None),
         'panel_respaldo': next((x for x in todos_sist if 'Panel alfabético' in x.nombre), None)
     }
 
+    nombres_excluidos = ['tracker', 'puntero', 'soporte', 'conmutador', 'pedal', 'guante', 
+                         'lápiz', 'ratón', 'ipad', 'tablet', 'portátil', 'alexa', 
+                         'google home', 'hub', 'enchufe', 'bjoy', 'chin']
+
     for s in resultados:
         nombre_low = s.nombre.lower()
-        
-        if any(kw in nombre_low for kw in ['modeltalker', 'myownvoice', 'vocalid']):
-            if v_habla >= 2: bancos_voz_informativa.append(s)
-            continue 
-
-        if any(kw in nombre_low for kw in ['tracker', 'puntero', 'soporte', 'conmutador', 'pedal', 'guante', 'lápiz', 'ratón', 'ipad', 'tablet', 'portátil', 'alexa', 'hub', 'enchufe']):
+        if any(kw in nombre_low for kw in ['voice', 'banking', 'modeltalker', 'vocalid']):
+            continue
+        if any(kw in nombre_low for kw in nombres_excluidos):
             continue
 
         s.nota_clinica = ""
         s.accesorio_vinculado = None 
         s.dispositivo_base = None 
         
-        ids_s = [e.id for e in s.entradas]
-        # Pesos de esfuerzo
-        if 1 in ids_s: s.peso_esfuerzo = 1
-        elif 4 in ids_s: s.peso_esfuerzo = 2
-        elif 3 in ids_s: s.peso_esfuerzo = 3
-        elif 5 in ids_s: s.peso_esfuerzo = 4
-        elif 2 in ids_s: s.peso_esfuerzo = 5
-        else: s.peso_esfuerzo = 10
-
-        # Lógica de Escalabilidad
-        if 1 in ids_s and 2 in ids_s and 5 in ids_s:
-            s.es_escalable = True
-            s.nota_clinica += "Sistema altamente escalable."
-        else:
-            s.es_escalable = False
-
-        # Dispositivo Base
         plats_s = [p.nombre for p in s.plataformas]
         if 'iOS' in plats_s: s.dispositivo_base = pref['ipad']
         elif 'Android' in plats_s: s.dispositivo_base = pref['tablet']
         elif 'Windows' in plats_s: s.dispositivo_base = pref['laptop']
 
-        # Periférico
-        if 2 in ids_entradas and s.peso_esfuerzo == 5:
+        ids_s = [e.id for e in s.entradas]
+        if 2 in ids_entradas and 2 in ids_s:
             s.accesorio_vinculado = pref['eye_tracker']
 
-        # Domótica
-        if v_habla == 3 and not s.accesorio_vinculado:
-            s.accesorio_vinculado = pref['alexa']
+        if 1 in ids_s and 2 in ids_s and 5 in ids_s:
+            s.nota_clinica += "Sistema altamente escalable."
         
-        if s.nombre in ['Grid 3', 'Communicator 5', 'TD Snap']:
-            s.nota_clinica += " | Incluye control domótico."
-            if pref['ir_hub'] and pref['ir_hub'].id not in ids_acc_vistos:
-                accesorios_referencia.append(pref['ir_hub'])
-                ids_acc_vistos.add(pref['ir_hub'].id)
-
-        # Lógica de Plan de Respaldo (Baja Tecnología)
-        es_alta_tecnologia = any(kw in s.nombre.lower() for kw in ['grid', 'snap', 'communicator', 'pilot', 'tallk', 'predictable', 'verbo'])
-        if es_alta_tecnologia:
-            s.nota_clinica += " | Requiere sistema de baja tecnología como respaldo."
-            if pref['panel_respaldo'] and pref['panel_respaldo'].id not in ids_acc_vistos:
-                accesorios_referencia.append(pref['panel_respaldo'])
-                ids_acc_vistos.add(pref['panel_respaldo'].id)
-
-        # Anclaje
         if v_silla and s.admite_anclaje:
-            s.nota_clinica += " | Requiere soporte de fijación."
+            s.nota_clinica += " | Requiere soporte de fijación a silla."
             if pref['soporte'] and pref['soporte'].id not in ids_acc_vistos:
                 accesorios_referencia.append(pref['soporte'])
                 ids_acc_vistos.add(pref['soporte'].id)
 
+        if 1 in ids_s: s.peso_esfuerzo = 1
+        elif 2 in ids_s: s.peso_esfuerzo = 5
+        else: s.peso_esfuerzo = 3
+
         sistemas_finales.append(s)
 
-    sistemas_finales.sort(key=lambda x: (x.peso_esfuerzo))
+    sistemas_finales.sort(key=lambda x: x.peso_esfuerzo)
 
     for s in sistemas_finales:
         for extra in [s.dispositivo_base, s.accesorio_vinculado]:
@@ -177,22 +177,55 @@ def recomendar():
                 accesorios_referencia.append(extra)
                 ids_acc_vistos.add(extra.id)
 
-    # --- 4. GUARDADO ---
+    # --- 5. GUARDADO EN HISTORIAL ---
     try:
-        resumen = f"SISTEMAS: {', '.join([s.nombre for s in sistemas_finales])}"
+        nombres_entradas = [e.nombre for e in TipoEntrada.query.filter(TipoEntrada.id.in_(ids_entradas)).all()]
+        nombres_plats = [p.nombre for p in Plataforma.query.filter(Plataforma.id.in_(ids_plataformas)).all()]
+
+        pref_comunicacion = []
+        if 3 in ids_alfabetizacion: pref_comunicacion.append("Alfabeto")
+        if 1 in ids_alfabetizacion: pref_comunicacion.append("Pictogramas")
+        if 0 in ids_alfabetizacion: pref_comunicacion.append("Emergente")
+
+        resumen_sistemas = ", ".join([s.nombre for s in sistemas_finales])
+        resumen_hardware = ", ".join([a.nombre for a in accesorios_referencia])
+        resumen_voz = ", ".join([b.nombre for b in bancos_voz_informativa])
+        
+        texto_final = f"SISTEMAS: {resumen_sistemas} | ACCESORIOS: {resumen_hardware} | BANCOS: {resumen_voz}"
+
+        datos_usuario = {
+            "vision": v_vision,
+            "alfabetizacion": ", ".join(pref_comunicacion),
+            "habla": v_habla,
+            "audicion": v_audicion,
+            "resistencia": v_resistencia,
+            "tecnologia": v_tecnologia,
+            "independencia": v_independencia,
+            "silla": v_silla,
+            "entorno": v_entorno,
+            "entradas_nombres": nombres_entradas,
+            "plataformas_nombres": nombres_plats
+        }
+
         nuevo_historial = HistorialRecomendacion(
             nombre_paciente=nombre_usuario,
-            input_usuario={"entradas": ids_entradas, "entorno": v_entorno},
-            sistemas_recomendados=resumen
+            input_usuario=datos_usuario,
+            sistemas_recomendados=texto_final 
         )
         bd.session.add(nuevo_historial)
         bd.session.commit()
         h_id = nuevo_historial.id
-    except:
+    except Exception as e:
+        print(f"Error al guardar: {e}")
         bd.session.rollback()
         h_id = None
 
-    return render_template('recomendacion.html', sistemas=sistemas_finales, accesorios_referencia=accesorios_referencia, bancos_voz=bancos_voz_informativa, nombre_usuario=nombre_usuario, historial_id=h_id)
+    return render_template('recomendacion.html', 
+                           sistemas=sistemas_finales, 
+                           accesorios_referencia=accesorios_referencia, 
+                           bancos_voz=bancos_voz_informativa, 
+                           nombre_usuario=nombre_usuario, 
+                           historial_id=h_id)
 
 @app.route('/guardar-feedback', methods=['POST'])
 def guardar_feedback():
@@ -207,9 +240,14 @@ def guardar_feedback():
             bd.session.commit()
     return render_template("gracias_feedback.html")
 
+@app.route('/admin_historial')
+def ver_historial():
+    registros = HistorialRecomendacion.query.order_by(HistorialRecomendacion.id.desc()).all()
+    return render_template('admin_historial.html', registros=registros)
+
 if __name__ == '__main__':
     app.run(debug=True)
 
 #python backend/app.py
 #http://127.0.0.1:5000
-#http://127.0.0.1:5000/admin/historial
+#http://127.0.0.1:5000/admin_historial

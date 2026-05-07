@@ -93,13 +93,12 @@ VALUES
 
 -- DOMÓTICA (CONTROL DEL ENTORNO)
 ('Amazon Alexa / Google Home', 'Asistente virtual para control de dispositivos domésticos (luces, persianas) mediante voz.', false, 1, false, false, 'https://www.amazon.es/b?node=15712533031'),
-('Hub Infrarrojos (Broadlink/Logitech)', 'Control de aparatos antiguos (TV, Aire) desde el comunicador.', false, 0, false, false, 'https://qinera.com/es/tienda/control-del-entorno/'),
 ('Enchufe Inteligente WiFi', 'Permite encender y apagar lámparas mediante el comunicador o la voz.', false, 0, false, false, NULL),
 
 -- HARDWARE GENÉRICO
-('iPad (Apple)', 'Tablet recomendada para iOS. Ideal para Predictable o TD Snap.', false, 1, true, true, 'https://www.apple.com/es/ipad/'),
-('Tablet Android (Gama Media/Alta)', 'Dispositivo versátil para apps Android como VirtualTEC.', false, 1, true, true, NULL),
-('Ordenador Portátil (Windows)', 'Necesario para software avanzado como Grid 3 u OptiKey.', false, 0, true, true, NULL),
+('iPad', 'Tablet recomendada para iOS. Ideal para Predictable o TD Snap.', false, 1, true, true, 'https://www.apple.com/es/ipad/'),
+('Tablet Android', 'Dispositivo versátil para apps Android como VirtualTEC.', false, 1, true, true, NULL),
+('Ordenador Portátil', 'Necesario para software avanzado como Grid 3 u OptiKey.', false, 0, true, true, NULL),
 
 -- PERIFÉRICOS ESPECIALIZADOS
 ('Eye tracker','Lector ocular para control de dispositivos.',false,1,false,true, 'https://www.irisbond.com/'),

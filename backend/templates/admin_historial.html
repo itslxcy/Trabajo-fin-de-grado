@@ -1,95 +1,115 @@
-<table class="tabla-historial" style="width: 100%; border-collapse: collapse; background: white; font-family: 'Segoe UI', Arial, sans-serif; color: #333; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden;">
-    <thead style="background-color: #2c3e50; color: white;">
-        <tr>
-            <th style="padding: 12px; text-align: center; font-size: 0.85em; text-transform: uppercase;">Sesión</th>
-            <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Paciente</th>
-            <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Perfil clínico</th>
-            <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Recomendación</th>
-            <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Opinión / Feedback</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for r in registros %}
-        <tr style="border-bottom: 1px solid #eee; transition: background 0.3s;">
-            <!-- FECHA Y HORA -->
-            <td style="padding: 15px; text-align: center; vertical-align: middle; background-color: #fcfcfc;">
-                <span style="font-size: 0.85em; color: #7f8c8d;">{{ r.fecha.strftime('%d/%m/%Y') }}</span><br>
-                <strong style="font-size: 1.1em; color: #2c3e50;">{{ r.fecha.strftime('%H:%M') }}</strong>
-            </td>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Historial</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body style="max-width: 1200px;"> <!-- Un poco más ancho para la tabla -->
+    <nav class="nav-tabs">
+        <a href="/">Inicio</a>
+        <a href="/admin_historial" class="active">Panel Administrativo</a>
+    </nav>
 
-            <!-- NOMBRE -->
-            <td style="padding: 15px; vertical-align: middle; border-left: 1px solid #eee;">
-                <strong style="text-transform: uppercase; color: #ac4caf;">{{ r.nombre_paciente }}</strong>
-            </td>
+    <h1>Historial de Recomendaciones Generadas</h1>
 
-            <!-- PERFIL CLÍNICO -->
-            <td style="padding: 15px; border-left: 1px solid #eee;">
-                <div style="display: flex; gap: 20px; font-size: 0.85em;">
-                    <div style="flex: 1;">
-                        <div style="margin-bottom: 4px;"><strong>Visión:</strong> {{ r.input_usuario.get('vision', 'N/A') }}</div>
-                        <div style="margin-bottom: 4px;"><strong>Cognición:</strong> {{ r.input_usuario.get('cognicion', 'N/A') }}</div>
-                        <div style="margin-bottom: 4px;"><strong>Habla:</strong> {{ r.input_usuario.get('habla', 'N/A') }}</div>
-                        <div style="margin-bottom: 4px;"><strong>Audición:</strong> {{ r.input_usuario.get('audicion', 'N/A') }}</div>
-                    </div>
-                    <div style="flex: 1;">
-                        <div style="margin-bottom: 4px;"><strong>Resistencia:</strong> {{ r.input_usuario.get('resistencia', 'N/A') }}</div>
-                        <div style="margin-bottom: 4px;"><strong>Tecnología:</strong> {{ r.input_usuario.get('tecnologia', 'N/A') }}</div>
-                        <div style="margin-bottom: 4px;"><strong>Independencia:</strong> {{ r.input_usuario.get('independencia', 'N/A') }}</div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #ddd; font-size: 0.85em;">
-                    <strong> Silla:</strong> {{ 'Sí' if r.input_usuario.get('silla') else 'No' }} | 
-                    <strong> Entorno:</strong> {{ r.input_usuario.get('entorno', 'N/A') }}<br>
-                    <div style="margin-top: 4px;">
-                        <strong> Acceso:</strong> {{ r.input_usuario.get('entradas_nombres', []) | join(', ') }}<br>
-                        <strong> Plataformas:</strong> {{ r.input_usuario.get('plataformas_nombres', []) | join(', ') }}
-                    </div>
-                </div>
-            </td>
+    <div class="seccion" style="padding: 0; overflow: hidden; border-radius: 8px;">
+        <table class="tabla-historial" style="width: 100%; border-collapse: collapse; background: white; font-family: 'Segoe UI', sans-serif; color: #333;">
+            <thead style="background-color: #2c3e50; color: white;">
+                <tr>
+                    <th style="padding: 12px; text-align: center; font-size: 0.85em; text-transform: uppercase;">Sesión</th>
+                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Paciente</th>
+                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Perfil clínico</th>
+                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Recomendación</th>
+                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Opinión / Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in registros %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <!-- FECHA Y HORA -->
+                    <td style="padding: 15px; text-align: center; vertical-align: middle; background-color: #fcfcfc;">
+                        <span style="font-size: 0.85em; color: #7f8c8d;">{{ r.fecha.strftime('%d/%m/%Y') if r.fecha else 'S/F' }}</span><br>
+                        <strong style="font-size: 1.1em; color: #2c3e50;">{{ r.fecha.strftime('%H:%M') if r.fecha else '' }}</strong>
+                    </td>
 
-            <!-- RECOMENDACIÓN TÉCNICA -->
-            <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em;">
-                {% set partes = r.sistemas_recomendados.split('|') %}
-                
-                <div style="margin-bottom: 8px;">
-                    <div style="font-weight: bold; color: #2980b9; text-transform: uppercase; font-size: 0.75em;">Sistemas:</div>
-                    {{ partes[0].replace('SISTEMAS:', '').strip() }}
-                </div>
+                    <!-- NOMBRE -->
+                    <td style="padding: 15px; vertical-align: middle; border-left: 1px solid #eee;">
+                        <strong style="text-transform: uppercase; color: #ac4caf;">{{ r.nombre_paciente }}</strong>
+                    </td>
 
-                {% if partes|length > 1 and partes[1].replace('ACCESORIOS:', '').strip() != "" %}
-                <div style="margin-bottom: 8px;">
-                    <div style="font-weight: bold; color: #27ae60; text-transform: uppercase; font-size: 0.75em;">Hardware:</div>
-                    {{ partes[1].replace('ACCESORIOS:', '').strip() }}
-                </div>
-                {% endif %}
+                    <!-- PERFIL CLÍNICO -->
+                    <td style="padding: 15px; border-left: 1px solid #eee;">
+                        <div style="display: flex; gap: 20px; font-size: 0.85em;">
+                            <div style="flex: 1;">
+                                <div style="margin-bottom: 4px;"><strong>Visión:</strong> {{ r.input_usuario.get('vision', '-') }}</div>
+                                <!-- CAMBIO: Cognición por Alfabetización -->
+                                <div style="margin-bottom: 4px;"><strong>Alfabetización:</strong> {{ r.input_usuario.get('alfabetizacion', '-') }}</div>
+                                <div style="margin-bottom: 4px;"><strong>Habla:</strong> {{ r.input_usuario.get('habla', '-') }}</div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="margin-bottom: 4px;"><strong>Resistencia:</strong> {{ r.input_usuario.get('resistencia', '-') }}</div>
+                                <div style="margin-bottom: 4px;"><strong>Tecnología:</strong> {{ r.input_usuario.get('tecnologia', '-') }}</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #ddd; font-size: 0.85em;">
+                            <strong> Silla:</strong> {{ 'Sí' if r.input_usuario.get('silla') else 'No' }} | 
+                            <strong> Entorno:</strong> {{ r.input_usuario.get('entorno', '-') }}<br>
+                            <div style="margin-top: 4px;">
+                                <strong> Acceso:</strong> {{ r.input_usuario.get('entradas_nombres', []) | join(', ') }}
+                            </div>
+                        </div>
+                    </td>
 
-                {% if partes|length > 2 and partes[2].replace('BANCOS:', '').strip() != "" %}
-                <div>
-                    <div style="font-weight: bold; color: #e67e22; text-transform: uppercase; font-size: 0.75em;">Voz:</div>
-                    {{ partes[2].replace('BANCOS:', '').strip() }}
-                </div>
-                {% endif %}
-            </td>
+                    <!-- RECOMENDACIÓN TÉCNICA -->
+                    <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em;">
+                        <!-- Corregido: r.sistemas_recomendados para que coincida con app.py -->
+                        {% set partes = r.sistemas_recomendados.split('|') if r.sistemas_recomendados else [] %}
+                        
+                        {% if partes|length > 0 %}
+                        <div style="margin-bottom: 8px;">
+                            <div style="font-weight: bold; color: #2980b9; text-transform: uppercase; font-size: 0.75em;">Sistemas:</div>
+                            {{ partes[0].replace('SISTEMAS:', '').strip() }}
+                        </div>
+                        {% endif %}
 
-            <!-- OPINIÓN / FEEDBACK -->
-            <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; background-color: #f9f9f9;">
-                {% if r.feedback %}
-                    <strong>Calificación:</strong> {{ r.feedback.get('adecuacion_general') }}/3 <br>
-                    <strong>Usa actual:</strong> {{ r.feedback.get('usa_actualmente') }} <br>
-                    <strong>Satisfacción:</strong> {{ r.feedback.get('satisfaccion') }} <br>
-                    <strong>Considera otro:</strong> {{ r.feedback.get('considera_otro') }} <br>
-                    <strong>Abandono:</strong> {{ r.feedback.get('motivo_abandono_pasado') }}
-                {% if r.feedback.get('comentarios') %}
-                    <div style="margin-top: 8px; padding-top: 5px; border-top: 1px solid #ddd; font-style: italic; color: #555;">
-                        <strong>Sugerencia:</strong> {{ r.feedback.get('comentarios') }}
-                    </div>
-                {% endif %}
-            {% else %}
-                <span style="color: #bbb;">Sin respuesta aún</span>
-            {% endif %}
-        </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                        {% if partes|length > 1 and 'ACCESORIOS:' in partes[1] %}
+                        <div style="margin-bottom: 8px;">
+                            <div style="font-weight: bold; color: #27ae60; text-transform: uppercase; font-size: 0.75em;">Hardware:</div>
+                            {{ partes[1].replace('ACCESORIOS:', '').strip() }}
+                        </div>
+                        {% endif %}
+
+                        {% if partes|length > 2 and 'BANCOS:' in partes[2] and partes[2].replace('BANCOS:', '').strip() != "" %}
+                        <div style="margin-bottom: 8px;">
+                            <div style="font-weight: bold; color: #e67e22; text-transform: uppercase; font-size: 0.75em;">Voz:</div>
+                            {{ partes[2].replace('BANCOS:', '').strip() }}
+                        </div>
+                        {% endif %}
+                    </td>
+
+                    <!-- OPINIÓN / FEEDBACK -->
+                    <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; background-color: #f9f9f9;">
+                        {% if r.feedback %}
+                            <strong>Calificación:</strong> {{ r.feedback.get('valoracion_general', '-') }}/5 <br>
+                            <strong>Satisfacción:</strong> {{ r.feedback.get('satisfaccion_actual', '-') }} <br>
+                            <div style="margin-top: 8px; padding-top: 5px; border-top: 1px solid #ddd; font-style: italic; color: #555;">
+                                <strong>Sugerencia:</strong> {{ r.feedback.get('comentarios_adicionales', '') }}
+                            </div>
+                        {% else %}
+                            <span style="color: #bbb;">Sin respuesta aún</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/" style="text-decoration: none; color: #2c3e50; font-weight: bold;">← Volver al inicio</a>
+    </div>
+</body>
+</html>
