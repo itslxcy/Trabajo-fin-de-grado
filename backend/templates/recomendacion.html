@@ -31,6 +31,14 @@
                 <tr>
                     <td><strong>{{ sistema.nombre }}</strong></td>
                     <td>
+                    <!-- Si el sistema admite Ojos (2) y Pulsador (5), le ponemos el distintivo -->
+                    {% if sistema.entradas|length > 2 %}
+                        <br><span style="display: inline-block; margin-top: 5px; padding: 2px 8px; background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; border-radius: 12px; font-size: 0.75em; font-weight: bold;">
+                            ⭐ Sistema Escalable
+                        </span>
+                    {% endif %}
+                </td>
+                    <td>
                         {{ sistema.descripcion }}
                         {% if sistema.nota_clinica %}
                             <div class="nota-clinica">
@@ -64,6 +72,18 @@
                 <strong>Aviso:</strong> No se han encontrado sistemas adecuados con todos los filtros seleccionados.
             </div>
         {% endif %}
+
+        <div class="alerta-respaldo" style="margin-top: 30px; padding: 20px; background-color: #e3f2fd; border: 1px solid #2196f3; border-radius: 10px;">
+            <h3 style="color: #0d47a1; margin-top: 0;"> Recuerde: El plan de respaldo</h3>
+            <p>Aunque los sistemas de alta tecnología aquí recomendados ofrecen la mayor autonomía, <strong>nunca deben ser la única opción</strong>. Sugerimos contar siempre con un sistema de baja tecnología (como un tablero alfabético o ETRAN) para:</p>
+            <ul style="columns: 2; -webkit-columns: 2; -moz-columns: 2;">
+                <li>Situaciones de ducha o aseo personal.</li>
+                <li>Exposición directa al sol (que afecta a los lectores oculares).</li>
+                <li>Uso en exteriores bajo la lluvia.</li>
+                <li>Momentos de agotamiento de batería o fallos del software.</li>
+                <li>Traslados rápidos donde no se puede anclar el equipo.</li>
+            </ul>
+        </div>
     </div>
 
     <!-- TABLA PERIFÉRICOS -->

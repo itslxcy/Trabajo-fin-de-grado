@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sobre la ELA</title>
+    <title>Sobre la ELA - TFG</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
 </head>
 <body>
@@ -17,47 +17,55 @@
     <h1>Esclerosis Lateral Amiotrófica (ELA)</h1>
     
     <div class="seccion">
-        <p>La Esclerosis Lateral Amiotrófica (ELA) es una enfermedad neurodegenerativa progresiva que afecta selectivamente a las motoneuronas superiores e inferiores, responsables del control voluntario de la musculatura. La degeneración de estas neuronas provoca debilidad muscular progresiva, pérdida de movilidad y, en fases avanzadas, parálisis generalizada.</p>
-    </div>
-
-    <div class="seccion">
-        <h2>Evolución clínica y etapas</h2>
-        <p>La progresión de la ELA suele seguir una evolución gradual que puede dividirse en las siguientes fases:</p>
+        <p>La ELA es una enfermedad neurodegenerativa progresiva que afecta a las motoneuronas, provocando una pérdida del control muscular voluntario. Aunque la enfermedad avanza hacia un destino común, el inicio de los síntomas permite distinguir dos tipos principales:</p>
         
-        <table style="margin-top: 20px;">
-            <thead>
-                <tr>
-                    <th>Etapa</th>
-                    <th>Descripción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>1. Inicial</strong></td>
-                    <td>Debilidad localizada y alteraciones leves del habla.</td>
-                </tr>
-                <tr>
-                    <td><strong>2. Intermedia</strong></td>
-                    <td>Limitaciones motoras crecientes y deterioro del lenguaje.</td>
-                </tr>
-                <tr>
-                    <td><strong>3. Avanzada</strong></td>
-                    <td>Pérdida casi total de movilidad voluntaria.</td>
-                </tr>
-                <tr>
-                    <td><strong>4. Terminal</strong></td>
-                    <td>Parálisis generalizada y comunicación muy limitada o inexistente.</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="tipos-ela">
+            <div class="tarjeta-tipo espinal">
+                <h3>Inicio Espinal</h3>
+                <p>Es el más frecuente (aprox. 70%). Los primeros síntomas aparecen en las <strong>extremidades</strong> (piernas o brazos), como tropiezos o pérdida de fuerza en las manos. El habla se mantiene preservada durante más tiempo.</p>
+            </div>
+            <div class="tarjeta-tipo bulbar">
+                <h3>Inicio Bulbar</h3>
+                <p>Afecta inicialmente a las neuronas del tronco encefálico. Los primeros síntomas son <strong>dificultades para hablar (disartria)</strong> o tragar. En estos casos, la necesidad de un SAAC surge de forma mucho más temprana.</p>
+            </div>
+        </div>
     </div>
 
     <div class="seccion">
-        <h2>Impacto en la comunicación</h2>
-        <p>Las alteraciones comunicativas asociadas a la ELA incluyen deterioro progresivo de la articulación, reducción de la inteligibilidad del habla y dificultades motoras que afectan a la producción verbal. Puede evolucionar hasta la anartria, es decir, la pérdida total de la capacidad oral.</p>
+        <h2>Fases de la enfermedad y comunicación</h2>
+        <p>La evolución de la ELA no es lineal, pero se puede estructurar en hitos según la capacidad comunicativa:</p>
+        
+        <div class="timeline">
+            <div class="fase-item">
+                <div class="fase-punto"></div>
+                <strong>Fase 1: Habla funcional</strong>
+                <p>El habla es inteligible. Es el momento ideal para realizar el <strong>Voice Banking</strong> (preservación de la voz digital) y aprender el manejo básico de dispositivos.</p>
+            </div>
 
-        <p>A pesar de estas limitaciones, en muchos pacientes las funciones cognitivas permanecen relativamente preservadas. Esta circunstancia constituye un factor favorable, ya que posibilita el aprendizaje y uso eficaz de sistemas aumentativos y alternativos de comunicación (SAAC), favoreciendo la autonomía personal. Puede conocer más acerca de estos sistemas en la pestaña superior <strong>¿Qué es un SAAC?</strong>
+            <div class="fase-item">
+                <div class="fase-punto"></div>
+                <strong>Fase 2: Habla con apoyo</strong>
+                <p>Aparece la fatiga al hablar y la disartria. Se empiezan a usar estrategias para reducir el esfuerzo vocal y sistemas SAAC sencillos para situaciones específicas.</p>
+            </div>
+
+            <div class="fase-item">
+                <div class="fase-punto"></div>
+                <strong>Fase 3: Comunicación Alternativa</strong>
+                <p>El habla ya no es funcional para la vida diaria. El paciente depende de <strong>sistemas tecnológicos</strong> (mirada, pulsadores) o baja tecnología (paneles) para expresarse.</p>
+            </div>
+
+            <div class="fase-item" style="border-left: none;"> <!-- Quitamos el borde en la última -->
+                <div class="fase-punto"></div>
+                <strong>Fase 4: Pérdida de movilidad total</strong>
+                <p>Situación de anartria. Se requieren accesos de alta precisión (seguimiento ocular avanzado) para mantener el vínculo con el entorno y la toma de decisiones.</p>
+            </div>
         </div>
+    </div>
+
+    <div class="seccion resumen-preservacion">
+        <h2>Preservación cognitiva</h2>
+        <p>Es importante destacar que, en la gran mayoría de los casos, <strong>las funciones cognitivas, la sensibilidad y el movimiento ocular permanecen intactos</strong>. Esto permite que el paciente pueda seguir comunicándose, tomando decisiones y manteniendo su identidad a través de la tecnología adecuada.</p>
+        <p style="margin-top: 15px; font-weight: bold;">Descubra cómo los sistemas de comunicación pueden ayudar en cada etapa en la pestaña <a href="/SAAC" style="color: #ac4caf;">¿Qué es un SAAC?</a></p>
     </div>
 
 </body>
