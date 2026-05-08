@@ -150,13 +150,19 @@
         <form action="/guardar-feedback" method="POST">
             <input type="hidden" name="historial_id" value="{{ historial_id }}">
 
-            <div class="pregunta">
-                <label class="feedback-label">1. ¿Usa actualmente alguno de los SAACs que se le ha recomendado? *</label>
-                <div class="radio-group">
-                    <div class="opcion-item"><input type="radio" name="usa_actual" value="si" id="si" required> <label for="si">Sí</label></div>
-                    <div class="opcion-item"><input type="radio" name="usa_actual" value="no" id="no" required> <label for="no">No</label></div>
-                </div>
-            </div>
+            <div class="pregunta-feedback">
+            <p>1. ¿Usa actualmente alguno de los SAACs que se le ha recomendado? *</p>
+            
+            <label class="opcion-label">
+                <input type="radio" name="usa_actual" value="Sí" required> 
+                <span>Sí</span>
+            </label>
+
+            <label class="opcion-label">
+                <input type="radio" name="usa_actual" value="No" required> 
+                <span>No</span>
+            </label>
+        </div>
 
             <div class="pregunta">
                 <label class="feedback-label">2. ¿Está satisfecho con dicho sistema? *</label>
