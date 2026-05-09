@@ -1,7 +1,7 @@
 from datetime import datetime
 from extension import bd
 
-# TABLAS DE RELACIÓN (Muchos a Muchos)
+#Tablas de relación muchos a muchos
 sistema_entorno = bd.Table('sistema_entorno',
     bd.Column('sistema_id', bd.Integer, bd.ForeignKey('saac_sistema.id', ondelete='CASCADE'), primary_key=True),
     bd.Column('entorno_id', bd.Integer, bd.ForeignKey('entorno_uso.id', ondelete='CASCADE'), primary_key=True)
@@ -27,7 +27,12 @@ paciente_entrada = bd.Table('paciente_entrada',
     bd.Column('entrada_id', bd.Integer, bd.ForeignKey('tipo_entrada.id', ondelete='CASCADE'), primary_key=True)
 )
 
-# TABLAS MAESTRAS
+sistema_metodo = bd.Table('sistema_metodo',
+    bd.Column('sistema_id', bd.Integer, bd.ForeignKey('saac_sistema.id'), primary_key=True),
+    bd.Column('metodo_id', bd.Integer, bd.ForeignKey('metodo_comunicacion.id'), primary_key=True)
+)
+
+#Tablas maestras
 class TipoEntrada(bd.Model):
     __tablename__ = 'tipo_entrada'
     id = bd.Column(bd.Integer, primary_key=True)
@@ -48,7 +53,12 @@ class EntornoUso(bd.Model):
     id = bd.Column(bd.Integer, primary_key=True)
     nombre = bd.Column(bd.Text, unique=True, nullable=False)
 
-# TABLAS DE DATOS
+class MetodoComunicacion(bd.Model):
+    __tablename__ = 'metodo_comunicacion'
+    id = bd.Column(bd.Integer, primary_key=True)
+    nombre = bd.Column(bd.String, unique=True)
+
+#Tablas de datos
 class SaacSistema(bd.Model):
     __tablename__ = 'saac_sistema'
     id = bd.Column(bd.Integer, primary_key=True)
@@ -60,21 +70,21 @@ class SaacSistema(bd.Model):
     admite_anclaje = bd.Column(bd.Boolean)
     enlace_info = bd.Column(bd.Text)
 
-    # Relación con requisitos funcionales (Uno a Uno)
+    #Relación con requisitos funcionales uno a uno
     requisitos = bd.relationship('SistemaRequisitoFuncional', backref='sistema', uselist=False, cascade="all, delete")
     
-    # Relaciones Muchos a Muchos
+    #Relaciones muchos a muchos
     entornos = bd.relationship('EntornoUso', secondary=sistema_entorno, backref='sistemas')
     entradas = bd.relationship('TipoEntrada', secondary=sistema_entrada, backref='sistemas')
     idiomas = bd.relationship('Idioma', secondary=sistema_idioma, backref='sistemas')
     plataformas = bd.relationship('Plataforma', secondary=sistema_plataforma, backref='sistemas')
+    metodos = bd.relationship('MetodoComunicacion', secondary='sistema_metodo', backref='sistemas')
 
 class SistemaRequisitoFuncional(bd.Model):
     __tablename__ = 'sistema_requisito_funcional'
     sistema_id = bd.Column(bd.Integer, bd.ForeignKey('saac_sistema.id', ondelete='CASCADE'), primary_key=True)
     nivel_visual_min = bd.Column(bd.SmallInteger, default=0)
     nivel_auditivo_min = bd.Column(bd.SmallInteger, default=0)
-    nivel_cognitivo_min = bd.Column(bd.SmallInteger, default=0)
     nivel_tecnologico_min = bd.Column(bd.SmallInteger, default=0)
     nivel_habla_min = bd.Column(bd.SmallInteger, default=0)
 
@@ -84,22 +94,21 @@ class Paciente(bd.Model):
     nombre = bd.Column(bd.Text)
     vision = bd.Column(bd.SmallInteger)
     audicion = bd.Column(bd.SmallInteger)
-    cognicion = bd.Column(bd.SmallInteger)
     tecnologia = bd.Column(bd.SmallInteger)
     resistencia = bd.Column(bd.SmallInteger)
     necesita_independencia = bd.Column(bd.Boolean)
     usa_silla = bd.Column(bd.Boolean)
     tiene_financiacion = bd.Column(bd.Boolean, default=False)
     
-    # Foreign keys
+    #Foreign keys
     entorno_id = bd.Column(bd.Integer, bd.ForeignKey('entorno_uso.id'))
     idioma_id = bd.Column(bd.Integer, bd.ForeignKey('idioma.id'), nullable=False)
     plataforma_preferida_id = bd.Column(bd.Integer, bd.ForeignKey('plataforma.id'))
 
-    # Relación Muchos a Muchos con Entradas
+    #Relación muchos a muchos con entradas
     entradas = bd.relationship('TipoEntrada', secondary=paciente_entrada, backref='pacientes')
 
-# NUEVA TABLA PARA GUARDAR LOS RESULTADOS DE LOS TESTS
+#Tabla para guardar resultados de tests
 class HistorialRecomendacion(bd.Model):
     __tablename__ = 'historial_recomendacion'
     id = bd.Column(bd.Integer, primary_key=True)

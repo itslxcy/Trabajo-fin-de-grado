@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control - Historial</title>
+    <title>Historial</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
 </head>
-<body style="max-width: 1200px;"> <!-- Un poco más ancho para la tabla -->
+<body style="max-width: 1200px;">
     <nav class="nav-tabs">
         <a href="/">Inicio</a>
         <a href="/admin_historial" class="active">Panel Administrativo</a>
@@ -33,18 +33,18 @@
                         <span style="font-size: 0.85em; color: #7f8c8d;">{{ r.fecha.strftime('%d/%m/%Y') if r.fecha else 'S/F' }}</span><br>
                         <strong style="font-size: 1.1em; color: #2c3e50;">{{ r.fecha.strftime('%H:%M') if r.fecha else '' }}</strong>
                     </td>
-
-                    <!-- NOMBRE -->
+                    <!-- CÓDIGO IDENTIFICADOR -->
                     <td style="padding: 15px; vertical-align: middle; border-left: 1px solid #eee;">
-                        <strong style="text-transform: uppercase; color: #ac4caf;">{{ r.nombre_paciente }}</strong>
+                        <span style="font-size: 0.85em; color: #666; display: block; margin-bottom: 2px;">ID Usuario:</span>
+                        <strong style="font-family: monospace; color: #ac4caf; letter-spacing: 1px;">
+                            {{ r.nombre_paciente }}
+                        </strong>
                     </td>
-
                     <!-- PERFIL CLÍNICO -->
                     <td style="padding: 15px; border-left: 1px solid #eee;">
                         <div style="display: flex; gap: 20px; font-size: 0.85em;">
                             <div style="flex: 1;">
                                 <div style="margin-bottom: 4px;"><strong>Visión:</strong> {{ r.input_usuario.get('vision', '-') }}</div>
-                                <!-- CAMBIO: Cognición por Alfabetización -->
                                 <div style="margin-bottom: 4px;"><strong>Alfabetización:</strong> {{ r.input_usuario.get('alfabetizacion', '-') }}</div>
                                 <div style="margin-bottom: 4px;"><strong>Habla:</strong> {{ r.input_usuario.get('habla', '-') }}</div>
                             </div>
@@ -65,7 +65,6 @@
 
                     <!-- RECOMENDACIÓN TÉCNICA -->
                     <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em;">
-                        <!-- Corregido: r.sistemas_recomendados para que coincida con app.py -->
                         {% set partes = r.sistemas_recomendados.split('|') if r.sistemas_recomendados else [] %}
                         
                         {% if partes|length > 0 %}
@@ -90,7 +89,7 @@
                         {% endif %}
                     </td>
 
-                    <!-- OPINIÓN / FEEDBACK -->
+                    <!-- FEEDBACK -->
                     <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; background-color: #f9f9f9;">
                         {% if r.feedback %}
                             <strong>Calificación:</strong> {{ r.feedback.get('valoracion_general', '-') }}/5 <br>
