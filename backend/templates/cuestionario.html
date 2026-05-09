@@ -23,6 +23,7 @@
             <h2>1. Información básica</h2>
             <div class="pregunta">
                 <label>Idiomas de comunicación:</label>
+                <small>Seleccione el o los idiomas en los que el usuario se comunique habitualmente.</small>
                 <div class="opciones-grid">
                     {% for i in idiomas %}
                     <label class="opcion-item">
@@ -30,7 +31,6 @@
                     </label>
                     {% endfor %}
                 </div>
-                <small>Seleccione los idiomas en los que el usuario se comunica habitualmente.</small>
             </div>
         </div>
 
@@ -109,12 +109,12 @@
     
                 <div class="opciones-grid">
                     <label class="opcion-item">
-                        <input type="checkbox" name="alfabetizacion_ids" value="3"> 
+                        <input type="checkbox" name="alfabetizacion_ids" value="1"> 
                         <span>Alfabeto</span>
                     </label>
 
                     <label class="opcion-item">
-                        <input type="checkbox" name="alfabetizacion_ids" value="1"> 
+                        <input type="checkbox" name="alfabetizacion_ids" value="2"> 
                         <span>Pictogramas</span>
                     </label>
 
@@ -141,6 +141,8 @@
             
             <div class="pregunta">
                 <label>¿Dónde se utilizará el sistema habitualmente?</label>
+                <small style="color: #666; margin-bottom: 5px; display: block;">
+                Tenga en cuenta que sistemas de infrarojos como el eye-tracker no funcionan bien con la luz solar. Si está pensando en comunicación fuera de casa pero en interiores (ej: Hospital, tiendas) seleccione la opción de Domicilio.
                 <select name="entorno_principal" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;">
                     <option value="" disabled selected>Seleccione una opción...</option>
                     <option value="domicilio">Domicilio (Entorno estable y luz controlada)</option>

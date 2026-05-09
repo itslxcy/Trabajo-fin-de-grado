@@ -69,6 +69,8 @@ class SaacSistema(bd.Model):
     portable = bd.Column(bd.Boolean)
     admite_anclaje = bd.Column(bd.Boolean)
     enlace_info = bd.Column(bd.Text)
+    categoria = bd.Column(bd.String)
+    requiere_hardware_extra = bd.Column(bd.Boolean, default=False)
 
     #Relación con requisitos funcionales uno a uno
     requisitos = bd.relationship('SistemaRequisitoFuncional', backref='sistema', uselist=False, cascade="all, delete")
@@ -79,6 +81,7 @@ class SaacSistema(bd.Model):
     idiomas = bd.relationship('Idioma', secondary=sistema_idioma, backref='sistemas')
     plataformas = bd.relationship('Plataforma', secondary=sistema_plataforma, backref='sistemas')
     metodos = bd.relationship('MetodoComunicacion', secondary='sistema_metodo', backref='sistemas')
+    
 
 class SistemaRequisitoFuncional(bd.Model):
     __tablename__ = 'sistema_requisito_funcional'

@@ -6,23 +6,24 @@
     <title>Historial</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
 </head>
-<body style="max-width: 1200px;">
+<body style="max-width: 1300px; margin: auto; padding: 20px; background-color: #f4f7f6;">
     <nav class="nav-tabs">
         <a href="/">Inicio</a>
         <a href="/admin_historial" class="active">Panel Administrativo</a>
     </nav>
 
-    <h1>Historial de Recomendaciones Generadas</h1>
+    <h1 style="color: #2c3e50; text-align: center; margin-bottom: 30px;">Historial de Recomendaciones Generadas</h1>
 
-    <div class="seccion" style="padding: 0; overflow: hidden; border-radius: 8px;">
+    <div class="seccion" style="padding: 0; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
         <table class="tabla-historial" style="width: 100%; border-collapse: collapse; background: white; font-family: 'Segoe UI', sans-serif; color: #333;">
             <thead style="background-color: #2c3e50; color: white;">
                 <tr>
                     <th style="padding: 12px; text-align: center; font-size: 0.85em; text-transform: uppercase;">Sesión</th>
                     <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Paciente</th>
-                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Perfil clínico</th>
+                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Perfil Clínico</th>
+                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Preferencias</th>
                     <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Recomendación</th>
-                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Opinión / Feedback</th>
+                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Feedback</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,34 +34,32 @@
                         <span style="font-size: 0.85em; color: #7f8c8d;">{{ r.fecha.strftime('%d/%m/%Y') if r.fecha else 'S/F' }}</span><br>
                         <strong style="font-size: 1.1em; color: #2c3e50;">{{ r.fecha.strftime('%H:%M') if r.fecha else '' }}</strong>
                     </td>
-                    <!-- CÓDIGO IDENTIFICADOR -->
+
+                    <!-- IDENTIFICADOR -->
                     <td style="padding: 15px; vertical-align: middle; border-left: 1px solid #eee;">
-                        <span style="font-size: 0.85em; color: #666; display: block; margin-bottom: 2px;">ID Usuario:</span>
-                        <strong style="font-family: monospace; color: #ac4caf; letter-spacing: 1px;">
-                            {{ r.nombre_paciente }}
-                        </strong>
+                        <strong style="color: #ac4caf; letter-spacing: 0.5px;">{{ r.nombre_paciente }}</strong>
                     </td>
+
                     <!-- PERFIL CLÍNICO -->
-                    <td style="padding: 15px; border-left: 1px solid #eee;">
-                        <div style="display: flex; gap: 20px; font-size: 0.85em;">
-                            <div style="flex: 1;">
-                                <div style="margin-bottom: 4px;"><strong>Visión:</strong> {{ r.input_usuario.get('vision', '-') }}</div>
-                                <div style="margin-bottom: 4px;"><strong>Alfabetización:</strong> {{ r.input_usuario.get('alfabetizacion', '-') }}</div>
-                                <div style="margin-bottom: 4px;"><strong>Habla:</strong> {{ r.input_usuario.get('habla', '-') }}</div>
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="margin-bottom: 4px;"><strong>Resistencia:</strong> {{ r.input_usuario.get('resistencia', '-') }}</div>
-                                <div style="margin-bottom: 4px;"><strong>Tecnología:</strong> {{ r.input_usuario.get('tecnologia', '-') }}</div>
-                            </div>
+                    <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+                            <div><strong>Visión:</strong> {{ r.input_usuario.get('vision', '-') }}</div>
+                            <div><strong>Audición:</strong> {{ r.input_usuario.get('audicion', '-') }}</div>
+                            <div><strong>Habla:</strong> {{ r.input_usuario.get('habla', '-') }}</div>
+                            <div><strong>Resistencia:</strong> {{ r.input_usuario.get('resistencia', '-') }}</div>
                         </div>
-                        
-                        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #ddd; font-size: 0.85em;">
-                            <strong> Silla:</strong> {{ 'Sí' if r.input_usuario.get('silla') else 'No' }} | 
-                            <strong> Entorno:</strong> {{ r.input_usuario.get('entorno', '-') }}<br>
-                            <div style="margin-top: 4px;">
-                                <strong> Acceso:</strong> {{ r.input_usuario.get('entradas_nombres', []) | join(', ') }}
-                            </div>
+                        <div style="margin-top: 8px; padding-top: 5px; border-top: 1px dashed #ddd;">
+                            <!-- Busca esta línea en tu HTML y cámbiala -->
+                        <strong>Silla:</strong> {{ 'Sí' if r.input_usuario.get('silla_ruedas') else 'No' }}
+                            <strong>Autonomía:</strong> {{ r.input_usuario.get('autonomia', '-') }}
                         </div>
+                    </td>
+
+                    <!-- PREFERENCIAS SELECCIONADAS -->
+                    <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; color: #555;">
+                        <div style="margin-bottom: 4px;"><strong>Idioma:</strong> {{ r.input_usuario.get('idioma', '-') | capitalize }}</div>
+                        <div style="margin-bottom: 4px;"><strong>Plataforma:</strong> {{ r.input_usuario.get('plataforma_pref', '-') }}</div>
+                        <div style="margin-bottom: 4px;"><strong>Método:</strong> {{ r.input_usuario.get('metodo_pref', '-') | capitalize }}</div>
                     </td>
 
                     <!-- RECOMENDACIÓN TÉCNICA -->
@@ -68,37 +67,29 @@
                         {% set partes = r.sistemas_recomendados.split('|') if r.sistemas_recomendados else [] %}
                         
                         {% if partes|length > 0 %}
-                        <div style="margin-bottom: 8px;">
-                            <div style="font-weight: bold; color: #2980b9; text-transform: uppercase; font-size: 0.75em;">Sistemas:</div>
+                        <div style="margin-bottom: 6px;">
+                            <div style="font-weight: bold; color: #2980b9; text-transform: uppercase; font-size: 0.7em;">Sistemas:</div>
                             {{ partes[0].replace('SISTEMAS:', '').strip() }}
                         </div>
                         {% endif %}
 
                         {% if partes|length > 1 and 'ACCESORIOS:' in partes[1] %}
-                        <div style="margin-bottom: 8px;">
-                            <div style="font-weight: bold; color: #27ae60; text-transform: uppercase; font-size: 0.75em;">Hardware:</div>
+                        <div style="margin-bottom: 6px;">
+                            <div style="font-weight: bold; color: #27ae60; text-transform: uppercase; font-size: 0.7em;">Hardware:</div>
                             {{ partes[1].replace('ACCESORIOS:', '').strip() }}
-                        </div>
-                        {% endif %}
-
-                        {% if partes|length > 2 and 'BANCOS:' in partes[2] and partes[2].replace('BANCOS:', '').strip() != "" %}
-                        <div style="margin-bottom: 8px;">
-                            <div style="font-weight: bold; color: #e67e22; text-transform: uppercase; font-size: 0.75em;">Voz:</div>
-                            {{ partes[2].replace('BANCOS:', '').strip() }}
                         </div>
                         {% endif %}
                     </td>
 
                     <!-- FEEDBACK -->
-                    <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; background-color: #f9f9f9;">
+                    <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; background-color: #fdfdfd;">
                         {% if r.feedback %}
-                            <strong>Calificación:</strong> {{ r.feedback.get('valoracion_general', '-') }}/5 <br>
-                            <strong>Satisfacción:</strong> {{ r.feedback.get('satisfaccion_actual', '-') }} <br>
-                            <div style="margin-top: 8px; padding-top: 5px; border-top: 1px solid #ddd; font-style: italic; color: #555;">
-                                <strong>Sugerencia:</strong> {{ r.feedback.get('comentarios_adicionales', '') }}
+                            <span title="Valoración">⭐ <strong>{{ r.feedback.get('valoracion_general', '-') }}/10</strong></span><br>
+                            <div style="margin-top: 5px; font-size: 0.9em; color: #666; font-style: italic;">
+                                "{{ r.feedback.get('comentarios_adicionales', 'Sin comentarios') }}"
                             </div>
                         {% else %}
-                            <span style="color: #bbb;">Sin respuesta aún</span>
+                            <span style="color: #bbb;">Pendiente</span>
                         {% endif %}
                     </td>
                 </tr>
@@ -106,6 +97,5 @@
             </tbody>
         </table>
     </div>
-    
 </body>
 </html>
