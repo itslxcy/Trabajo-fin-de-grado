@@ -9,10 +9,10 @@
 <body style="max-width: 1300px; margin: auto; padding: 20px; background-color: #f4f7f6;">
     <nav class="nav-tabs">
         <a href="/">Inicio</a>
-        <a href="/admin_historial" class="active">Panel Administrativo</a>
+        <a href="/admin_historial" class="active">Panel administrativo</a>
     </nav>
 
-    <h1 style="color: #2c3e50; text-align: center; margin-bottom: 30px;">Historial de Recomendaciones Generadas</h1>
+    <h1 style="color: #2c3e50; text-align: center; margin-bottom: 30px;">Historial de recomendaciones generadas</h1>
 
     <div class="seccion" style="padding: 0; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
         <table class="tabla-historial" style="width: 100%; border-collapse: collapse; background: white; font-family: 'Segoe UI', sans-serif; color: #333;">
@@ -47,11 +47,15 @@
                             <div><strong>Audición:</strong> {{ r.input_usuario.get('audicion', '-') }}</div>
                             <div><strong>Habla:</strong> {{ r.input_usuario.get('habla', '-') }}</div>
                             <div><strong>Resistencia:</strong> {{ r.input_usuario.get('resistencia', '-') }}</div>
+                            <!-- AÑADIDO: Nivel Tecnológico -->
+                            <div><strong>Tecnología:</strong> {{ r.input_usuario.get('tecnologia', '-') }}</div>
                         </div>
+                        
                         <div style="margin-top: 8px; padding-top: 5px; border-top: 1px dashed #ddd;">
-                            <!-- Busca esta línea en tu HTML y cámbiala -->
-                        <strong>Silla:</strong> {{ 'Sí' if r.input_usuario.get('silla_ruedas') else 'No' }}
-                            <strong>Autonomía:</strong> {{ r.input_usuario.get('autonomia', '-') }}
+                            <div><strong>Silla:</strong> {{ 'Sí' if r.input_usuario.get('silla_ruedas') else 'No' }}</div>
+                            <div><strong>Autonomía:</strong> {{ r.input_usuario.get('autonomia', '-') }}</div>
+                            <!-- AÑADIDO: Entorno -->
+                            <div><strong>Entorno:</strong> {{ r.input_usuario.get('entorno', '-') }}</div>
                         </div>
                     </td>
 
@@ -60,6 +64,10 @@
                         <div style="margin-bottom: 4px;"><strong>Idioma:</strong> {{ r.input_usuario.get('idioma', '-') | capitalize }}</div>
                         <div style="margin-bottom: 4px;"><strong>Plataforma:</strong> {{ r.input_usuario.get('plataforma_pref', '-') }}</div>
                         <div style="margin-bottom: 4px;"><strong>Método:</strong> {{ r.input_usuario.get('metodo_pref', '-') | capitalize }}</div>
+                        <!-- AÑADIDO: Formas de Interacción (Entradas) -->
+                        <div style="margin-top: 5px; padding-top: 5px; border-top: 1px solid #f9f9f9; color: #2c3e50;">
+                            <strong>Interacción:</strong> {{ r.input_usuario.get('interaccion', 'No definida') }}
+                        </div>
                     </td>
 
                     <!-- RECOMENDACIÓN TÉCNICA -->
@@ -82,14 +90,35 @@
                     </td>
 
                     <!-- FEEDBACK -->
-                    <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; background-color: #fdfdfd;">
+                    <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; background-color: #fdfdfd; min-width: 250px;">
                         {% if r.feedback %}
-                            <span title="Valoración">⭐ <strong>{{ r.feedback.get('valoracion_general', '-') }}/10</strong></span><br>
-                            <div style="margin-top: 5px; font-size: 0.9em; color: #666; font-style: italic;">
-                                "{{ r.feedback.get('comentarios_adicionales', 'Sin comentarios') }}"
+                            <!-- Puntuación General -->
+                            <div style="margin-bottom: 8px;">
+                                <span style="background: #e3f2fd; padding: 2px 8px; border-radius: 10px; color: #1976d2; font-weight: bold;">
+                                    ⭐ Valoración: {{ r.feedback.get('valoracion_general', '-') }}/10
+                                </span>
+                            </div>
+
+                            <!-- Respuestas Detalladas -->
+                            <div style="display: flex; flex-direction: column; gap: 4px; color: #444; line-height: 1.2;">
+                                <div><strong>Usa recomendado:</strong> {{ r.feedback.get('usa_actual', '-') }}</div>
+                                <div><strong>Satisfacción:</strong> {{ r.feedback.get('satisfaccion_actual', '-') }}</div>
+                                <div><strong>Cambiaría a otro:</strong> {{ r.feedback.get('opcion_cambio', '-') }}</div>
+                                
+                                <div style="margin-top: 4px; padding: 4px; background: #fffbe6; border-left: 3px solid #ffe58f; font-size: 0.9em;">
+                                    <strong>Motivo cese pasado:</strong><br>
+                                    {{ r.feedback.get('motivo_cambio', 'N/A') }}
+                                </div>
+                            </div>
+
+                            <!-- Comentarios Adicionales -->
+                            <div style="margin-top: 8px; font-size: 0.9em; color: #666; font-style: italic; border-top: 1px solid #f0f0f0; padding-top: 5px;">
+                                "{{ r.feedback.get('comentarios_adicionales') or 'Sin sugerencias' }}"
                             </div>
                         {% else %}
-                            <span style="color: #bbb;">Pendiente</span>
+                            <div style="text-align: center; color: #bbb; padding-top: 10px;">
+                                <i class="fas fa-clock"></i> Pendiente
+                            </div>
                         {% endif %}
                     </td>
                 </tr>

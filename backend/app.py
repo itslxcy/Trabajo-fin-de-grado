@@ -198,12 +198,20 @@ def recomendar():
         idiomas_obj = Idioma.query.filter(Idioma.id.in_(ids_idiomas)).all()
         plataformas_obj = Plataforma.query.filter(Plataforma.id.in_(ids_plataformas)).all()
         metodos_obj = MetodoComunicacion.query.filter(MetodoComunicacion.id.in_(ids_metodos_usuario)).all()
-        
+        entradas_obj = TipoEntrada.query.filter(TipoEntrada.id.in_(ids_entradas)).all()
+        nombres_entradas = [e.nombre for e in entradas_obj]
+
         datos_completos = {
-            "vision": v_vision, "audicion": v_audicion, "habla": v_habla,
-            "resistencia": v_resistencia, "tecnologia": v_tecnologia,
-            "autonomia": f"Nivel {v_autonomia_nivel}", "silla_ruedas": v_silla,
-            "entorno": v_entorno,"idioma": ", ".join([i.nombre for i in idiomas_obj]) if idiomas_obj else "No seleccionado",
+            "vision": v_vision, 
+            "audicion": v_audicion,
+            "habla": v_habla,
+            "resistencia": v_resistencia, 
+            "tecnologia": v_tecnologia,
+            "autonomia": f"Nivel {v_autonomia_nivel}", 
+            "silla_ruedas": v_silla,
+            "entorno": v_entorno,
+            "interaccion": ", ".join(nombres_entradas) if nombres_entradas else "No definidas",
+            "idioma": ", ".join([i.nombre for i in idiomas_obj]) if idiomas_obj else "No seleccionado",
             "plataforma_pref": ", ".join([p.nombre for p in plataformas_obj]) if plataformas_obj else "Cualquiera",
             "metodo_pref": ", ".join([m.nombre for m in metodos_obj]) if metodos_obj else "Sin preferencia"
         }

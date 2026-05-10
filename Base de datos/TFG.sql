@@ -137,11 +137,15 @@ CREATE TABLE sistema_requisito_funcional (
 );
 
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_tecnologico_min, nivel_habla_min)
-SELECT id, 3, 1, 2, 0 FROM saac_sistema 
-WHERE nombre IN ('Eye tracker', 'Tallk', 'Look to Speak', 'MegaBEE', 'Look to learn', 'Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 'Puntero Láser', 'Gafas con Puntero Láser', 'OptiKey');
+SELECT id, 2, 1, 1, 0 FROM saac_sistema 
+WHERE nombre IN ('Eye tracker', 'Tallk', 'Look to Speak', 'MegaBEE', 'Look to learn', 'OptiKey');
 
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_tecnologico_min, nivel_habla_min)
-SELECT id, 2, 2, 3, 0 FROM saac_sistema 
+SELECT id, 2, 1, 0, 0 FROM saac_sistema 
+WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 'Puntero Láser','Gafas con Puntero Láser');
+
+INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_tecnologico_min, nivel_habla_min)
+SELECT id, 2, 2, 2, 0 FROM saac_sistema 
 WHERE nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'Communicator 5', 'TD Pilot', 'Predictable', 'EVA Facial Mouse', 'Enchufe Inteligente WiFi');
 
 INSERT INTO sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_tecnologico_min, nivel_habla_min)
@@ -174,6 +178,45 @@ WHERE nombre IN ('Look to Speak', 'Eye tracker', 'Tablero ETRAN', 'Tallk', 'Look
 -- 8. RELACIONES DE IDIOMA
 INSERT INTO sistema_idioma (sistema_id, idioma_id)
 SELECT s.id, (SELECT id FROM idioma WHERE nombre = 'español') FROM saac_sistema s;
+
+INSERT INTO sistema_idioma (sistema_id, idioma_id)
+SELECT id, (SELECT id FROM idioma WHERE nombre = 'catalán') FROM saac_sistema 
+WHERE nombre IN (
+    'Grid 3', 'Verbo', 'TD Snap', 'Proloquo2Go', 'Communicator 5', 'Boardmaker 7', 
+    'LetMeTalk', 'Predictable', 'Tallk', 'OptiKey', 'Look to learn',
+    'Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 
+    'QuickTalker 23', 'MegaBEE',
+    'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'TD Pilot', 'Amazon Alexa / Google Home',
+    'Eye tracker', 'iPad', 'Tablet Android', 'Ordenador Portátil', 'Puntero Láser', 
+    'Gafas con Puntero Láser', 'Soporte de anclaje articulado', 'Conmutador por soplido (Pufo)', 
+    'Conmutador de pedal', 'Conmutador Spec Amarillo', 'BJOY Chin Plus', 'Ratón Bluetooth'
+);
+
+INSERT INTO sistema_idioma (sistema_id, idioma_id)
+SELECT id, (SELECT id FROM idioma WHERE nombre = 'gallego') FROM saac_sistema 
+WHERE nombre IN (
+    'Grid 3', 'Verbo', 'TD Snap', 'Communicator 5', 'Boardmaker 7', 
+    'VirtualTEC', 'OptiKey', 'Look to learn',
+    'Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 
+    'QuickTalker 23', 'MegaBEE',
+    'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'TD Pilot',
+    'Eye tracker', 'iPad', 'Tablet Android', 'Ordenador Portátil', 'Puntero Láser', 
+    'Gafas con Puntero Láser', 'Soporte de anclaje articulado', 'Conmutador por soplido (Pufo)', 
+    'Conmutador de pedal', 'Conmutador Spec Amarillo', 'BJOY Chin Plus', 'Ratón Bluetooth'
+);
+
+INSERT INTO sistema_idioma (sistema_id, idioma_id)
+SELECT id, (SELECT id FROM idioma WHERE nombre = 'euskera') FROM saac_sistema 
+WHERE nombre IN (
+    'Grid 3', 'Verbo', 'TD Snap', 'Communicator 5', 'Boardmaker 7', 
+    'OptiKey', 'Look to learn',
+    'Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 
+    'QuickTalker 23', 'MegaBEE',
+    'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)', 'TD Pilot',
+    'Eye tracker', 'iPad', 'Tablet Android', 'Ordenador Portátil', 'Puntero Láser', 
+    'Gafas con Puntero Láser', 'Soporte de anclaje articulado', 'Conmutador por soplido (Pufo)', 
+    'Conmutador de pedal', 'Conmutador Spec Amarillo', 'BJOY Chin Plus', 'Ratón Bluetooth'
+);
 
 -- 9. RELACIONES DE PLATAFORMA
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
