@@ -1,17 +1,18 @@
 -- 1. LIMPIEZA TOTAL DE TABLAS
-DROP TABLE IF EXISTS historial_recomendacion CASCADE;
-DROP TABLE IF EXISTS sistema_metodo CASCADE;
-DROP TABLE IF EXISTS sistema_plataforma CASCADE;
-DROP TABLE IF EXISTS sistema_idioma CASCADE;
-DROP TABLE IF EXISTS sistema_entrada CASCADE;
-DROP TABLE IF EXISTS sistema_entorno CASCADE;
-DROP TABLE IF EXISTS sistema_requisito_funcional CASCADE;
-DROP TABLE IF EXISTS saac_sistema CASCADE;
-DROP TABLE IF EXISTS metodo_comunicacion CASCADE;
-DROP TABLE IF EXISTS tipo_entrada CASCADE;
-DROP TABLE IF EXISTS idioma CASCADE;
-DROP TABLE IF EXISTS plataforma CASCADE;
-DROP TABLE IF EXISTS entorno_uso CASCADE;
+-- DROP TABLE IF EXISTS historial_recomendacion CASCADE;
+-- DROP TABLE IF EXISTS sistema_metodo CASCADE;
+-- DROP TABLE IF EXISTS sistema_plataforma CASCADE;
+-- DROP TABLE IF EXISTS sistema_idioma CASCADE;
+-- DROP TABLE IF EXISTS sistema_entrada CASCADE;
+-- DROP TABLE IF EXISTS sistema_entorno CASCADE;
+-- DROP TABLE IF EXISTS sistema_requisito_funcional CASCADE;
+-- DROP TABLE IF EXISTS saac_sistema CASCADE;
+-- DROP TABLE IF EXISTS metodo_comunicacion CASCADE;
+-- DROP TABLE IF EXISTS tipo_entrada CASCADE;
+-- DROP TABLE IF EXISTS idioma CASCADE;
+-- DROP TABLE IF EXISTS plataforma CASCADE;
+-- DROP TABLE IF EXISTS entorno_uso CASCADE;
+-- DELETE FROM historial_recomendacion WHERE id = 1;
 
 -- 2. TABLAS MAESTRAS
 CREATE TABLE tipo_entrada (
@@ -257,7 +258,8 @@ CREATE TABLE historial_recomendacion (
     nombre_paciente VARCHAR(100),
     input_usuario JSONB, 
     sistemas_recomendados TEXT,
-    feedback JSON
+    feedback JSON,
+	es_real BOOLEAN DEFAULT FALSE
 );
 
--- DELETE FROM historial_recomendacion WHERE id = 1;
+SELECT * FROM historial_recomendacion;

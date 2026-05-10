@@ -120,6 +120,7 @@ class HistorialRecomendacion(bd.Model):
     input_usuario = bd.Column(bd.JSON) 
     sistemas_recomendados = bd.Column(bd.Text)
     feedback = bd.Column(bd.JSON, nullable=True)
+    es_real = bd.Column(bd.Boolean, default=False)
 
     def __repr__(self):
         return f'<Recomendacion {self.nombre_paciente} - {self.fecha}>'

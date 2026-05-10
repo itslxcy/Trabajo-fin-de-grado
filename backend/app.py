@@ -71,6 +71,7 @@ def recomendar():
     v_autonomia_nivel = int(request.form.get('independencia', 0))
     v_entorno = request.form.get('entorno_principal', 'No definido')
     v_silla = request.form.get('usa_silla') == 'true'
+    v_es_real = request.form.get('es_real') == 'true'
 
     # --- INICIALIZACIÓN DE LISTAS ---
     sistemas_finales = []
@@ -154,27 +155,43 @@ def recomendar():
         if v_habla == 0 and ("voz" in s.nombre.lower() and "asistente" in s.nombre.lower()):
             continue
 
-        # Asignación de accesorios
+        # --- ASIGNACIÓN DE ACCESORIOS Y LÓGICA PREVENTIVA ---
         s.nota_clinica = ""
         s.accesorio_vinculado = None
         s.dispositivo_base = None
 
-        plats_nombres = [p.nombre for p in s.plataformas]
-        if 'iOS' in plats_nombres: s.dispositivo_base = pref['ipad']
-        elif 'Android' in plats_nombres: s.dispositivo_base = pref['tablet']
-        elif 'Windows' in plats_nombres: s.dispositivo_base = pref['laptop']
+        # Asignar dispositivo base según plataforma
+        p_nombres_list = [p.nombre for p in s.plataformas]
+        if 'iOS' in p_nombres_list: s.dispositivo_base = pref['ipad']
+        elif 'Android' in p_nombres_list: s.dispositivo_base = pref['tablet']
+        elif 'Windows' in p_nombres_list: s.dispositivo_base = pref['laptop']
 
         s_entradas_ids = [e.id for e in s.entradas]
+        
+        # Lógica para control ocular (ojos)
         if id_ojos in s_entradas_ids:
-            if id_ojos not in ids_entradas: # Es preventivo
-                if s.requiere_hardware_extra: s.accesorio_vinculado = pref['eye_tracker']
-                s.nota_clinica = "RECOMENDACIÓN PREVENTIVA: Entrenamiento temprano para el futuro."
-                sistemas_preventivos.append(s)
-                continue
+            if id_ojos not in ids_entradas: 
+                # --- FILTRO PARA EVITAR HARDWARE Y PANELES EN PREVENTIVOS ---
+                es_software = s.categoria == 'sistema' and not any(kw in s.nombre.lower() for kw in ['panel', 'tablero', 'cuaderno', 'etran'])
+                
+                # Solo si es software y requiere hardware extra (eye tracker)
+                if es_software and s.requiere_hardware_extra:
+                    s.accesorio_vinculado = pref['eye_tracker']
+                    s.nota_clinica = "RECOMENDACIÓN PREVENTIVA: Entrenamiento temprano para el futuro control ocular."
+                    sistemas_preventivos.append(s)
+                    continue # Importante: No lo añade a la lista normal
+                else:
+                    # Si no es software "pesado" (ej. un panel o hardware), 
+                    # simplemente no lo recomendamos de forma preventiva para no saturar.
+                    continue 
             else:
-                if s.requiere_hardware_extra: s.accesorio_vinculado = pref['eye_tracker']
+                # Si el usuario SÍ marcó ojos, vinculamos el accesorio si lo requiere
+                if s.requiere_hardware_extra: 
+                    s.accesorio_vinculado = pref['eye_tracker']
 
-        sistemas_finales.append(s)
+        # Si llegamos aquí y no es hardware puro, se añade a la lista final
+        if s.categoria == 'sistema':
+            sistemas_finales.append(s)
 
     # 4. PREPARAR LISTAS PARA HTML
     recomendados = [s for s in sistemas_finales if s.categoria == 'sistema']
@@ -225,7 +242,8 @@ def recomendar():
             nombre_paciente=nombre_usuario,
             fecha=datetime.now(),
             input_usuario=datos_completos,
-            sistemas_recomendados=texto_recomendacion
+            sistemas_recomendados=texto_recomendacion,
+            es_real=v_es_real
         )
         
         bd.session.add(nuevo_historial)

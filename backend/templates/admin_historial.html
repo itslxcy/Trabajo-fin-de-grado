@@ -33,6 +33,15 @@
                     <td style="padding: 15px; text-align: center; vertical-align: middle; background-color: #fcfcfc;">
                         <span style="font-size: 0.85em; color: #7f8c8d;">{{ r.fecha.strftime('%d/%m/%Y') if r.fecha else 'S/F' }}</span><br>
                         <strong style="font-size: 1.1em; color: #2c3e50;">{{ r.fecha.strftime('%H:%M') if r.fecha else '' }}</strong>
+                        {% if r.es_real %}
+                            <span style="background-color: #4caf50; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: bold;">
+                                PACIENTE REAL
+                            </span>
+                        {% else %}
+                            <span style="background-color: #eee; color: #888; padding: 2px 6px; border-radius: 4px; font-size: 0.75em;">
+                                PRUEBA / OTROS
+                            </span>
+                        {% endif %}
                     </td>
 
                     <!-- IDENTIFICADOR -->
