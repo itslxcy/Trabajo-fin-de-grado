@@ -1,40 +1,39 @@
+<!-- Pestaña de información acerca de los SAAC -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Sobre los SAAC</title>
+    <!-- Vínculo con estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
 </head>
 <body>
+    <!-- NAVEGACIÓN: Menú de pestañas con la clase 'active' en la que se encuentre en ese momento (en este caso SAAC)-->
     <nav class="nav-tabs">
         <a href="/">Inicio</a>
         <a href="/ELA">Sobre la ELA</a>
         <a href="/SAAC" class="active">¿Qué es un SAAC?</a>
         <a href="/cuestionario">Cuestionario</a>
     </nav>
-
     <h1>Sistemas Aumentativos y Alternativos de Comunicación (SAAC)</h1>
-
     <div class="seccion">
         <p>Los SAAC son herramientas diseñadas para facilitar o sustituir el habla en personas con dificultades de comunicación oral. Su objetivo principal es garantizar que el usuario pueda expresar sus necesidades, sentimientos e ideas.</p>
-        
+        <!-- Definición -->
         <h2>Definición conceptual</h2>
         <ul>
             <li><strong>Sistema aumentativo:</strong> Apoya el habla residual para que la comunicación sea eficaz.</li>
             <li><strong>Sistema alternativo:</strong> Sustituye totalmente el habla cuando esta no es funcional.</li>
         </ul>
     </div>
-
     <div class="seccion">
+        <!-- Clasificación -->
         <h2>Clasificación de soluciones disponibles</h2>
-        
         <p style="margin-bottom: 25px; color: #333;">
             Para garantizar una comunicación continua, es vital combinar un sistema de alta tecnología con uno de baja tecnología como respaldo. Mientras que los sistemas avanzados ofrecen autonomía, la baja tecnología (como paneles físicos o pizarras) es indispensable en situaciones donde la tecnología falla o no es viable: bajo luz solar directa intensa, en la ducha, ante falta de batería, averías técnicas o condiciones climáticas adversas como la lluvia.
         </p>
-
     <div class="grid-soluciones">
         
-        <!-- Columna: Baja Tecnología -->
+        <!-- Baja Tecnología -->
         <div class="columna-solucion columna-baja">
             <h3>Baja tecnología</h3>
             <p class="subtitulo-col">Soportes físicos y sistemas sin electrónica</p>
@@ -45,7 +44,7 @@
             </ul>
         </div>
 
-        <!-- Columna: Software y Apps -->
+        <!-- Software y Apps -->
         <div class="columna-solucion columna-apps">
             <h3>Software y Apps</h3>
             <p class="subtitulo-col">Programas que gestionan el lenguaje y la voz</p>
@@ -57,7 +56,7 @@
             </ul>
         </div>
 
-        <!-- Columna: Hardware -->
+        <!-- Hardware -->
         <div class="columna-solucion columna-hardware">
             <h3>Hardware y periféricos</h3>
             <p class="subtitulo-col">Dispositivos de acceso y complementos técnicos</p>
@@ -72,6 +71,7 @@
 </div>
 
 <div class="seccion" style="border-left: 5px solid #ac4caf; background-color: #fdf7ff;">
+    <!-- Aviso sobre escalabilidad del sistema -->
     <h2 style="color: #ac4caf;">Sistemas escalables: Una inversión a futuro</h2>
     <p>En enfermedades progresivas como la ELA, es fundamental elegir sistemas <strong>escalables</strong>. Estos son softwares avanzados que permiten cambiar el método de acceso sin que el usuario tenga que cambiar su vocabulario o aprender a usar un programa nuevo.</p>
     <ul>
@@ -83,6 +83,7 @@
 </div>
 
 <div class="seccion" style="border-left: 5px solid #2e7d32; background-color: #f1f8e9;">
+    <!-- Info sobre financiación -->
     <h3 style="color: #2e7d32; margin-top: 0;"> Financiación</h3>
     <p>Muchos de los sistemas de alta tecnología (lectores oculares y software avanzado) están incluidos en la Cartera Común de Servicios del Sistema Nacional de Salud, aunque la gestión depende de cada Comunidad Autónoma.</p>
     

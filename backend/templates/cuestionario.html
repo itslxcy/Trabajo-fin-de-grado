@@ -1,12 +1,15 @@
+<!-- Página del cuestionario con las preguntas y opciones -->
 <!DOCTYPE html>
 <html lang="es-ES">
 <head>
     <meta charset="UTF-8">
     <title>Evaluación clínica SAAC</title>
+    <!-- Enlace a estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
 </head>
 <body>
 
+    <!-- NAVEGACIÓN: Menú de pestañas con la clase 'active' en la que se encuentre en ese momento (en este caso cuestionario)-->
     <nav class="nav-tabs">
     <a href="/">Inicio</a>
     <a href="/ELA">Sobre la ELA</a>
@@ -16,11 +19,13 @@
 
     <h1>Evaluación del Usuario SAAC</h1>
 
+    <!-- Envía los datos a la ruta '/recomendar' mediante el método POST -->
     <form action="/recomendar" method="POST">
         
-        <!-- SECCIÓN 1: DATOS GENERALES -->
+        <!-- DATOS GENERALES -->
         <div class="seccion">
             <h2>1. Información básica</h2>
+            <!-- Filtro para diferenciar pruebas de datos reales -->
             <div style="background-color: #e8f5e9; padding: 18px; border-radius: 8px; border: 1px solid #c8e6c9; margin-bottom: 25px;">
                 <label style="display: flex; align-items: flex-start; cursor: pointer;">
                     <input type="checkbox" name="es_real" value="true" style="width: 22px; height: 22px; margin-right: 15px; margin-top: 2px;">
@@ -32,6 +37,8 @@
                     </span>
                 </label>
             </div>
+
+            <!-- Idiomas generados dinámicamente desde la base de datos (idioma_ids) -->
             <div class="pregunta">
                 <label>Idiomas de comunicación:</label>
                 <small>Seleccione el o los idiomas en los que el usuario se comunique habitualmente.</small>
@@ -45,34 +52,28 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 2: CAPACIDADES -->
+        <!-- CAPACIDADES (Sliders)-->
         <div class="seccion">
             <h2>2. Capacidades del Usuario</h2>
-            
+            <!-- Lista con variables clínicas para generar los sliders automáticamente-->
             {% set caps = [
                 ('vision', 'Capacidad visual y de fijación', 
                  '0: Nula o sin control voluntario de la mirada.|1: Movimientos involuntarios o dificultad física para mantener el foco.|2: Funcional para distinguir símbolos y botones grandes.|3: Precisión total para lectura de texto y botones pequeños.', 0),
-
                 ('audicion', 'Capacidad auditiva', 
                  '0: Sordera o hipoacusia severa (requiere avisos visuales).|1: Dificultad con voces sintéticas o en entornos con ruido ambiente.|2: Entiende voces sintetizadas en situaciones cotidianas.|3: Excelente (capaz de usar el sonido como guía principal).', 0),
-
                 ('habla', 'Capacidad oral / Habla', 
                  '0: Comunicación verbal nula.|1: Habla residual difícil de entender para personas externas.|2: Habla comprensible pero con fatiga o lentitud significativa.|3: Habla fluida (uso de SAAC preventivo o por fatiga extrema).', 0),
-
                 ('tecnologia', 'Destreza tecnológica previa', 
                  '0: Nula (requiere interfaz de "pulsar y hablar" sin menús).|1: Principiante (uso de tablet básica pero sin manejo de configuración).|2: Habitual (uso autónomo de apps, redes sociales e internet).|3: Experto (dominio de configuración de sistemas y resolución de fallos).', 0),
-
                 ('resistencia', 'Resistencia a la fatiga física', 
                  '0: Crítica (<30s): Agotamiento casi inmediato.|1: Limitada (30s-2min): Requiere descansos tras mensajes cortos.|2: Funcional (2-10min): Permite conversaciones breves o párrafos.|3: Sostenida (>10min): Capacidad para ocio y escritura prolongada.', 0),
-
                 ('independencia', 'Nivel de autonomía comunicativa', 
-                 '0: Siempre cuenta con alguien que le ayuda a comunicarse.|1: Tiene a alguien que le coloca o enciende el dispositivo pero luego lo usa solo.|2: Puede encender el equipo si está accesible pero se cansa y puede requerir ayuda puntual.|3: Maneja el encendido, carga el uso sin ayuda alguna.', 0)
-            ] %}
+                 '0: Siempre cuenta con alguien que le ayuda a comunicarse.|1: Tiene a alguien que le coloca o enciende el dispositivo pero luego lo usa solo.|2: Puede encender el equipo si está accesible pero se cansa y puede requerir ayuda puntual.|3: Maneja el encendido, carga el uso sin ayuda alguna.', 0)] %}
 
+            <!-- Bucle para generar cada slider con su descripción -->     
             {% for id, titulo, desc, defecto in caps %}
             <div class="pregunta" style="margin-bottom: 30px;">
                 <label><strong>{{ titulo }}:</strong></label>
-                
                 <div class="slider-wrapper" style="margin-top: 10px;">
                     <div class="slider-container">
                         <input type="range" name="{{ id }}" min="0" max="3" step="1" value="{{ defecto }}" list="tickmarks" style="width: 100%;">
@@ -81,7 +82,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="descripcion-niveles">
                     {% for linea in desc.split('|') %}
                         <p style="margin: 4px 0; font-size: 0.85em; line-height: 1.3; color: #333;">{{ linea }}</p>
@@ -89,17 +89,17 @@
                 </div>
             </div>
             {% endfor %}
-
             <datalist id="tickmarks">
                 <option value="0"></option><option value="1"></option>
                 <option value="2"></option><option value="3"></option>
             </datalist>
         </div>
 
-        <!-- SECCIÓN 3: PREFERENCIAS TÉCNICAS -->
+        <!-- PREFERENCIAS TÉCNICAS -->
         <div class="seccion">
             <h2>3. Interacción y dispositivos</h2>
             <div class="pregunta">
+                <!-- Selección múltiple (entradas dinámicas desde BD) -->
                 <label>Formas de interacción posibles (Acceso):</label>
                 <small style="color: #666; margin-bottom: 5px; display: block;">
                 (Seleccione aquella/s formas en las que pueda/prefiera interactuar con el sistema.)
@@ -112,30 +112,43 @@
                     {% endfor %}
                 </div>
             </div>
+
             <div class="pregunta">
-    <label>Forma de comunicación preferida:</label>
-    <small style="color: #666; margin-bottom: 5px; display: block;">
-        (Seleccione aquella/s opciones en las que prefiera expresarse.)
-    </small>
-    
+                <!-- Método de comunicación -->
+                <label>Forma de comunicación preferida:</label>
+                <small style="color: #666; margin-bottom: 5px; display: block;">
+                (Seleccione aquella/s opciones en las que prefiera expresarse.)
+            </small>
                 <div class="opciones-grid">
                     <label class="opcion-item">
                         <input type="checkbox" name="alfabetizacion_ids" value="1"> 
                         <span>Alfabeto</span>
                     </label>
-
                     <label class="opcion-item">
                         <input type="checkbox" name="alfabetizacion_ids" value="2"> 
                         <span>Pictogramas</span>
                     </label>
-
                 </div>
             </div>
+
             <div class="pregunta">
+                <!-- Plataforma -->
                 <label>Plataformas o dispositivos preferidos:</label>
                 <small style="color: #666; margin-bottom: 5px; display: block;">
-                (Seleccione aquella/s plataformas de las que ya disponga o que prefiera utilizar.)
-            </small>
+                    (Seleccione aquella/s plataformas de las que ya disponga o que prefiera utilizar.)
+                </small>
+
+                <!-- Guía rápida para el usuario -->
+                <div style="background-color: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 3px solid #ac4caf; margin-bottom: 15px; font-size: 0.85em; color: #555;">
+                    <strong>Guía rápida:</strong>
+                    <ul style="margin: 5px 0 0 15px; padding: 0;">
+                        <li><strong>Windows:</strong> Ordenadores portátiles o de sobremesa. </li>
+                        <li><strong>iOS:</strong> Dispositivos Apple (iPad o iPhone).</li>
+                        <li><strong>Android:</strong> Tablets y móviles de marcas como Samsung, Xiaomi, etc.</li>
+                        <li><strong>Web:</strong> Sistemas accesibles desde cualquier navegador por internet (Google).</li>
+                        <li><strong>Panel físico:</strong> Soluciones sin electrónica (cartón, plástico o láminas).</li>
+                    </ul>
+                </div>
                 <div class="opciones-grid">
                     {% for p in plataformas %}
                     <label class="opcion-item">
@@ -144,13 +157,12 @@
                     {% endfor %}
                 </div>
             </div>
-        </div>
 
-        <!-- SECCIÓN 4: ENTORNO Y RECURSOS -->
+        <!-- ENTORNO -->
         <div class="seccion">
             <h2>4. Entorno de uso</h2>
-            
             <div class="pregunta">
+                <!-- Lugar de uso principal -->
                 <label>¿Dónde se utilizará el sistema habitualmente?</label>
                 <small style="color: #666; margin-bottom: 5px; display: block;">
                 Tenga en cuenta que sistemas de infrarojos como el eye-tracker no funcionan bien con la luz solar. Si está pensando en comunicación fuera de casa pero en interiores (ej: Hospital, tiendas) seleccione la opción de Domicilio.
@@ -163,6 +175,7 @@
             </div>
 
             <div class="pregunta">
+                <!-- Silla de ruedas -->
                 <label>¿Utiliza silla de ruedas de forma habitual?</label>
                 <div class="radio-group">
                     <label><input type="radio" name="usa_silla" value="true" required> Sí (Se priorizarán sistemas de anclaje)</label>
@@ -172,6 +185,7 @@
 
             <div class="pregunta" style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 5px solid #2ecc71;">
             <p style="margin: 0; color: #2c3e50; font-size: 0.9em;">
+                <!-- Aviso confidencialidad-->
                 <strong> Privacidad garantizada:</strong> 
                 Este estudio es totalmente anónimo. No se recogen nombres, correos ni datos personales. 
                 Al hacer clic en el botón de abajo, se le asignará un código ID aleatorio para procesar sus datos clínicos.

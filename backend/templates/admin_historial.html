@@ -1,12 +1,15 @@
+<!-- Página que permite ver las respuestas del usuario, las recomendaciones generadas y el feedback  -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial</title>
+    <!-- Vinculación con los estilos globales -->
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
 </head>
 <body style="max-width: 1300px; margin: auto; padding: 20px; background-color: #f4f7f6;">
+    <!-- NAVEGACIÓN: Pestañas superiores para moverse entre el inicio y el panel -->
     <nav class="nav-tabs">
         <a href="/">Inicio</a>
         <a href="/admin_historial" class="active">Panel administrativo</a>
@@ -16,20 +19,22 @@
 
     <div class="seccion" style="padding: 0; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
         <table class="tabla-historial" style="width: 100%; border-collapse: collapse; background: white; font-family: 'Segoe UI', sans-serif; color: #333;">
+            <!-- ENCABEZADO DE TABLA: Definición de columnas -->
             <thead style="background-color: #2c3e50; color: white;">
                 <tr>
                     <th style="padding: 12px; text-align: center; font-size: 0.85em; text-transform: uppercase;">Sesión</th>
                     <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Paciente</th>
-                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Perfil Clínico</th>
+                    <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Perfil clínico</th>
                     <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Preferencias</th>
                     <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Recomendación</th>
                     <th style="padding: 12px; text-align: left; font-size: 0.85em; text-transform: uppercase;">Feedback</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Itera sobre cada registro guardado en la base de datos -->
                 {% for r in registros %}
                 <tr style="border-bottom: 1px solid #eee;">
-                    <!-- FECHA Y HORA -->
+                    <!-- Fecha, hora y etiqueta paciente real-->
                     <td style="padding: 15px; text-align: center; vertical-align: middle; background-color: #fcfcfc;">
                         <span style="font-size: 0.85em; color: #7f8c8d;">{{ r.fecha.strftime('%d/%m/%Y') if r.fecha else 'S/F' }}</span><br>
                         <strong style="font-size: 1.1em; color: #2c3e50;">{{ r.fecha.strftime('%H:%M') if r.fecha else '' }}</strong>
@@ -44,12 +49,12 @@
                         {% endif %}
                     </td>
 
-                    <!-- IDENTIFICADOR -->
+                    <!-- Identificador (ID anónimo) -->
                     <td style="padding: 15px; vertical-align: middle; border-left: 1px solid #eee;">
                         <strong style="color: #ac4caf; letter-spacing: 0.5px;">{{ r.nombre_paciente }}</strong>
                     </td>
 
-                    <!-- PERFIL CLÍNICO -->
+                    <!-- Perfil clínico -->
                     <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em;">
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
                             <div><strong>Visión:</strong> {{ r.input_usuario.get('vision', '-') }}</div>
@@ -68,18 +73,17 @@
                         </div>
                     </td>
 
-                    <!-- PREFERENCIAS SELECCIONADAS -->
+                    <!-- Preferencias seleccionadas -->
                     <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; color: #555;">
                         <div style="margin-bottom: 4px;"><strong>Idioma:</strong> {{ r.input_usuario.get('idioma', '-') | capitalize }}</div>
                         <div style="margin-bottom: 4px;"><strong>Plataforma:</strong> {{ r.input_usuario.get('plataforma_pref', '-') }}</div>
                         <div style="margin-bottom: 4px;"><strong>Método:</strong> {{ r.input_usuario.get('metodo_pref', '-') | capitalize }}</div>
-                        <!-- AÑADIDO: Formas de Interacción (Entradas) -->
                         <div style="margin-top: 5px; padding-top: 5px; border-top: 1px solid #f9f9f9; color: #2c3e50;">
                             <strong>Interacción:</strong> {{ r.input_usuario.get('interaccion', 'No definida') }}
                         </div>
                     </td>
 
-                    <!-- RECOMENDACIÓN TÉCNICA -->
+                    <!-- Recomendación -->
                     <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em;">
                         {% set partes = r.sistemas_recomendados.split('|') if r.sistemas_recomendados else [] %}
                         
@@ -98,17 +102,17 @@
                         {% endif %}
                     </td>
 
-                    <!-- FEEDBACK -->
+                    <!-- Feedback-->
                     <td style="padding: 15px; border-left: 1px solid #eee; font-size: 0.85em; background-color: #fdfdfd; min-width: 250px;">
                         {% if r.feedback %}
                             <!-- Puntuación General -->
                             <div style="margin-bottom: 8px;">
                                 <span style="background: #e3f2fd; padding: 2px 8px; border-radius: 10px; color: #1976d2; font-weight: bold;">
-                                    ⭐ Valoración: {{ r.feedback.get('valoracion_general', '-') }}/10
+                                    Valoración: {{ r.feedback.get('valoracion_general', '-') }}/10
                                 </span>
                             </div>
 
-                            <!-- Respuestas Detalladas -->
+                            <!-- Respuestas detalladas -->
                             <div style="display: flex; flex-direction: column; gap: 4px; color: #444; line-height: 1.2;">
                                 <div><strong>Usa recomendado:</strong> {{ r.feedback.get('usa_actual', '-') }}</div>
                                 <div><strong>Satisfacción:</strong> {{ r.feedback.get('satisfaccion_actual', '-') }}</div>
@@ -120,11 +124,12 @@
                                 </div>
                             </div>
 
-                            <!-- Comentarios Adicionales -->
+                            <!-- Comentarios adicionales -->
                             <div style="margin-top: 8px; font-size: 0.9em; color: #666; font-style: italic; border-top: 1px solid #f0f0f0; padding-top: 5px;">
                                 "{{ r.feedback.get('comentarios_adicionales') or 'Sin sugerencias' }}"
                             </div>
                         {% else %}
+                        <!-- Mensaje si el usuario no rellenó el formulario final -->
                             <div style="text-align: center; color: #bbb; padding-top: 10px;">
                                 <i class="fas fa-clock"></i> Pendiente
                             </div>

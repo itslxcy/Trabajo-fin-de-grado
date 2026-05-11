@@ -1,4 +1,4 @@
 from flask_sqlalchemy import SQLAlchemy
 
-#Creación objeto
-bd = SQLAlchemy()
+#Instanciación a SQLAlchemy
+bd = SQLAlchemy() #Este objeto representa nuestra base de datos en vscode
