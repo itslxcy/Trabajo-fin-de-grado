@@ -42,14 +42,14 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if sistema.accesorio_vinculado %}
-                                <div class="periferico-box">
-                                    <!-- Muestra el hardware vinculado (ej: Eye tracker para software de mirada) -->
-                                    <strong>{{ sistema.accesorio_vinculado.nombre }}</strong>
-                                </div>
-                            {% else %}
-                                <small style="color: #999;">No requiere hardware adicional</small>
-                            {% endif %}
+                            <!-- Visualización mejorada de periféricos con espaciado -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                {% for acc in sistema.accesorios_totales %}
+                                    <span class="badge badge-info" style="display: inline-block; margin-bottom: 2px;">{{ acc.nombre }}</span>
+                                {% else %}
+                                    <span style="color: #888; font-style: italic;">Ninguno</span>
+                                {% endfor %}
+                            </div>
                         </td>
                         <td>
                             {% if sistema.enlace_info %}
@@ -93,7 +93,16 @@
                 <tr>
                     <td><strong>{{ s.nombre }}</strong></td>
                     <td>{{ s.nota_clinica }}</td>
-                    <td><strong>{{ s.accesorio_vinculado.nombre if s.accesorio_vinculado else 'Eye tracker' }}</strong></td>
+                    <!-- Visualización mejorada de periféricos para preventivos -->
+                    <td>
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                            {% for acc in s.accesorios_totales %}
+                                <span class="badge badge-warning" style="display: inline-block; margin-bottom: 2px; color: #856404; border: 1px solid #ffeeba;">{{ acc.nombre }}</span>
+                            {% else %}
+                                <span class="badge badge-warning">Eye tracker</span>
+                            {% endfor %}
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

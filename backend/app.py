@@ -86,6 +86,12 @@ def recomendar():
     ids_acc_vistos = set() #Control de duplicados en accesorios (si es complementario a varios SAAC sugeridos vale con que lo recomiende una vez)
     bancos_voz_final = [] #Lista con Voice Banking
 
+    #Identificación de IDs críticos para filtros inteligentes (Ojos y Manos)
+    ent_ojos = TipoEntrada.query.filter(TipoEntrada.nombre.ilike('%ojos%')).first()
+    id_ojos = ent_ojos.id if ent_ojos else None
+    ent_manos = TipoEntrada.query.filter(TipoEntrada.nombre.ilike('%manos%')).first()
+    id_manos = ent_manos.id if ent_manos else None
+
     #LÓGICA DE FILTRADO BASE (SQL)
     consulta = SaacSistema.query.outerjoin(SistemaRequisitoFuncional)
     
@@ -102,42 +108,46 @@ def recomendar():
     #Ejecuta el filtro anterior y se obtienen los resultados preliminares
     resultados_preliminares = consulta.all()
 
-    #PERIFÉRICOS 
-    #Busca dispositivos por nombre para agregarlos como periféricos
-    todos_sist = SaacSistema.query.all()
-    def buscar_hardware(keyword):
-        return next((x for x in todos_sist if keyword.lower() in x.nombre.lower() and x.categoria == 'hardware'), None)
+    #FUNCIÓN RECURSIVA PARA OBTENER PERIFÉRICOS (NUEVO)
+    #Busca en la tabla de asociación sistema_dependencia y añade accesorios "tirando del hilo" (ej: Software -> Tablet -> Soporte)
+    def obtener_perifericos_recursivo(sistema_u_objeto, lista_para_llenar):
+        for acc in sistema_u_objeto.hardware_requerido:
+            #FILTRO DE PRECISIÓN TÁCTIL: Solo recomienda Lápiz o Guantes si el usuario puede usar las manos
+            es_accesorio_tactil = any(k in acc.nombre.lower() for k in ['lápiz', 'guante'])
+            if es_accesorio_tactil and (id_manos not in ids_entradas):
+                continue
 
-    #Lista con los recomendados más habitualmente
-    pref = {'eye_tracker': buscar_hardware('Eye tracker'),
-        'ipad': buscar_hardware('iPad'),
-        'tablet': buscar_hardware('Tablet Android'),
-        'laptop': buscar_hardware('Ordenador Portátil'),}
+            # Lo añadimos a la lista específica de este sistema (para que salga en la tabla)
+            if acc not in lista_para_llenar:
+                lista_para_llenar.append(acc)
 
-    #Obtiene el ID de control ocular para los filtros
-    ent_ojos = TipoEntrada.query.filter(TipoEntrada.nombre.ilike('%ojos%')).first()
-    id_ojos = ent_ojos.id
+            # Lo añadimos a la lista global de referencia (para evitar duplicados en la tabla inferior)
+            if acc.id not in ids_acc_vistos:
+                ids_acc_vistos.add(acc.id)
+                accesorios_referencia.append(acc)
+
+            #Llamada recursiva para encontrar dependencias del accesorio (Cascada)
+            obtener_perifericos_recursivo(acc, lista_para_llenar)
 
     #BUCLE DE FILTRADO DETALLADO a partir de los preliminares
     for s in resultados_preliminares:
+        # Inicializamos los atributos para el HTML
+        s.accesorios_totales = []
+        s.nota_clinica = ""
+
         #Filtro de idiomas, el sistema debe tener al menos uno de los idiomas seleccionados
         if ids_idiomas and not any(i.id in ids_idiomas for i in s.idiomas): continue
         
-        #Filtro de plataformas (Paneles físicos pasan siempre, apps se filtran según la plataforma que haya elegido el usaurio)
+        #Filtro de plataformas (Corregido para ser estricto con los Packs y Paneles)
         if ids_plataformas:
             s_plats_ids = [p.id for p in s.plataformas]
-            plats_nombres = [p.nombre.lower() for p in s.plataformas]
-            
-            #Determinamos si es un sistema físico/papel:
-            es_sistema_fisico = (
-                len(s_plats_ids) == 0 or 
-                any(n in ["panel físico", "papel", "baja tecnología"] for n in plats_nombres) or
-                any(keyword in s.nombre.lower() for keyword in ['panel', 'tablero', 'cuaderno', 'etran'])
-            )
-
-            #Si NO es físico y NO coincide con la plataforma del usuario, lo descartamos
-            if not es_sistema_fisico:
-                if not any(p_id in s_plats_ids for p_id in ids_plataformas): continue
+            # Si el sistema tiene plataformas asignadas, comprobamos coincidencia estricta
+            if s_plats_ids:
+                if not any(p_id in s_plats_ids for p_id in ids_plataformas):
+                    continue
+            # Si el sistema no tiene ninguna plataforma asignada (y es categoría sistema), no debería pasar el filtro
+            elif s.categoria == 'sistema':
+                continue
 
         #FILTRO DE MÉTODOS (Alfabeto/Pictogramas)
         if ids_metodos_usuario:
@@ -150,54 +160,32 @@ def recomendar():
             if not any(e.id in ids_entradas for e in s.entradas): continue
 
         #ASIGNACIÓN DE ACCESORIOS Y LÓGICA PREVENTIVA
-        #Atributos para mejor visualización
-        s.nota_clinica = ""
-        s.accesorio_vinculado = None
-        s.dispositivo_base = None
-
-        #Asignar dispositivo base según plataforma asignada del sistema
-        p_nombres_list = [p.nombre for p in s.plataformas]
-        if 'iOS' in p_nombres_list: s.dispositivo_base = pref['ipad']
-        elif 'Android' in p_nombres_list: s.dispositivo_base = pref['tablet']
-        elif 'Windows' in p_nombres_list: s.dispositivo_base = pref['laptop']
-
         s_entradas_ids = [e.id for e in s.entradas]
         
-        #Lógica para control ocular
-        if id_ojos in s_entradas_ids:
-            if id_ojos not in ids_entradas: 
-                #Filtro para evitar recomendar hardware como preventivos y paneles fisicos
-                es_software = s.categoria == 'sistema' and not any(kw in s.nombre.lower() for kw in ['panel', 'tablero', 'cuaderno', 'etran'])
-                
-                #Solo se recomienda como preventivo si es software y requiere hardware extra (eye tracker)
-                #El eye tracker es con lo que más les cuesta familiarizarse y a la vez lo más usado en etapas avanzadas
-                if es_software and s.requiere_hardware_extra:
-                    s.accesorio_vinculado = pref['eye_tracker']
-                    s.nota_clinica = "RECOMENDACIÓN PREVENTIVA: Entrenamiento temprano para el futuro control ocular."
-                    sistemas_preventivos.append(s)
-                    continue #No se añade a la lista de recomendaciones directas para que no salga duplicado
-                else:
-                    continue 
+        #Lógica para control ocular preventivo
+        if id_ojos and id_ojos in s_entradas_ids and id_ojos not in ids_entradas:
+            #Solo se recomienda como preventivo si es software y requiere eye tracker (según BD)
+            tiene_eye_tracker = any('eye tracker' in h.nombre.lower() for h in s.hardware_requerido)
+            
+            if s.categoria == 'sistema' and tiene_eye_tracker:
+                s.nota_clinica = "RECOMENDACIÓN PREVENTIVA: Entrenamiento temprano para el futuro control ocular."
+                sistemas_preventivos.append(s)
+                #Buscamos periféricos del preventivo para mostrarlos en la lista de referencia y en su objeto
+                obtener_perifericos_recursivo(s, s.accesorios_totales)
+                continue #No se añade a la lista de recomendaciones directas para que no salga duplicado
             else:
-                #Si el usuario SÍ marcó ojos, vinculamos el accesorio si el sistema lo requiere
-                if s.requiere_hardware_extra: 
-                    s.accesorio_vinculado = pref['eye_tracker']
-
+                continue 
+        
         #Si llegamos aquí y es de la categoria sistema (no es hardware), se añade a la lista final
         if s.categoria == 'sistema':
             sistemas_finales.append(s)
+            #Activamos la búsqueda en cascada de periféricos para este sistema
+            obtener_perifericos_recursivo(s, s.accesorios_totales)
 
     #PREPARAR LISTAS PARA HTML
     #Lista de sistemas recomendados directamente
-    recomendados = [s for s in sistemas_finales if s.categoria == 'sistema']
+    recomendados = sistemas_finales
     
-    #Recopila accesorios únicos (dispositivo base + accesorio vinculado)
-    for s in recomendados:
-        for extra in [s.dispositivo_base, s.accesorio_vinculado]:
-            if extra and extra.id not in ids_acc_vistos:
-                accesorios_referencia.append(extra)
-                ids_acc_vistos.add(extra.id)
-
     #Si el usuario puede hablar se muestran todos
     bancos_voz_final = [s for s in sistemas_finales if s.categoria == 'servicio']
     if not bancos_voz_final and v_habla >= 2:
@@ -208,8 +196,6 @@ def recomendar():
     h_id = None
 
     #Recupera los objetos completos a partir de los IDs seleccionados
-    metodos_obj = MetodoComunicacion.query.filter(MetodoComunicacion.id.in_(ids_metodos_usuario)).all()
-    metodos_nombres = [m.nombre for m in metodos_obj]
     idiomas_obj = Idioma.query.filter(Idioma.id.in_(ids_idiomas)).all()
     plataformas_obj = Plataforma.query.filter(Plataforma.id.in_(ids_plataformas)).all()
     metodos_obj = MetodoComunicacion.query.filter(MetodoComunicacion.id.in_(ids_metodos_usuario)).all()
@@ -231,7 +217,7 @@ def recomendar():
         "plataforma_pref": ", ".join([p.nombre for p in plataformas_obj]) if plataformas_obj else "Cualquiera",
         "metodo_pref": ", ".join([m.nombre for m in metodos_obj]) if metodos_obj else "Sin preferencia"}
 
-    #Texto para mejorar legilibilidad en visualización
+    #Texto para mejorar legibilidad en visualización del historial
     texto_recomendacion = f"SISTEMAS: {', '.join([s.nombre for s in recomendados])}"
     if accesorios_referencia:
         texto_recomendacion += f" | ACCESORIOS: {', '.join([a.nombre for a in accesorios_referencia])}"

@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS tipo_entrada CASCADE;
 DROP TABLE IF EXISTS idioma CASCADE;
 DROP TABLE IF EXISTS plataforma CASCADE;
 DROP TABLE IF EXISTS entorno_uso CASCADE;
+DROP TABLE IF EXISTS sistema_dependencia CASCADE;
 
 -- 2. TABLAS MAESTRAS
 -- Métodos físicos de interacción
@@ -64,67 +65,67 @@ CREATE TABLE saac_sistema (
 	
 -- 4. CARGA DE SISTEMAS 
 INSERT INTO saac_sistema 
-(nombre, descripcion, requiere_interlocutor, fatiga_fisica, portable, admite_anclaje, enlace_info, categoria, requiere_hardware_extra)
+(nombre, descripcion, requiere_interlocutor, fatiga_fisica, portable, admite_anclaje, enlace_info, categoria)
 VALUES
 -- BAJA TECNOLOGÍA
-('Panel pictogramas','Tablero físico que utiliza símbolos pictográficos (ARASAAC).',true,0,true,true, 'https://arasaac.org/', 'sistema', false),
-('Panel alfabético','Tablero de comunicación directa mediante el deletreo.',true,0,true,true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf', 'sistema', false),
-('SpeakBook','Cuaderno de comunicación diseñado para la selección mediante la mirada.',true,0,true,true, 'https://aulaabierta.arasaac.org/materiales-caa-tableros-de-comunicacion', 'sistema', false),
-('Tablero ETRAN','Panel transparente para comunicación mediante la dirección de la mirada.',true,0,true,true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf', 'sistema', false),
-('QuickTalker 23','Comunicador portátil con 23 casillas para mensajes grabados.',false,0,true,false, 'https://qinera.com/es/tienda/comunicadores-sencillos/quick-talker-23', 'sistema', false),
-('MegaBEE', 'Escritura asistida por mirada y teclado táctil asistido por un interlocutor.', true, 0, true, true, 'https://www.e2l.uk.com/megabee/indexes.html', 'sistema', false),
+('Panel pictogramas','Tablero físico que utiliza símbolos pictográficos (ARASAAC).',true,0,true,true, 'https://arasaac.org/', 'sistema'),
+('Panel alfabético','Tablero de comunicación directa mediante el deletreo.',true,0,true,true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf', 'sistema'),
+('SpeakBook','Cuaderno de comunicación diseñado para la selección mediante la mirada.',true,0,true,true, 'https://aulaabierta.arasaac.org/materiales-caa-tableros-de-comunicacion', 'sistema'),
+('Tablero ETRAN','Panel transparente para comunicación mediante la dirección de la mirada.',true,0,true,true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf', 'sistema'),
+('QuickTalker 23','Comunicador portátil con 23 casillas para mensajes grabados.',false,0,true,false, 'https://qinera.com/es/tienda/comunicadores-sencillos/quick-talker-23', 'sistema'),
+('MegaBEE', 'Escritura asistida por mirada y teclado táctil asistido por un interlocutor.', true, 0, true, true, 'https://www.e2l.uk.com/megabee/indexes.html', 'sistema'),
 
 -- SOFTWARE Y APPS (Look to Speak y Tallk NO requieren hardware extra porque usan su propia cámara integrada)
-('Look to Speak','Mirada a través de cámara frontal para frases preestablecidas.',false,1,true,true, 'https://play.google.com/store/apps/details?id=com.androidexperiments.looktospeak', 'sistema', false),
-('Tallk','Seguimiento ocular a través de la cámara de la tablet (Samsung).',false,1,true,true, 'https://play.google.com/store/apps/details?id=com.irisbond.tallk', 'sistema', false),
-('Grid 3','Software integral para comunicación y control del entorno.',false,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/grid-3', 'sistema', true),
-('Verbo','Software de comunicación dinámico con salida de voz.',false,1,true,true, 'https://api.eneso.es/verbo', 'sistema', true),
-('Proloquo2Go','Comunicación simbólica para iOS basada en lenguaje natural.',false,2,true,true, 'https://www.assistiveware.com/es/productos/proloquo2go', 'sistema', false),
-('TD Snap','Software centrado en símbolos y navegación rápida.',false,1,true,true, 'https://apps.apple.com/es/app/td-snap/id1072799231', 'sistema', false),
-('Communicator 5','Software de comunicación eficiente para texto y símbolos.',false,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/communicator-5', 'sistema', true),
-('Boardmaker 7','Estándar para crear materiales basados en símbolos.',true,2,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/boardmaker-7', 'sistema', false),
-('Look to learn','Software de entrenamiento para el control ocular.',true,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/look-to-learn-1-licencia-electronica', 'sistema', true),
-('LetMeTalk','App de comunicación mediante pictogramas gratuita.',false,2,true,false, 'https://apps.apple.com/us/app/letmetalk-talker-saac-caa-sac/id919990138', 'sistema', false),
-('OptiKey', 'Teclado en pantalla gratuito optimizado para control ocular y Windows.', false, 1, true, true, 'https://www.optikey.org/', 'sistema', true),
-('Predictable', 'App de comunicación alfabética con predicción inteligente y acceso por pulsador.', false, 2, true, true, 'https://apps.apple.com/es/app/predictable/id404445007', 'sistema', false),
-('VirtualTEC', 'Comunicador personalizable para Android con acceso por pulsador.', false, 2, true, true, 'https://play.google.com/store/apps/details?id=com.uvigo.gti.VirtualTEC', 'sistema', false),
-('EVA Facial Mouse', 'Control del dispositivo Android mediante movimientos de la cabeza.', false, 2, true, true, 'https://easeapps.xyz/es/eva/', 'sistema', false),
-('Ease Touch', 'Facilita el uso de pantallas táctiles mediante pulsaciones simples o esperas.', false, 3, true, false, 'https://easeapps.xyz/es/ease-touch/', 'sistema', false),
-('Voice Access', 'App para controlar el móvil mediante la voz',false, 0, true, true, 'https://play.google.com/store/apps/details?id=com.google.android.apps.accessibility.voiceaccess&hl=es', 'sistema',true),
-('Asistente de voz AAC','Conversión de texto a voz.',false,1,true,false, 'https://play.google.com/store/apps/details?id=nl.asoft.speechassistant', 'sistema', false),
-('Speak4Me','App para reproducir frases rápidas guardadas.',false,1,true,false, 'https://apps.apple.com/es/app/speak4me-convertir-texto-a-voz/id894460403', 'sistema', false),
+('Look to Speak','Mirada a través de cámara frontal para frases preestablecidas.',false,1,true,true, 'https://play.google.com/store/apps/details?id=com.androidexperiments.looktospeak', 'sistema'),
+('Tallk','Seguimiento ocular a través de la cámara de la tablet (Samsung).',false,1,true,true, 'https://play.google.com/store/apps/details?id=com.irisbond.tallk', 'sistema'),
+('Grid 3','Software integral para comunicación y control del entorno.',false,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/grid-3', 'sistema'),
+('Verbo','Software de comunicación dinámico con salida de voz.',false,1,true,true, 'https://api.eneso.es/verbo', 'sistema'),
+('Proloquo2Go','Comunicación simbólica para iOS basada en lenguaje natural.',false,2,true,true, 'https://www.assistiveware.com/es/productos/proloquo2go', 'sistema'),
+('TD Snap','Software centrado en símbolos y navegación rápida.',false,1,true,true, 'https://apps.apple.com/es/app/td-snap/id1072799231', 'sistema'),
+('Communicator 5','Software de comunicación eficiente para texto y símbolos.',false,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/communicator-5', 'sistema'),
+('Boardmaker 7','Estándar para crear materiales basados en símbolos.',true,2,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/boardmaker-7', 'sistema'),
+('Look to learn','Software de entrenamiento para el control ocular.',true,1,true,true, 'https://qinera.com/es/tienda/software-para-la-comunicacion/look-to-learn-1-licencia-electronica', 'sistema'),
+('LetMeTalk','App de comunicación mediante pictogramas gratuita.',false,2,true,false, 'https://apps.apple.com/us/app/letmetalk-talker-saac-caa-sac/id919990138', 'sistema'),
+('OptiKey', 'Teclado en pantalla gratuito optimizado para control ocular y Windows.', false, 1, true, true, 'https://www.optikey.org/', 'sistema'),
+('Predictable', 'App de comunicación alfabética con predicción inteligente y acceso por pulsador.', false, 2, true, true, 'https://apps.apple.com/es/app/predictable/id404445007', 'sistema'),
+('VirtualTEC', 'Comunicador personalizable para Android con acceso por pulsador.', false, 2, true, true, 'https://play.google.com/store/apps/details?id=com.uvigo.gti.VirtualTEC', 'sistema'),
+('EVA Facial Mouse', 'Control del dispositivo Android mediante movimientos de la cabeza.', false, 2, true, true, 'https://easeapps.xyz/es/eva/', 'sistema'),
+('Ease Touch', 'Facilita el uso de pantallas táctiles mediante pulsaciones simples o esperas.', false, 3, true, false, 'https://easeapps.xyz/es/ease-touch/', 'sistema'),
+('Voice Access', 'App para controlar el móvil mediante la voz',false, 0, true, true, 'https://play.google.com/store/apps/details?id=com.google.android.apps.accessibility.voiceaccess&hl=es', 'sistema'),
+('Asistente de voz AAC','Conversión de texto a voz.',false,1,true,false, 'https://play.google.com/store/apps/details?id=nl.asoft.speechassistant', 'sistema'),
+('Speak4Me','App para reproducir frases rápidas guardadas.',false,1,true,false, 'https://apps.apple.com/es/app/speak4me-convertir-texto-a-voz/id894460403', 'sistema'),
 
 -- PACKS COMPLETOS
-('ComuniQa (TD Snap)','Pack tablet + seguimiento ocular + TD Snap.',false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-td-snap', 'sistema', false),
-('ComuniQa (Grid 3)','Pack tablet + seguimiento ocular + Grid 3.',false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-grid-3', 'sistema', false),
-('TD Pilot','Comunicador ocular de alta gama integrado para iPad.',false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/TD-Pilot', 'sistema', false),
+('ComuniQa (TD Snap)','Pack tablet + seguimiento ocular + TD Snap.',false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-td-snap', 'sistema'),
+('ComuniQa (Grid 3)','Pack tablet + seguimiento ocular + Grid 3.',false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-grid-3', 'sistema'),
+('TD Pilot','Comunicador ocular de alta gama integrado para iPad.',false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/TD-Pilot', 'sistema'),
 
 -- DOMÓTICA
-('Amazon Alexa / Google Home', 'Asistente virtual para control doméstico.', false, 1, false, false, 'https://www.amazon.es/b?node=15712533031', 'sistema', false),
-('Enchufe Inteligente WiFi', 'Permite encender y apagar lámparas.', false, 0, false, false, NULL, 'hardware', false),
+('Amazon Alexa / Google Home', 'Asistente virtual para control doméstico.', false, 1, false, false, 'https://www.amazon.es/b?node=15712533031', 'sistema'),
+('Enchufe Inteligente WiFi', 'Permite encender y apagar lámparas.', false, 0, false, false, NULL, 'hardware'),
 
 -- HARDWARE
-('iPad', 'Tablet recomendada para iOS.', false, 0, true, true, 'https://www.apple.com/es/ipad/', 'hardware', false),
-('Tablet Android', 'Dispositivo versátil para Android.', false, 0, true, true, NULL, 'hardware', false),
-('Ordenador Portátil', 'Necesario para software avanzado.', false, 0, true, true, NULL, 'hardware', false),
+('iPad', 'Tablet recomendada para iOS.', false, 0, true, true, 'https://www.apple.com/es/ipad/', 'hardware'),
+('Tablet Android', 'Dispositivo versátil para Android.', false, 0, true, true, NULL, 'hardware'),
+('Ordenador Portátil', 'Necesario para software avanzado.', false, 0, true, true, NULL, 'hardware'),
 
 -- PERIFÉRICOS
-('Eye tracker','Lector ocular para control de dispositivos.',false,1,false,true, 'https://www.irisbond.com/', 'hardware', false),
-('Puntero Láser','Señalización directa para tableros físicos.',true,0,true,false, NULL, 'hardware', false),
-('Gafas con Puntero Láser', 'Puntero láser adaptado para control cefálico.',true,1,true,false, 'https://www.elaandalucia.es/gafas-puntero-laser-todas-las-unidades-hospitalarias-ela-andalucia/', 'hardware', false),
-('Soporte de anclaje articulado', 'Brazo mecánico para fijación.',false,0,false,true, 'https://qinera.com/es/tienda/comunicacion-aumentativa/soportes-y-brazos-caa', 'hardware', false),
-('Conmutador por soplido (Pufo)', 'Sensor de soplido.', false, 0, true, true, 'https://qinera.com/es/tienda/acceso-a-dispositivos-y-conmutadores/quha-pufo-con-kit-de-montaje-de-cabeza', 'hardware', false),
-('Conmutador de pedal', 'Pulsador para ser activado con el pie.', false, 1, true, false, 'https://qinera.com/es/tienda/ratones-y-pulsadores/conmutador-de-pedal', 'hardware', false),
-('Conmutador Spec Amarillo', 'Pulsador de fácil activación física.', false, 1, true, true, 'http://qinera.com/es/tienda/conmutadores/conmutador-spec-amarillo', 'hardware', false),
-('BJOY Chin Plus', 'Joystick de barbilla de alta precisión.', false, 1, true, true, 'https://qinera.com/es/tienda/ratones-y-pulsadores/bjoy-chin-plus', 'hardware', false),
-('Guantes antiincrustantes', 'Guante para evitar toques accidentales.', false, 0, true, false,'https://www.amazon.es/HUION-Tableta-Antiincrustante-Personas-Tabletas/dp/B00VTHAS00', 'hardware', false),
-('Lápiz táctil', 'Ergonómico para mayor precisión.', false, 1, true, false, 'https://goo.su/jnGcNM', 'hardware', false),
-('Ratón Bluetooth', 'Ratón inalámbrico ergonómico.', false, 1, true, true, 'https://goo.su/3XvwDat', 'hardware', false),
+('Eye tracker','Lector ocular para control de dispositivos.',false,1,false,true, 'https://www.irisbond.com/', 'hardware'),
+('Puntero Láser','Señalización directa para tableros físicos.',true,0,true,false, NULL, 'hardware'),
+('Gafas con Puntero Láser', 'Puntero láser adaptado para control cefálico.',true,1,true,false, 'https://www.elaandalucia.es/gafas-puntero-laser-todas-las-unidades-hospitalarias-ela-andalucia/', 'hardware'),
+('Soporte de anclaje articulado', 'Brazo mecánico para fijación.',false,0,false,true, 'https://qinera.com/es/tienda/comunicacion-aumentativa/soportes-y-brazos-caa', 'hardware'),
+('Conmutador por soplido (Pufo)', 'Sensor de soplido.', false, 0, true, true, 'https://qinera.com/es/tienda/acceso-a-dispositivos-y-conmutadores/quha-pufo-con-kit-de-montaje-de-cabeza', 'hardware'),
+('Conmutador de pedal', 'Pulsador para ser activado con el pie.', false, 1, true, false, 'https://qinera.com/es/tienda/ratones-y-pulsadores/conmutador-de-pedal', 'hardware'),
+('Conmutador Spec Amarillo', 'Pulsador de fácil activación física.', false, 1, true, true, 'http://qinera.com/es/tienda/conmutadores/conmutador-spec-amarillo', 'hardware'),
+('BJOY Chin Plus', 'Joystick de barbilla de alta precisión.', false, 1, true, true, 'https://qinera.com/es/tienda/ratones-y-pulsadores/bjoy-chin-plus', 'hardware'),
+('Guantes antiincrustantes', 'Guante para evitar toques accidentales.', false, 0, true, false,'https://www.amazon.es/HUION-Tableta-Antiincrustante-Personas-Tabletas/dp/B00VTHAS00', 'hardware'),
+('Lápiz táctil', 'Ergonómico para mayor precisión.', false, 1, true, false, 'https://goo.su/jnGcNM', 'hardware'),
+('Ratón Bluetooth', 'Ratón inalámbrico ergonómico.', false, 1, true, true, 'https://goo.su/3XvwDat', 'hardware'),
 
 -- BANCOS DE VOZ
-('ModelTalker Gen3', 'Síntesis de voz personalizada.', false,2,true,false, 'https://modeltalker.org/', 'servicio', false),
-('MyOwnVoice (Acapela)', 'Voz digital idéntica.',false,1,true,false, 'https://mov.acapela-group.com/es/home-es/', 'servicio', false),
-('VocaliD', 'Hibridación de voz personalizada.',false,1,true,false, 'https://vocalid.ai/', 'servicio', false);
+('ModelTalker Gen3', 'Síntesis de voz personalizada.', false,2,true,false, 'https://modeltalker.org/', 'servicio'),
+('MyOwnVoice (Acapela)', 'Voz digital idéntica.',false,1,true,false, 'https://mov.acapela-group.com/es/home-es/', 'servicio'),
+('VocaliD', 'Hibridación de voz personalizada.',false,1,true,false, 'https://vocalid.ai/', 'servicio');
 
 -- REQUISITOS DE LOS SISTEMAS
 -- 5. TABLA DE REQUISITOS FUNCIONALES
@@ -318,7 +319,7 @@ SELECT id, (SELECT id FROM plataforma WHERE nombre = 'Web') FROM saac_sistema
 WHERE nombre IN ('Look to Speak', 'LetMeTalk', 'OptiKey', 'ModelTalker Gen3', 'MyOwnVoice (Acapela)', 
 	'VocaliD', 'Amazon Alexa / Google Home', 'Boardmaker 7');
 
--- RELACIONES DE MÉTODO
+-- 10.RELACIONES DE MÉTODO
 -- Forma del lenguaje en la que prefieren comunicarse
 INSERT INTO sistema_metodo (sistema_id, metodo_id)
 SELECT id, (SELECT id FROM metodo_comunicacion WHERE nombre = 'alfabeto') FROM saac_sistema 
@@ -338,7 +339,7 @@ WHERE nombre IN ('Panel pictogramas', 'SpeakBook', 'TD Snap', 'LetMeTalk', 'Prol
 	'Ease Touch', 'Conmutador por soplido (Pufo)', 'Conmutador de pedal', 'Conmutador Spec Amarillo', 
 	'BJOY Chin Plus', 'Guantes antiincrustantes', 'Soporte de anclaje articulado' );
 
--- RELACIONES DE ENTORNO
+-- 11. RELACIONES DE ENTORNO
 -- Donde se va a utilizar el sistema, en domicilio todos, en exterior solo algunos
 INSERT INTO sistema_entorno (sistema_id, entorno_id) SELECT id, 1 FROM saac_sistema;
 INSERT INTO sistema_entorno (sistema_id, entorno_id)
@@ -347,7 +348,109 @@ WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero
 	'iPad', 'Tablet Android', 'Look to Speak', 'Tallk', 'Predictable', 'VirtualTEC', 
 	'Asistente de voz AAC', 'Speak4Me', 'Voice Access');
 
--- 10. TABLA HISTORIAL
+-- 12. RELACIONES SAAC-PERIFÉRICOS
+-- Tabla de asignación de periféricos
+CREATE TABLE sistema_dependencia (
+    sistema_id INT REFERENCES saac_sistema(id) ON DELETE CASCADE,
+    hardware_requerido_id INT REFERENCES saac_sistema(id) ON DELETE CASCADE,
+    es_opcional BOOLEAN DEFAULT FALSE, -- Por si el hardware es una mejora pero no vital
+    PRIMARY KEY (sistema_id, hardware_requerido_id));
+
+-- Los softwares de PC requieren un 'Ordenador Portátil'
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Ordenador Portátil')
+FROM saac_sistema WHERE nombre IN ('Grid 3', 'Verbo', 'Communicator 5', 'Look to learn', 
+	'OptiKey', 'Boardmaker 7', 'TD Snap', 'Eye tracker', 'BJOY Chin Plus', 'OptiKey', 'Ratón Bluetooth')
+ON CONFLICT DO NOTHING;
+
+-- Los sistemas iOS requieren iPad
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'iPad')
+FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'Predictable', 'Speak4Me', 'TD Snap', 'Lápiz táctil',
+	'Guantes antiincrustantes','Ratón Bluetooth')
+ON CONFLICT DO NOTHING;
+
+-- Los sistemas Android requieren Tablet Android
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Tablet Android')
+FROM saac_sistema WHERE nombre IN ('Tallk', 'VirtualTEC', 'EVA Facial Mouse', 'Ease Touch', 
+	'Voice Access', 'Asistente de voz AAC', 'Look to Speak', 'LetMeTalk', 'TD Snap', 'Lápiz táctil',
+	'Guantes antiincrustantes','Ratón Bluetooth')
+ON CONFLICT DO NOTHING;
+
+-- Queremos que si sale una App de Tablet, se sugieran los accesorios de precisión.
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Lápiz táctil')
+FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'TD Snap', 'LetMeTalk', 'Asistente de voz AAC', 
+	'Predictable', 'VirtualTEC')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Guantes antiincrustantes')
+FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'TD Snap', 'LetMeTalk', 'VirtualTEC')
+ON CONFLICT DO NOTHING;
+
+-- Software compatible con soplido
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'BJOY Chin Plus')
+FROM saac_sistema WHERE nombre IN ('Grid 3', 'Verbo', 'Communicator 5', 'OptiKey')
+ON CONFLICT DO NOTHING;
+
+-- Software que se beneficia de Ratón Bluetooth (Usuarios con movilidad reducida pero funcional)
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Ratón Bluetooth')
+FROM saac_sistema WHERE nombre IN ('Proloquo2Go', 'TD Snap', 'LetMeTalk', 'Predictable', 
+	'Asistente de voz AAC')
+ON CONFLICT DO NOTHING;
+	
+-- Todo hardware pesado o de alta tecnología requiere anclaje por seguridad y precisión
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Soporte de anclaje articulado')
+FROM saac_sistema WHERE nombre IN 
+('Ordenador Portátil', 'iPad', 'Tablet Android', 'TD Pilot', 'ComuniQa (TD Snap)', 'ComuniQa (Grid 3)',
+	'Tablero ETRAN', 'MegaBEE', 'SpeakBook')
+ON CONFLICT DO NOTHING;
+
+-- Requieren seguimiento ocular (Software -> Periférico)
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Eye tracker')
+FROM saac_sistema WHERE nombre IN ('Grid 3', 'Communicator 5', 'Look to learn', 'OptiKey', 'TD Snap')
+ON CONFLICT DO NOTHING;
+
+-- Pulsadores y métodos de barrido (Software -> Periférico)
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Conmutador de pedal')
+FROM saac_sistema WHERE nombre IN ('Grid 3', 'Verbo', 'Communicator 5', 'Predictable', 'VirtualTEC')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Conmutador Spec Amarillo')
+FROM saac_sistema WHERE nombre IN ('Predictable', 'VirtualTEC', 'QuickTalker 23')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Conmutador por soplido (Pufo)')
+FROM saac_sistema WHERE nombre IN ('Grid 3', 'Verbo', 'Communicator 5', 'VirtualTEC')
+ON CONFLICT DO NOTHING;
+
+-- Baja Tecnología (Sistemas -> Periféricos físicos)
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Puntero Láser')
+FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Panel alfabético')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Gafas con Puntero Láser')
+FROM saac_sistema WHERE nombre IN ('Panel pictogramas', 'Panel alfabético')
+ON CONFLICT DO NOTHING;
+
+-- Domótica
+INSERT INTO sistema_dependencia (sistema_id, hardware_requerido_id)
+SELECT id, (SELECT id FROM saac_sistema WHERE nombre = 'Enchufe Inteligente WiFi')
+FROM saac_sistema WHERE nombre = 'Amazon Alexa / Google Home'
+ON CONFLICT DO NOTHING;
+
+-- 13. TABLA HISTORIAL
 -- Guardado
 CREATE TABLE historial_recomendacion (
     id SERIAL PRIMARY KEY,

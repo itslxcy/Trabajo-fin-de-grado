@@ -32,6 +32,12 @@ sistema_metodo = bd.Table('sistema_metodo',
     bd.Column('sistema_id', bd.Integer, bd.ForeignKey('saac_sistema.id', ondelete='CASCADE'), primary_key=True),
     bd.Column('metodo_id', bd.Integer, bd.ForeignKey('metodo_comunicacion.id', ondelete='CASCADE'), primary_key=True))
 
+#Relaciona sistemas SAAC con sus periféricos
+sistema_dependencia = bd.Table('sistema_dependencia',
+    bd.Column('sistema_id', bd.Integer, bd.ForeignKey('saac_sistema.id')),
+    bd.Column('hardware_requerido_id', bd.Integer, bd.ForeignKey('saac_sistema.id'))
+)
+
 #TABLAS MAESTRAS (valores posibles para las opciones del cuestionario)
 #Métodos de interacción con el dispositivo (ej: pulsador, pantalla táctil, control ocular, voz)
 class TipoEntrada(bd.Model):
@@ -76,7 +82,11 @@ class SaacSistema(bd.Model):
     admite_anclaje = bd.Column(bd.Boolean) #Permite anclarlo a silla de ruedas o similares
     enlace_info = bd.Column(bd.Text) #Link con más info del producto
     categoria = bd.Column(bd.String) #Categoría a la que pertenece (Sistema, hardware periférico o banco de voz)
-    requiere_hardware_extra = bd.Column(bd.Boolean, default=False) #Requiere periférico para funcionar (ej: eye tracker, pulsador)
+    hardware_requerido = bd.relationship('SaacSistema',  #Si el sistema requiere hardware para su uso
+        secondary=sistema_dependencia,
+        primaryjoin=(sistema_dependencia.c.sistema_id == id),
+        secondaryjoin=(sistema_dependencia.c.hardware_requerido_id == id),
+        backref='es_requisito_de')
 
     #RELACIONES
     #Con requisitos funcionales uno a uno
