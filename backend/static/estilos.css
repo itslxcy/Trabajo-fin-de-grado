@@ -407,3 +407,30 @@ small { color: #888; display: block; margin-top: 5px; font-style: normal; font-s
     padding: 20px;
     border: 1px solid #eee;
 }
+
+/* Contenedor de la celda para que los elementos se repartan bien */
+.lista-perifericos {
+    display: flex;
+    flex-wrap: wrap; /* Para que si hay muchos, salten de línea */
+    gap: 8px;       /* Espacio entre cada periférico */
+    padding: 5px 0;
+}
+
+/* Estilo de la etiqueta del periférico */
+.badge-periferico {
+    background-color: #e3f2fd; /* Azul clarito */
+    color: #0d47a1;            /* Azul oscuro para el texto */
+    padding: 4px 10px;
+    border-radius: 15px;       /* Bordes redondeados */
+    font-size: 0.85em;
+    border: 1px solid #bbdefb;
+    white-space: nowrap;       /* Evita que el nombre de un periférico se parta a la mitad */
+    display: inline-block;
+}
+
+/* Estilo para cuando no hay nada */
+.ninguno-texto {
+    color: #999;
+    font-style: italic;
+    font-size: 0.9em;
+}

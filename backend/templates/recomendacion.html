@@ -43,14 +43,13 @@
                         </td>
                         <td>
                             <!-- Visualización mejorada de periféricos con espaciado -->
-                            <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
                                 {% for acc in sistema.accesorios_totales %}
-                                    <span class="badge badge-info" style="display: inline-block; margin-bottom: 2px;">{{ acc.nombre }}</span>
+                                    <span class="badge badge-info" style="display: block; width: fit-content;">{{ acc.nombre }}</span>
                                 {% else %}
                                     <span style="color: #888; font-style: italic;">Ninguno</span>
                                 {% endfor %}
                             </div>
-                        </td>
                         <td>
                             {% if sistema.enlace_info %}
                                 <a href="{{ sistema.enlace_info }}" target="_blank" class="boton-volver" style="padding: 5px 10px; font-size: 0.8em; margin:0;">Ver producto</a>
@@ -95,15 +94,14 @@
                     <td>{{ s.nota_clinica }}</td>
                     <!-- Visualización mejorada de periféricos para preventivos -->
                     <td>
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                            {% for acc in s.accesorios_totales %}
-                                <span class="badge badge-warning" style="display: inline-block; margin-bottom: 2px; color: #856404; border: 1px solid #ffeeba;">{{ acc.nombre }}</span>
-                            {% else %}
-                                <span class="badge badge-warning">Eye tracker</span>
-                            {% endfor %}
-                        </div>
-                    </td>
-                </tr>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        {% for acc in s.accesorios_totales %}
+                            <span class="badge badge-warning" style="display: block; width: fit-content; color: #856404; border: 1px solid #ffeeba;">{{ acc.nombre }}</span>
+                        {% else %}
+                            <span class="badge badge-warning" style="display: block; width: fit-content;">Eye tracker</span>
+                        {% endfor %}
+                    </div>
+                </td>
                 {% endfor %}
             </tbody>
         </table>

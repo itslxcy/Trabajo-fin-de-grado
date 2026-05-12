@@ -117,6 +117,13 @@ def recomendar():
             if es_accesorio_tactil and (id_manos not in ids_entradas):
                 continue
 
+            # FILTRO DE COHERENCIA DE PLATAFORMA PARA HIJOS:
+            # Si el accesorio tiene plataformas asignadas, solo lo incluimos si coincide con la selección del usuario
+            acc_plats_ids = [p.id for p in acc.plataformas]
+            if acc_plats_ids and ids_plataformas:
+                if not any(p_id in acc_plats_ids for p_id in ids_plataformas):
+                    continue
+
             # Lo añadimos a la lista específica de este sistema (para que salga en la tabla)
             if acc not in lista_para_llenar:
                 lista_para_llenar.append(acc)
