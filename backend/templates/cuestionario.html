@@ -1,4 +1,3 @@
-<!-- Página del cuestionario con las preguntas y opciones -->
 <!DOCTYPE html>
 <html lang="es-ES">
 <head>
@@ -11,11 +10,11 @@
 
     <!-- NAVEGACIÓN: Menú de pestañas con la clase 'active' en la que se encuentre en ese momento (en este caso cuestionario)-->
     <nav class="nav-tabs">
-    <a href="/">Inicio</a>
-    <a href="/ELA">Sobre la ELA</a>
-    <a href="/SAAC">¿Qué es un SAAC?</a>
-    <a href="/cuestionario" class="active">Cuestionario</a>
-</nav>
+        <a href="/">Inicio</a>
+        <a href="/ELA">Sobre la ELA</a>
+        <a href="/SAAC">¿Qué es un SAAC?</a>
+        <a href="/cuestionario" class="active">Cuestionario</a>
+    </nav>
 
     <h1>Evaluación del Usuario SAAC</h1>
 
@@ -25,11 +24,12 @@
         <!-- DATOS GENERALES -->
         <div class="seccion">
             <h2>1. Información básica</h2>
+            
             <!-- Filtro para diferenciar pruebas de datos reales -->
-            <div style="background-color: #e8f5e9; padding: 18px; border-radius: 8px; border: 1px solid #c8e6c9; margin-bottom: 25px;">
-                <label style="display: flex; align-items: flex-start; cursor: pointer;">
-                    <input type="checkbox" name="es_real" value="true" style="width: 22px; height: 22px; margin-right: 15px; margin-top: 2px;">
-                    <span style="font-size: 0.95em; color: #2e7d32; line-height: 1.4;">
+            <div class="alerta-validacion">
+                <label class="label-checkbox-personalizado">
+                    <input type="checkbox" name="es_real" value="true" class="input-checkbox-grande">
+                    <span class="texto-validacion">
                         <strong>Validación de datos para investigación:</strong> 
                         Marque esta casilla únicamente si es una persona afectada por ELA o cuidador. 
                         Esto permite que sus respuestas sean incluidas en el análisis estadístico del estudio de investigación 
@@ -72,11 +72,11 @@
 
             <!-- Bucle para generar cada slider con su descripción -->     
             {% for id, titulo, desc, defecto in caps %}
-            <div class="pregunta" style="margin-bottom: 30px;">
+            <div class="pregunta espaciado-pregunta">
                 <label><strong>{{ titulo }}:</strong></label>
-                <div class="slider-wrapper" style="margin-top: 10px;">
+                <div class="slider-wrapper">
                     <div class="slider-container">
-                        <input type="range" name="{{ id }}" min="0" max="3" step="1" value="{{ defecto }}" list="tickmarks" style="width: 100%;">
+                        <input type="range" name="{{ id }}" min="0" max="3" step="1" value="{{ defecto }}" list="tickmarks" class="slider-input-full">
                         <div class="escala-numerica">
                             <span>0</span><span>1</span><span>2</span><span>3</span>
                         </div>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="descripcion-niveles">
                     {% for linea in desc.split('|') %}
-                        <p style="margin: 4px 0; font-size: 0.85em; line-height: 1.3; color: #333;">{{ linea }}</p>
+                        <p>{{ linea }}</p>
                     {% endfor %}
                 </div>
             </div>
@@ -101,9 +101,9 @@
             <div class="pregunta">
                 <!-- Selección múltiple (entradas dinámicas desde BD) -->
                 <label>Formas de interacción posibles (Acceso):</label>
-                <small style="color: #666; margin-bottom: 5px; display: block;">
-                (Seleccione aquella/s formas en las que pueda/prefiera interactuar con el sistema.)
-            </small>
+                <small class="texto-secundario">
+                    (Seleccione aquella/s formas en las que pueda/prefiera interactuar con el sistema.)
+                </small>
                 <div class="opciones-grid">
                     {% for e in entradas %}
                     <label class="opcion-item">
@@ -116,9 +116,9 @@
             <div class="pregunta">
                 <!-- Método de comunicación -->
                 <label>Forma de comunicación preferida:</label>
-                <small style="color: #666; margin-bottom: 5px; display: block;">
-                (Seleccione aquella/s opciones en las que prefiera expresarse.)
-            </small>
+                <small class="texto-secundario">
+                    (Seleccione aquella/s opciones en las que prefiera expresarse.)
+                </small>
                 <div class="opciones-grid">
                     <label class="opcion-item">
                         <input type="checkbox" name="alfabetizacion_ids" value="1"> 
@@ -134,14 +134,14 @@
             <div class="pregunta">
                 <!-- Plataforma -->
                 <label>Plataformas o dispositivos preferidos:</label>
-                <small style="color: #666; margin-bottom: 5px; display: block;">
+                <small class="texto-secundario">
                     (Seleccione aquella/s plataformas de las que ya disponga o que prefiera utilizar.)
                 </small>
 
                 <!-- Guía rápida para el usuario -->
-                <div style="background-color: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 3px solid #ac4caf; margin-bottom: 15px; font-size: 0.85em; color: #555;">
+                <div class="guia-plataformas">
                     <strong>Guía rápida:</strong>
-                    <ul style="margin: 5px 0 0 15px; padding: 0;">
+                    <ul>
                         <li><strong>Windows:</strong> Ordenadores portátiles o de sobremesa. </li>
                         <li><strong>iOS:</strong> Dispositivos Apple (iPad o iPhone).</li>
                         <li><strong>Android:</strong> Tablets y móviles de marcas como Samsung, Xiaomi, etc.</li>
@@ -157,6 +157,7 @@
                     {% endfor %}
                 </div>
             </div>
+        </div>
 
         <!-- ENTORNO -->
         <div class="seccion">
@@ -164,9 +165,10 @@
             <div class="pregunta">
                 <!-- Lugar de uso principal -->
                 <label>¿Dónde se utilizará el sistema habitualmente?</label>
-                <small style="color: #666; margin-bottom: 5px; display: block;">
-                Tenga en cuenta que sistemas de infrarojos como el eye-tracker no funcionan bien con la luz solar. Si está pensando en comunicación fuera de casa pero en interiores (ej: Hospital, tiendas) seleccione la opción de Domicilio.
-                <select name="entorno_principal" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                <small class="texto-secundario">
+                    Tenga en cuenta que sistemas de infrarojos como el eye-tracker no funcionan bien con la luz solar. Si está pensando en comunicación fuera de casa pero en interiores (ej: Hospital, tiendas) seleccione la opción de Domicilio.
+                </small>
+                <select name="entorno_principal" class="select-entorno">
                     <option value="" disabled selected>Seleccione una opción...</option>
                     <option value="domicilio">Domicilio (Entorno estable y luz controlada)</option>
                     <option value="exterior">Exterior frecuente (Requiere pantallas de alto brillo y robustez)</option>
@@ -183,13 +185,14 @@
                 </div>
             </div>
 
-            <div class="pregunta" style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 5px solid #2ecc71;">
-            <p style="margin: 0; color: #2c3e50; font-size: 0.9em;">
-                <!-- Aviso confidencialidad-->
-                <strong> Privacidad garantizada:</strong> 
-                Este estudio es totalmente anónimo. No se recogen nombres, correos ni datos personales. 
-                Al hacer clic en el botón de abajo, se le asignará un código ID aleatorio para procesar sus datos clínicos.
-            </p>
+            <div class="footer-privacidad">
+                <p class="texto-privacidad">
+                    <!-- Aviso confidencialidad-->
+                    <strong> Privacidad garantizada:</strong> 
+                    Este estudio es totalmente anónimo. No se recogen nombres, correos ni datos personales. 
+                    Al hacer clic en el botón de abajo, se le asignará un código ID aleatorio para procesar sus datos clínicos.
+                </p>
+            </div>
         </div>
 
         <button type="submit" class="boton-enviar">
