@@ -61,6 +61,7 @@ CREATE TABLE saac_sistema (
     enlace_info TEXT, -- Enlace con más información del producto (página de los desarrolladores o vendedores)
     categoria TEXT, -- Si es un sistema, un periférico o un servicio de banco de voz
     requiere_hardware_extra BOOLEAN DEFAULT FALSE ); 
+	
 -- 4. CARGA DE SISTEMAS 
 INSERT INTO saac_sistema 
 (nombre, descripcion, requiere_interlocutor, fatiga_fisica, portable, admite_anclaje, enlace_info, categoria, requiere_hardware_extra)
@@ -89,10 +90,9 @@ VALUES
 ('VirtualTEC', 'Comunicador personalizable para Android con acceso por pulsador.', false, 2, true, true, 'https://play.google.com/store/apps/details?id=com.uvigo.gti.VirtualTEC', 'sistema', false),
 ('EVA Facial Mouse', 'Control del dispositivo Android mediante movimientos de la cabeza.', false, 2, true, true, 'https://easeapps.xyz/es/eva/', 'sistema', false),
 ('Ease Touch', 'Facilita el uso de pantallas táctiles mediante pulsaciones simples o esperas.', false, 3, true, false, 'https://easeapps.xyz/es/ease-touch/', 'sistema', false),
-
--- VOZ
-('Asistente de voz AAC','Conversión de voz a texto.',false,1,true,false, 'https://play.google.com/store/apps/details?id=nl.asoft.speechassistant', 'sistema', false),
-('Speak4Me','App para reproducir frases rápidas guardadas.',false,1,true,false, 'https://speak4me.io/', 'sistema', false),
+('Voice Access', 'App para controlar el móvil mediante la voz',false, 0, true, true, 'https://play.google.com/store/apps/details?id=com.google.android.apps.accessibility.voiceaccess&hl=es', 'sistema',true),
+('Asistente de voz AAC','Conversión de texto a voz.',false,1,true,false, 'https://play.google.com/store/apps/details?id=nl.asoft.speechassistant', 'sistema', false),
+('Speak4Me','App para reproducir frases rápidas guardadas.',false,1,true,false, 'https://apps.apple.com/es/app/speak4me-convertir-texto-a-voz/id894460403', 'sistema', false),
 
 -- PACKS COMPLETOS
 ('ComuniQa (TD Snap)','Pack tablet + seguimiento ocular + TD Snap.',false,1,true,true, 'https://qinera.com/es/tienda/comunicadores-de-mirada/comuniqa-eye-con-td-snap', 'sistema', false),
@@ -162,9 +162,8 @@ VALUES
 ((SELECT id FROM saac_sistema WHERE nombre = 'VirtualTEC'), 1, 1, 2, 0),
 ((SELECT id FROM saac_sistema WHERE nombre = 'EVA Facial Mouse'), 2, 2, 2, 0),
 ((SELECT id FROM saac_sistema WHERE nombre = 'Ease Touch'), 1, 1, 2, 0),
-
--- VOZ
-((SELECT id FROM saac_sistema WHERE nombre = 'Asistente de voz AAC'), 2, 1, 2, 3),
+((SELECT id FROM saac_sistema WHERE nombre = 'Voice Access'), 2, 1, 2, 3),
+((SELECT id FROM saac_sistema WHERE nombre = 'Asistente de voz AAC'), 2, 1, 1, 0),
 ((SELECT id FROM saac_sistema WHERE nombre = 'Speak4Me'), 2, 1, 2, 0),
 
 -- PACKS COMPLETOS
@@ -212,7 +211,7 @@ CREATE TABLE sistema_metodo ( sistema_id INT REFERENCES saac_sistema(id) ON DELE
 -- Entrada manual o táctil
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, (SELECT id FROM tipo_entrada WHERE nombre = 'manos') FROM saac_sistema 
-WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero Láser', 'Proloquo2Go', 
+WHERE nombre IN ('Asistente de voz AAC','Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Puntero Láser', 'Proloquo2Go', 
 	'Grid 3', 'Verbo', 'Boardmaker 7', 'QuickTalker 23', 'LetMeTalk', 'TD Snap', 'Guantes antiincrustantes',
 	'Lápiz táctil', 'Ratón Bluetooth', 'Predictable', 'VirtualTEC', 'Ease Touch', 'iPad', 'Tablet Android', 
 	'Ordenador Portátil', 'Enchufe Inteligente WiFi', 'Soporte de anclaje articulado', 'Speak4Me');
@@ -239,8 +238,8 @@ WHERE nombre IN ('Grid 3', 'Verbo', 'TD Snap', 'Predictable', 'VirtualTEC', 'Com
 -- Entrada oral
 INSERT INTO sistema_entrada (sistema_id, entrada_id)
 SELECT id, (SELECT id FROM tipo_entrada WHERE nombre = 'voz') FROM saac_sistema 
-WHERE nombre IN ('Asistente de voz AAC', 'Amazon Alexa / Google Home', 'ModelTalker Gen3', 
-	'MyOwnVoice (Acapela)', 'VocaliD');
+WHERE nombre IN ( 'Amazon Alexa / Google Home', 'ModelTalker Gen3', 
+	'MyOwnVoice (Acapela)', 'VocaliD', 'Voice Access');
 
 -- 8. RELACIONES DE IDIOMA
 -- Se definen los idiomas en los que están cada sistema
@@ -304,7 +303,7 @@ INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
 SELECT id, (SELECT id FROM plataforma WHERE nombre = 'Android') FROM saac_sistema 
 WHERE nombre IN ('Look to Speak', 'Tallk', 'LetMeTalk', 'Guantes antiincrustantes', 'Lápiz táctil', 
 	'VirtualTEC', 'EVA Facial Mouse', 'Ease Touch', 'Tablet Android', 'Enchufe Inteligente WiFi', 
-	'Ratón Bluetooth', 'Conmutador por soplido (Pufo)', 'Asistente de voz AAC');
+	'Ratón Bluetooth', 'Conmutador por soplido (Pufo)', 'Asistente de voz AAC', 'Voice Access');
 
 -- iOs (iPhones o iPads)
 INSERT INTO sistema_plataforma (sistema_id, plataforma_id)
@@ -329,7 +328,7 @@ WHERE nombre IN ('Panel alfabético', 'Predictable', 'OptiKey', 'Communicator 5'
 	'Amazon Alexa / Google Home', 'Enchufe Inteligente Wifi', 'iPad', 'Tablet Android', 'Ordenador Portátil',
 	'ModelTalker Gen3', 'MyOwnVoice (Acapela)', 'VocaliD', 'EVA Facial Mouse', 'Ease Touch', 
     'Conmutador por soplido (Pufo)', 'Conmutador de pedal', 'Conmutador Spec Amarillo', 'BJOY Chin Plus', 
-    'Guantes antiincrustantes', 'Soporte de anclaje articulado');
+    'Guantes antiincrustantes', 'Soporte de anclaje articulado', 'Voice Access');
 
 INSERT INTO sistema_metodo (sistema_id, metodo_id)
 SELECT id, (SELECT id FROM metodo_comunicacion WHERE nombre = 'pictogramas') FROM saac_sistema 
@@ -346,7 +345,7 @@ INSERT INTO sistema_entorno (sistema_id, entorno_id)
 SELECT id, 2 FROM saac_sistema 
 WHERE nombre IN ('Panel pictogramas', 'Panel alfabético', 'SpeakBook', 'Tablero ETRAN', 'QuickTalker 23', 
 	'iPad', 'Tablet Android', 'Look to Speak', 'Tallk', 'Predictable', 'VirtualTEC', 
-	'Asistente de voz AAC', 'Speak4Me');
+	'Asistente de voz AAC', 'Speak4Me', 'Voice Access');
 
 -- 10. TABLA HISTORIAL
 -- Guardado
