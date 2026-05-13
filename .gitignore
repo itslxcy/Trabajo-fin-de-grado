@@ -1,3 +1,22 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+venv/
+tfg/
+
+# Variables de entorno
+.env
+
+# Archivos de sistema y editores
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# LaTeX 
 *.aux
 *.log
 *.lof
@@ -7,9 +26,3 @@
 *.synctex.gz
 *.fls
 *.fdb_latexmk
-
-#Entorno virtual
-tfg/
-__pycache__/
-*.pyc
-.env
