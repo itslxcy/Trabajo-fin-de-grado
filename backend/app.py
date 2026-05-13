@@ -8,20 +8,33 @@ from extension import bd
 from dotenv import load_dotenv
 from sqlalchemy import or_
 
-#Carga las variables de entorno desde el archivo .env (credenciales de BD)
+import os
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+
 load_dotenv()
 
 app = Flask(__name__)
 
-#CONFIGURACIÓN DE BASE DE DATOS
-#Recupera la configuración de conexión desde las variables de entorno para evitar filtrar contraseña
-usuario = os.getenv('DB_USER')
-contrasena = os.getenv('DB_PASSWORD')
-host = os.getenv('DB_HOST')
-puerto = os.getenv('DB_PORT')
-base = os.getenv('DB_NAME')
+# CONFIGURACIÓN DE BASE DE DATOS 
+# Primero intenta obtener la URL completa (la que te da Render)
+# Si no existe, construye la URL con las variables locales del .env
+url_nube = os.getenv('DATABASE_URL')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{usuario}:{contrasena}@{host}:{puerto}/{base}'
+if url_nube:
+    # Render a veces da la URL como 'postgres://', pero SQLAlchemy necesita 'postgresql://'
+    if url_nube.startswith("postgres://"):
+        url_nube = url_nube.replace("postgres://", "postgresql://", 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = url_nube
+else:
+    usuario = os.getenv('DB_USER')
+    contrasena = os.getenv('DB_PASSWORD')
+    host = os.getenv('DB_HOST')
+    puerto = os.getenv('DB_PORT')
+    base = os.getenv('DB_NAME')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{usuario}:{contrasena}@{host}:{puerto}/{base}'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bd.init_app(app)
 
