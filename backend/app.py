@@ -38,6 +38,13 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bd.init_app(app)
 
+with app.app_context():
+    try:
+        bd.create_all()
+        print("Tablas creadas exitosamente.")
+    except Exception as e:
+        print(f"Error al crear las tablas: {e}")
+
 #Función que crea un id único aleatorio a cada usuario para conseguir inonimización
 def generar_id_anonimo():
     caracteres = string.ascii_uppercase + string.digits
