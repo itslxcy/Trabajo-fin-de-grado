@@ -1,42 +1,30 @@
--- 1. CONFIGURACIÓN INICIAL
+-- 1. CONFIGURACIÓN
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
 
--- 2. LIMPIEZA (Opcional: borra datos previos si los hubiera para evitar duplicados)
--- TRUNCATE public.sistema_metodo, public.sistema_plataforma, public.sistema_idioma, public.sistema_entrada, public.sistema_entorno, public.sistema_dependencia, public.sistema_requisito_funcional CASCADE;
-
--- 3. INSERCIÓN DE DATOS MAESTROS
--- Idiomas
+-- 2. DATOS MAESTROS (Idiomas, Plataformas, Entornos, Entradas, Métodos)
 INSERT INTO public.idioma (id, nombre) VALUES 
 (1, 'español'), (2, 'gallego'), (3, 'catalán'), (4, 'euskera')
 ON CONFLICT (id) DO NOTHING;
 
--- Plataformas
 INSERT INTO public.plataforma (id, nombre) VALUES 
 (1, 'Windows'), (2, 'iOS'), (3, 'Android'), (4, 'Panel físico/Papel'), (5, 'Web')
 ON CONFLICT (id) DO NOTHING;
 
--- Entornos
 INSERT INTO public.entorno_uso (id, nombre) VALUES 
 (1, 'domicilio'), (2, 'exterior')
 ON CONFLICT (id) DO NOTHING;
 
--- Tipos de Entrada (Métodos de interacción)
 INSERT INTO public.tipo_entrada (id, nombre) VALUES 
 (1, 'manos'), (2, 'ojos'), (3, 'cabeza'), (4, 'voz'), (5, 'pulsador')
 ON CONFLICT (id) DO NOTHING;
 
--- Métodos de Comunicación (Pictos/Alfabeto)
 INSERT INTO public.metodo_comunicacion (id, nombre) VALUES 
 (1, 'alfabeto'), (2, 'pictogramas')
 ON CONFLICT (id) DO NOTHING;
 
--- 4. INSERCIÓN DE SISTEMAS Y HARDWARE (Tabla saac_sistema) - SIN requiere_hardware_extra NI coste_min
+-- 3. SISTEMAS Y HARDWARE (saac_sistema)
 INSERT INTO public.saac_sistema (id, nombre, descripcion, requiere_interlocutor, fatiga_fisica, portable, admite_anclaje, enlace_info, categoria) VALUES
 (1, 'Panel pictogramas', 'Tablero físico que utiliza símbolos pictográficos (ARASAAC).', true, 0, true, true, 'https://arasaac.org/', 'sistema'),
 (2, 'Panel alfabético', 'Tablero de comunicación directa mediante el deletreo.', true, 0, true, true, 'https://downloads.tobiidynavox.com/Conditions/ALS/Communication_Board/TD_CommunicationBoard_ALS_es-ES.pdf', 'sistema'),
@@ -84,9 +72,9 @@ INSERT INTO public.saac_sistema (id, nombre, descripcion, requiere_interlocutor,
 (44, 'ModelTalker Gen3', 'Síntesis de voz personalizada.', false, 2, true, false, 'https://modeltalker.org/', 'servicio'),
 (45, 'MyOwnVoice (Acapela)', 'Voz digital idéntica.', false, 1, true, false, 'https://mov.acapela-group.com/es/home-es/', 'servicio'),
 (46, 'VocaliD', 'Hibridación de voz personalizada.', false, 1, true, false, 'https://vocalid.ai/', 'servicio')
-ON CONFLICT (id) DO UPDATE SET nombre = EXCLUDED.nombre; 
+ON CONFLICT (id) DO UPDATE SET nombre = EXCLUDED.nombre;
 
--- 5. REQUISITOS FUNCIONALES
+-- 4. REQUISITOS FUNCIONALES
 INSERT INTO public.sistema_requisito_funcional (sistema_id, nivel_visual_min, nivel_auditivo_min, nivel_tecnologico_min, nivel_habla_min) VALUES
 (1,2,0,0,0),(2,2,0,0,0),(3,2,0,0,0),(4,2,0,0,0),(5,1,1,2,0),(6,2,0,1,0),
 (7,2,1,1,0),(8,2,1,1,0),(9,2,2,2,0),(10,2,2,2,0),(11,2,1,2,0),(12,2,2,2,0),
@@ -98,16 +86,19 @@ INSERT INTO public.sistema_requisito_funcional (sistema_id, nivel_visual_min, ni
 (43,1,1,1,0),(44,0,1,2,3),(45,0,1,2,3),(46,0,1,2,3)
 ON CONFLICT (sistema_id) DO NOTHING;
 
--- 6. RELACIONES (PLATAFORMAS, IDIOMAS, MÉTODOS)
--- Solo un ejemplo para no saturar, pero el formato es este:
-INSERT INTO public.sistema_plataforma (sistema_id, plataforma_id) VALUES 
-(1,4),(2,4),(3,4),(4,4),(5,4),(9,1),(10,1),(11,2),(12,2),(16,3),(19,3),(22,3)
+-- 5. RELACIONES HARDWARE (sistema_dependencia)
+INSERT INTO public.sistema_dependencia (sistema_id, hardware_requerido_id) VALUES
+(9, 32), (9, 33), (13, 32), (13, 33), (12, 30), (12, 31), (11, 30), (7, 31),
+(1, 34), (2, 34), (3, 36), (4, 36), (27, 36)
 ON CONFLICT DO NOTHING;
 
-INSERT INTO public.sistema_idioma (sistema_id, idioma_id) VALUES 
-(1,1),(2,1),(3,1),(4,1),(5,1),(1,2),(1,3),(1,4)
+-- 6. RELACIONES ENTRADA (sistema_entrada)
+INSERT INTO public.sistema_entrada (sistema_id, entrada_id) VALUES
+(1,1),(2,1),(3,2),(4,2),(5,1),(9,1),(9,2),(33,2),(34,3),(35,3),(37,5),(39,5)
 ON CONFLICT DO NOTHING;
 
--- REAJUSTE DE SECUENCIAS
+-- 7. REAJUSTE DE SECUENCIAS Y COMMIT FINAL
 SELECT setval('public.idioma_id_seq', (SELECT max(id) FROM public.idioma));
 SELECT setval('public.saac_sistema_id_seq', (SELECT max(id) FROM public.saac_sistema));
+
+COMMIT;
