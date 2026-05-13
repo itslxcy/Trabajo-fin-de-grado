@@ -3,8 +3,8 @@ import string
 import random
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma, HistorialRecomendacion, EntornoUso, MetodoComunicacion
-from extension import bd
+from backend.modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma, HistorialRecomendacion, EntornoUso, MetodoComunicacion
+from backend.extension import bd
 from dotenv import load_dotenv
 from sqlalchemy import or_
 
