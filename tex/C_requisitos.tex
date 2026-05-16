@@ -16,7 +16,7 @@ A continuación, se detallan los requisitos funcionales del sistema.
 
 \subsection{Retroalimentación y evaluación (Asociados a CU-2)}
 \begin{description}
-    \item[\textbf{RF-04: Captura de feedback del usuario.}] El sistema deberá ofrecer un formulario en la pantalla de resultados para que el paciente o cuidador evalúe la propuesta. Los campos incluirán el nivel de satisfacción, el uso actual de SAAC, los motivos de cambio y comentarios cualitativos.   
+    \item[\textbf{RF-04: Captura de feedback del usuario.}] El sistema deberá ofrecer un formulario en la pantalla de resultados para que el paciente o cuidador evalúe la propuesta. Los campos incluirán el nivel de satisfacción, el uso actual de SAAC, los motivos de cambio y comentarios cualitativos.
     \item[\textbf{RF-05: Vinculación con historial mediante ORM.}] El sistema deberá recuperar de forma segura el identificador oculto del historial (\texttt{historial\_id}) de la sesión actual, buscar el registro correspondiente en la tabla \texttt{HistorialRecomendacion} por su clave primaria y guardar las respuestas indexadas en un diccionario JSON estructurado en el campo \texttt{feedback}.
 \end{description}
 
@@ -30,8 +30,8 @@ A continuación, se detallan los requisitos funcionales del sistema.
 Los requisitos no funcionales garantizan las restricciones técnicas, el rendimiento y la viabilidad del sistema.
 
 \begin{description}
-    \item[\textbf{RNF-01: Seguridad y privacidad (RGPD).}] No se almacenará ningún Dato de Carácter Personal (DPI) que permita la reidentificación directa del paciente (como nombres, correos o IPs). Los registros de investigación se tratarán bajo una política de anonimización en la base de datos relacional.  
-    \item[\textbf{RNF-02: Robustez y tolerancia a fallos.}] 
+    \item[\textbf{RNF-01: Seguridad y privacidad (RGPD).}] No se almacenará ningún Dato de Carácter Personal (DPI) que permita la reidentificación directa del paciente (como nombres, correos o IPs). Los registros de investigación se tratarán bajo una política de anonimización en la base de datos relacional.
+    \item[\textbf{RNF-02: Robustez y tolerancia a fallos.}] \leavevmode
     \begin{itemize}
         \item Si un usuario no acepta el consentimiento obligatorio, el sistema detendrá el procesamiento del cuestionario de forma segura sin romper la navegación, solicitando de nuevo la aceptación.
         \item Si una petición de feedback carece de un \texttt{historial\_id} válido o este no existe en el sistema, la aplicación abortará el proceso de guardado y redirigirá al usuario a una pantalla genérica de agradecimiento sin mostrar errores de servidor (500).
@@ -40,137 +40,175 @@ Los requisitos no funcionales garantizan las restricciones técnicas, el rendimi
 \end{description}
 
 \section{Diagrama de casos de uso}
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.85\linewidth]{../img/diagrama_casos_uso.png}
-    \caption{Diagrama de Casos de Uso del sistema.}
-    \label{fig:casos_uso}
-\end{figure}
+
+\imagen{../img/diagrama_casos_uso.png}{Diagrama de Casos de Uso del sistema.}
 
 \section{Explicación casos de uso.}
 
-\begin{table}[ht]
+\begin{table}[!h]
 	\centering
-	\begin{tabular}
+	\begin{tabular}{ l p{10cm} }
 		\toprule
 		\textbf{CU-1} & \textbf{Generar recomendación personalizada de SAAC}\\
-		\toprule
-		\textbf{Versión}  & 1.0    \\
-		\textbf{Autor} & [Lucía Gil Aire] \\
-		\textbf{Requisitos asociados} & RF-01 (Captura de perfil), RF-02 (Filtrado clínico), RF-03 (Cumplimiento RGPD) \\
+		\midrule
+		\addlinespace
+		\textbf{Versión}  & 1.0 \\
+		\addlinespace
+		\textbf{Autor} & Lucía Gil Aire \\
+		\addlinespace
+		\textbf{Requisitos asociados} & RF-01, RF-02, RF-03 \\
+		\addlinespace
 		\textbf{Descripción}  & El sistema procesa las capacidades funcionales, entorno y preferencias del usuario para devolver una propuesta de sistemas y periféricos, gestionando de forma segura su consentimiento legal. \\
+		\addlinespace
 		\textbf{Precondición} & El usuario debe haber completado los campos obligatorios del formulario y marcado la casilla de aceptación de procesamiento de datos en tiempo real. \\
-		\textbf{Acciones}   &
-		\begin{enumerate}
-			\item El usuario rellena los campos delcuestionario (idioma, capacidades, métodos de entrada, alfabetización, plataformas y entorno de uso).
-			\item El usuario envía el formulario mediante una petición POST a la ruta \texttt{/recomendar}.
-			\item El sistema valida el consentimiento RGPD obligatorio.
-			\item El algoritmo aplica el filtrado clínico en la base de datos comparando las capacidades del usuario con los requisitos mínimos del sistema SAAC.
-			\item El sistema ejecuta la función recursiva para asociar periféricos y hardware necesario eliminando duplicados.
-			\item Si el usuario autorizó el uso para investigación, el sistema almacena el perfil clínico en formato JSON de forma anónima en la tabla de historial, identificando si se trata de un caso real o de prueba.
-			\item El sistema renderiza la plantilla de resultados dividiendo los sistemas finales, preventivos y bancos de voz.
-		\end{enumerate}\\
+		\addlinespace
+		\textbf{Acciones} & El usuario rellena los campos del cuestionario (idioma, capacidades, métodos de entrada, etc.). \\
+		&  El usuario envía el formulario mediante una petición POST a la ruta \texttt{/recomendar}. \\
+		&  El sistema valida el consentimiento RGPD obligatorio. \\
+		& El algoritmo aplica el filtrado clínico en la base de datos comparando las capacidades. \\
+		&  El sistema ejecuta la función recursiva para asociar periféricos y hardware necesario. \\
+		&  Si hay autorización, el sistema almacena el perfil clínico en formato JSON de forma anónima. \\
+		&  El sistema renderiza la plantilla de resultados dividiendo los sistemas recomendados. \\
+		\addlinespace
 		\textbf{Postcondición}  & Se muestra la pantalla de resultados y, si hubo consentimiento, se genera un registro en la base de datos con un ID anónimo único. \\
+		\addlinespace
 		\textbf{Excepciones}  & El usuario no marca la casilla de procesamiento obligatorio: el sistema no procesa el cuestionario y solicita la aceptación del término. \\
+		\addlinespace
 		\textbf{Importancia}   & Crítica. \\
+		\addlinespace
 		\bottomrule
 	\end{tabular}
 	\caption{CU-1 Generar recomendación personalizada de SAAC.}
 \end{table}
+\FloatBarrier
 
-\begin{table}[ht]
+\begin{table}[!h]
 	\centering
-	\begin{tabular}
+	\begin{tabular}{ l p{10cm} }
 		\toprule
 		\textbf{CU-2} & \textbf{Enviar retroalimentación (Feedback) sobre la recomendación}\\
-		\toprule
-		\textbf{Versión}  & 1.0    \\
-		\textbf{Autor}   & [Lucía Gil Aire] \\
-		\textbf{Requisitos asociados} & RF-04 (Captura de feedback), RF-05 (Vinculación con historial) \\
+		\midrule
+		\addlinespace
+		\textbf{Versión}  & 1.0 \\
+		\addlinespace
+		\textbf{Autor} & Lucía Gil Aire \\
+		\addlinespace
+		\textbf{Requisitos asociados} & RF-04, RF-05 \\
+		\addlinespace
 		\textbf{Descripción}  & El usuario (paciente o cuidador) evalúa la propuesta generada por el sistema y envía un formulario de opinión que se asocia directamente a su registro previo en la base de datos. \\
+		\addlinespace
 		\textbf{Precondición}   & El usuario debe haber generado una recomendación previamente, contar con un ID de historial (\texttt{historial\_id}) activo en la sesión y encontrarse en la página de resultados. \\
-		\textbf{Acciones}  &
-		\begin{enumerate}
-			\item El usuario rellena los campos del formulario de feedback (satisfacción, uso actual, motivos de cambio y comentarios).
-			\item El usuario envía el formulario mediante una petición POST a la ruta \texttt{/guardar-feedback}.
-			\item El sistema recupera el identificador del historial enviado de forma oculta en el formulario.
-			\item El sistema busca el registro correspondiente en la tabla \texttt{HistorialRecomendacion} utilizando el método de obtención por clave primaria.
-			\item Si el registro existe, el sistema mapea las respuestas en un diccionario estructurado y lo asigna al campo \texttt{feedback}.
-			\item El sistema notifica explícitamente el cambio al ORM mediante la instrucción \texttt{flag\_modified} para asegurar la persistencia del objeto JSON.
-			\item El sistema realiza el \texttt{db.session.commit()} y renderiza la plantilla de agradecimiento.
-		\end{enumerate}\\
+		\addlinespace
+		\textbf{Acciones} & El usuario rellena los campos del formulario de feedback. \\
+		& El usuario envía el formulario mediante una petición POST a la ruta \texttt{/guardar-feedback}. \\
+		& El sistema recupera el identificador del historial enviado de forma oculta en el formulario. \\
+		&  El sistema busca el registro correspondiente en la tabla \texttt{HistorialRecomendacion} por clave primaria. \\
+		&  Si el registro existe, el sistema mapea las respuestas en un diccionario estructurado. \\
+		&  El sistema notifica el cambio al ORM mediante la instrucción \texttt{flag\_modified}. \\
+		&  El sistema realiza el \texttt{db.session.commit()} y renderiza la plantilla de agradecimiento. \\
+		\addlinespace
 		\textbf{Postcondición} & El campo de feedback del registro del historial se actualiza en la base de datos y se muestra la pantalla \texttt{gracias\_feedback.html}. \\
-		\textbf{Excepciones} & El identificador del historial no se encuentra en la base de datos o la petición no incluye el ID: el sistema aborta el guardado y muestra la pantalla de agradecimiento estándar de forma segura. \\
+		\addlinespace
+		\textbf{Excepciones} & El identificador del historial no se encuentra o la petición no incluye el ID: el sistema aborta el guardado de forma segura. \\
+		\addlinespace
 		\textbf{Importancia} & Media-Alta (Crítica para el análisis de resultados del TFG). \\
+		\addlinespace
 		\bottomrule
 	\end{tabular}
 	\caption{CU-2 Enviar retroalimentación (Feedback) sobre la recomendación.}
 \end{table}
+\FloatBarrier
 
-\begin{table}[ht]
+\begin{table}[!h]
 	\centering
-	\begin{tabular}
+	\begin{tabular}{ l p{10cm} }
 		\toprule
 		\textbf{CU-3} & \textbf{Consultar historial y feedback de recomendaciones}\\
-		\toprule
-		\textbf{Versión}   & 1.0    \\
-		\textbf{Autor}  & [Lucía Gil Aire] \\
-		\textbf{Requisitos asociados} & RF-06 (Visualización de registros), RF-07 (Auditoría e investigación) \\
+		\midrule
+		\addlinespace
+		\textbf{Versión}   & 1.0 \\
+		\addlinespace
+		\textbf{Autor}  & Lucía Gil Aire \\
+		\addlinespace
+		\textbf{Requisitos asociados} & RF-06, RF-07 \\
+		\addlinespace
 		\textbf{Descripción} & El investigador del proyecto accede a un panel donde se listan de forma cronológica todas las evaluaciones guardadas, diferenciando los casos de uso clínico real de las pruebas. \\
+		\addlinespace
 		\textbf{Precondición}  & Deben existir registros almacenados en la tabla de historial con el consentimiento de investigación otorgado por los usuarios. \\
-		\textbf{Acciones}  &
-		\begin{enumerate}
-			\item El investigador solicita la ruta de administración mediante una petición GET a \texttt{/admin\_historial}.
-			\item El sistema realiza una consulta a la base de datos sobre el modelo \texttt{HistorialRecomendacion}.
-			\item El sistema ordena los registros de forma descendente utilizando el ID del historial para priorizar los casos más recientes.
-			\item El sistema inyecta la lista completa de objetos en la plantilla \texttt{admin\_historial.html}.
-			\item El motor de plantillas (Jinja2) procesa de forma iterativa cada registro en la tabla HTML.
-			\item Para cada elemento, el sistema evalúa la variable booleana \texttt{es\_real}. Si es afirmativa, renderiza la etiqueta visual «PACIENTE REAL»; en caso contrario, renderiza «PRUEBA / OTROS».
-		\end{enumerate}\\
-		\textbf{Postcondición} & El investigador visualiza la tabla completa con el identificador anónimo del paciente, fecha, hora, parámetros clínicos, sistemas recomendados y los bloques de feedback si estuvieran rellenados. \\
+		\addlinespace
+		\textbf{Acciones} &  El investigador solicita la ruta de administración mediante una petición GET a \texttt{/admin\_historial}. \\
+		&  El sistema realiza una consulta a la base de datos sobre el modelo \texttt{HistorialRecomendacion}. \\
+		&  El sistema ordena los registros de forma descendente utilizando el ID del historial. \\
+		&  El sistema inyecta la lista completa de objetos en la plantilla \texttt{admin\_historial.html}. \\
+		&  El motor de plantillas (Jinja2) procesa de forma iterativa cada registro en la tabla HTML. \\
+		&  Para cada elemento, el sistema evalúa la variable booleana \texttt{es\_real} para renderizar la etiqueta correspondiente. \\
+		\addlinespace
+		\textbf{Postcondición} & El investigador visualiza la tabla completa con el identificador anónimo del paciente, parámetros clínicos y bloques de feedback. \\
+		\addlinespace
 		\textbf{Excepciones}  & La base de datos está vacía: el sistema renderiza la tabla vacía sin romper la interfaz de usuario. \\
+		\addlinespace
 		\textbf{Importancia}  & Alta (Esencial para la consulta de datos de la investigación). \\
+		\addlinespace
 		\bottomrule
 	\end{tabular}
 	\caption{CU-3 Consultar panel de administración del historial.}
 \end{table}
+\FloatBarrier
 
 \section{Prototipos de interfaz o interacción con el proyecto.}
+A continuación se muestran capturas de pantalla de la interfaz del proyecto con su correspondiente especificación.
 
-\section{Interacción del usuario con el cuestionario}
-\begin{figure}[htbp]
-    \centering
-    \includegraphics{../img/respuesta_cuestionario_1.png}
-    \caption{Respuesta del cuestionario parte I.}
-    \label{fig:respuesta_cuestionario_1}
-\end{figure}
+\subsection{Página de inicio}
+La primera página que se vería al entrar al cuestionario. Contiene información como la naturaleza de la página, su propósito, los criterios utilizados para crearla y en colaboración a quien se ha realizado.
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics{../img/respuesta_cuestionario_2.png}
-    \caption{Respuesta del cuestionario parte II.}
-    \label{fig:respuesta_cuestionario_2}
-\end{figure}
+\imagen{../img/inicio.png}{Página de inicio parte I.}
+\imagen{../img/inicio_2.png}{Página de inicio parte II.}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics{../img/respuesta_cuestionario_3.png}
-    \caption{Respuesta del cuestionario parte III.}
-    \label{fig:respuesta_cuestionario_3}
-\end{figure}
+\subsection{Página de información sobre ELA}
+Segunda página que se ve en el orden de navegación de las pestañas. Contiene información sobre qué es la ELA, sus tipos según el origen, sus fases y un apunte sobre la preservación cognitiva.
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics{../img/respuesta_cuestionario_4.png}
-    \caption{Respuesta del cuestionario parte IV.}
-    \label{fig:respuesta_cuestionario_4}
-\end{figure}
+\imagen{../img/ELA_1.png}{Página de ELA parte I.}
+\imagen{../img/ELA_II.png}{Página de ELA parte II.}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics{../img/respuesta_cuestionario_5.png}
-    \caption{Respuesta del cuestionario parte V.}
-    \label{fig:respuesta_cuestionario_5}
-\end{figure}
+\subsection{Página de información sobre SAAC}
+Tercera página presentada. Explica que son los SAAC, sus tipos, la clasificación según tecnología, la importancia de escoger sistemas escalables e información sobre la financiación.
 
+\imagen{../img/SAAC_I.png}{Página de SAAC parte I.}
+\imagen{../img/SAAC_2.png}{Página de SAAC parte II.}
+\imagen{../img/SAAC_3.png}{Página de SAAC parte III.}
 
+\subsection{Página de información sobre legalidad}
+En esta pestaña se explican la finalidad del tratamiento de datos, las bases jurídicas, la política de conservación de datos, los destinatarios de la información y los derechos de usuario.
+
+\imagen{../img/legal_1.png}{Base legal del cuestionario parte I.}
+\imagen{../img/legal_2.png}{Base legal del cuestionario parte II.}
+
+\subsection{Interacción del usuario con el cuestionario}
+La interacción en esta sección describe el comportamiento dinámico del usuario con los controles del formulario. El usuario interactúa seleccionando sus parámetros clínicos a través de menús desplegables y botones de opción (\textit{radio buttons}). Asimismo, se incluye la casilla interactiva de verificación legal obligatoria (RGPD). El flujo concluye operando directamente sobre el \textbf{botón de acción principal («Obtener recomendación»)}, lo que desencadena una petición POST HTTP hacia el servidor para procesar los datos de entrada recopilados.
+
+\imagen{../img/respuesta_cuestionario_1.png}{Respuesta del cuestionario parte I.}
+\imagen{../img/respuesta_cuestionario_2.png}{Respuesta del cuestionario parte II.}
+\imagen{../img/respuesta_cuestionario_3.png}{Respuesta del cuestionario parte III.}
+\imagen{../img/respuesta_cuestionario_4.png}{Respuesta del cuestionario parte IV.}
+\imagen{../img/respuesta_cuestionario_5.png}{Respuesta del cuestionario parte V.}
+
+\subsection{Obtención de recomendación}
+Tras procesar el formulario, la interfaz reacciona renderizando dinámicamente la propuesta adaptada. El usuario interactúa visualmente con una estructura segmentada en tres bloques independientes: sistemas finales recomendados, alternativas o complementos de uso preventivo y bancos de voz.
+
+Cada producto o SAAC sugerido cuenta con un \textbf{botón interactivo externo («Ver producto»)}. Al hacer clic sobre él, el sistema abre una nueva pestaña en el navegador para enlazar directamente con la página oficial del distribuidor o fabricante, permitiendo consultar detalles comerciales o proceder a su adquisición sin perder el informe clínico generado.
+
+\imagen{../img/obtencion_recomendacion_1.png}{Recomendación propuesta parte 1.}
+\imagen{../img/obtencion_recomendacion_2.png}{Recomendación propuesta parte 2.}
+\imagen{../img/uso_preventivo.png}{Uso preventivo de SAAC.}
+\imagen{../img/voice_banking.png}{Recomendación de voice banking.}
+
+\subsection{Respuesta de feedback}
+Ejemplo de posible interacción con el formulario de feedback y su consiguiente página de agradecimiento.
+
+\imagen{../img/respuesta_feedback.png}{Retroalimentación.}
+\imagen{../img/gracias_feedback.png}{Mensaje de gracias por la retroalimentación.}
+
+\subsection{Historial guardado}
+La siguiente pestaña no está diseñada para la interacción del usuario sino para la interacción del desarrollador. En la siguiente captura se puede observar el historial de pruebas guardado al completo así como el feedback si corresponde. Se ve la distinción entre una prueba real y una de funcionamiento.
+
+\imagen{../img/admin_historial.png}{Pestaña de historial.}
