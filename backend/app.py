@@ -3,8 +3,8 @@ import string
 import random
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from backend.modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma, HistorialRecomendacion, EntornoUso, MetodoComunicacion
-from backend.extension import bd
+from modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma, HistorialRecomendacion, EntornoUso, MetodoComunicacion
+from extension import bd
 from dotenv import load_dotenv
 from sqlalchemy import or_
 
@@ -54,7 +54,7 @@ def generar_id_anonimo():
 #Ruta a pestaña de inicio con info general
 @app.route('/')
 def informar(): 
-    return render_template("informacion.html")
+    return render_template("inicio.html")
 
 #Ruta a pestaña con info sobre ELA
 @app.route('/ELA')
@@ -73,6 +73,11 @@ def cuestionary():
     entradas = TipoEntrada.query.all()
     plataformas = Plataforma.query.all()
     return render_template('cuestionario.html', idiomas=idiomas, entradas=entradas, plataformas=plataformas)
+
+#Ruta a pestaña con información legal (tratamiento, almacenamiento y procesado de datos sensibles)
+@app.route('/info_legal')
+def info_legal():
+    return render_template('info_legal.html')
 
 #LÓGICA PRINCIPAL DE RECOMENDACIÓN. Recibe el cuestionario contestado, aplica un algoritmo de filtrado y genera recomendación
 @app.route('/recomendar', methods=['POST'])

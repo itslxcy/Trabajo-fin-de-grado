@@ -1235,4 +1235,98 @@ h1,h2 .titulo-seccion {
     margin-top: 20px;
 }
 
+.informacion-participante {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #fbf9fc; /* Fondo lila extremadamente sutil */
+    border: 1px solid #e1d5e7;
+    border-radius: 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.titulo-clausula {
+    color: #4a154b; /* Morado corporativo principal */
+    margin-top: 0;
+    border-bottom: 2px solid #6b2d5c; /* Morado secundario */
+    padding-bottom: 12px;
+    font-size: 1.6em;
+    font-weight: 600;
+}
+
+.introduccion-legal {
+    font-size: 0.95em;
+    color: #5a525a;
+    margin-bottom: 25px;
+}
+
+.cuadrícula-legal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Soporte para pantallas más pequeñas */
+@media (max-width: 600px) {
+    .cuadrícula-legal {
+        grid-template-columns: 1fr;
+    }
+}
+
+.tarjeta-legal {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #f0e6f5;
+    box-shadow: 0 2px 4px rgba(74, 21, 75, 0.03);
+    font-size: 0.92em;
+    transition: transform 0.2s ease;
+}
+
+.tarjeta-legal:hover {
+    transform: translateY(-2px);
+    border-color: #d0bfe3;
+}
+
+.subtitulo-legal {
+    color: #4a154b;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.05em;
+    font-weight: bold;
+}
+
+.tarjeta-legal a {
+    color: #8a307f;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.tarjeta-legal a:hover {
+    text-decoration: underline;
+    color: #4a154b;
+}
+
+.lista-finalidades {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.lista-finalidades li {
+    margin-bottom: 6px;
+}
+
+.nota-navegacion {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: #f3ebf7; /* Fondo lila claro */
+    border-left: 4px solid #8a307f;
+    border-radius: 4px;
+    font-size: 0.92em;
+    color: #3b2040;
+}
 

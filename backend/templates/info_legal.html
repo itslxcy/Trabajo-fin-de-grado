@@ -1,0 +1,75 @@
+<!-- Pestaña de información acerca de la protección de datos, su almacenamiento -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información legal</title>
+    <!-- Vínculo con estilos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <!--Navegación-->
+     <nav class="nav-tabs">
+        <a href="/">Inicio</a>
+        <a href="/ELA">Sobre la ELA</a>
+        <a href="/SAAC">¿Qué es un SAAC?</a>
+        <a href="/cuestionario">Cuestionario</a>
+        <a href="/info_legal" class="active">Información legal</a>
+    </nav>
+
+    <!-- BLOQUE INICIAL DE INFORMACIÓN AL PARTICIPANTE (RGPD / REQUISITO TUTOR) -->
+    <section class="informacion-participante">
+        <h2 class="titulo-clausula">
+            Cláusula informativa al participante
+        </h2>
+        <p class="introduccion-legal">
+            En cumplimiento del Reglamento General de Protección de Datos (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), se detalla a continuación el marco legal y las condiciones del tratamiento de los datos procesados en esta plataforma académica.
+        </p>
+
+        <div class="cuadrícula-legal">
+            
+            <div class="tarjeta-legal">
+                <strong class="subtitulo-legal">1. Responsable del tratamiento</strong>
+                Universidad de Burgos (UBU)<br>
+                <strong>Proyecto:</strong> Trabajo de Fin de Grado (TFG) - Recomendador inteligente de SAAC.<br>
+                <strong>Contacto Investigador:</strong> <a href="mailto:lga1016@alu.ubu.es">lga1016@alu.ubu.es</a><br>
+            </div>
+
+            <div class="tarjeta-legal">
+                <strong class="subtitulo-legal">2. Finalidades del tratamiento</strong>
+                <ul class="lista-finalidades">
+                    <li><strong>Finalidad asistencial/orientativa:</strong> Procesar las capacidades funcionales introducidas en el cuestionario en tiempo real para generar y mostrar una recomendación personalizada de SAAC.</li>
+                    <li><strong>Finalidad investigadora:</strong> Almacenar las respuestas de forma estrictamente anonimizada para el análisis estadístico y validación del algoritmo dentro del marco del TFG.</li>
+                </ul>
+            </div>
+
+            <div class="tarjeta-legal">
+                <strong class="subtitulo-legal">3. Base jurídica de legitimación</strong>
+                Art. 6.1.a) del RGPD: El **consentimiento explícito e inequívoco** del participante proporcionado al interactuar con la plataforma.<br>
+                Art. 9.2.j) del RGPD: Tratamiento necesario con fines de **investigación científica** (datos de salud/situación funcional anonimizados).
+            </div>
+
+            <div class="tarjeta-legal">
+                <strong class="subtitulo-legal">4. Política de conservación de datos</strong>
+                Los datos técnicos procesados se almacenan de forma permanente en la base de datos con fines históricos y de investigación estadística del proyecto.<br>
+                Al tratarse de un procedimiento de **anonimización irreversible** desde el origen (no se guarda IP, nombre, ni correos), no es posible asociar los registros a ninguna persona física identificada o identificable.
+            </div>
+
+            <div class="tarjeta-legal">
+                <strong class="subtitulo-legal">5. Destinatarios de la información</strong>
+                Los datos recopilados se alojan de forma segura en los servidores de la plataforma Render dentro del territorio de la **Unión Europea (Región de Frankfurt, Alemania)**. No se realizarán cesiones de datos a terceros ni transferencias internacionales fuera del espacio económico europeo.
+            </div>
+
+            <div class="tarjeta-legal">
+                <strong class="subtitulo-legal">6. Ejercicio de derechos del usuario</strong>
+                Conforme al RGPD, usted tiene derecho al acceso, rectificación, supresión o limitación del tratamiento. Sin embargo, se informa al participante que, debido a la **estricta anonimización de los datos**, el sistema no dispone de herramientas técnicas para vincular un cuestionario específico con un individuo concreto tras su envío, impidiendo la aplicación de modificaciones retroactivas.
+            </div>
+
+        </div>
+        <div class="nota-navegacion">
+            <strong>Nota sobre la navegación:</strong> Puede consultar las secciones informativas en las pestañas superiores o acudir directamente a la pestaña de <strong>Cuestionario</strong> si desea iniciar la evaluación.
+        </div>
+    </section>
+</body>
+</html>
