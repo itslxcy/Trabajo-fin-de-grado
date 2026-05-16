@@ -140,7 +140,7 @@ class HistorialRecomendacion(bd.Model):
     input_usuario = bd.Column(bd.JSON) #JSON con perfil de usuario como se introdujo al cuestionario (incluye niveles clínicos, idioma, plataforma...)
     sistemas_recomendados = bd.Column(bd.Text) #Texto con nombres de los sistemas recomendados y accesorios asociados
     feedback = bd.Column(bd.JSON, nullable=True) #JSON con las valoraciones del usuario
-    es_real = bd.Column(bd.Boolean, default=False) #Distinción entre registros reales y feedback
+    es_real = bd.Column(bd.Boolean, default=False, nullable=False) #Distinción entre registros reales y feedback
 
     def __repr__(self):
         return f'<Recomendacion {self.nombre_paciente} - {self.fecha}>'

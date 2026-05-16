@@ -930,15 +930,6 @@ thead tr {
     color: #444;
 }
 
-.badge {
-    display: block;
-    width: fit-content;
-    padding: 2px 0; /* Sin padding lateral para que parezca texto limpio */
-    font-size: 0.9em;
-    background: none !important; /* Eliminamos cualquier fondo */
-    border: none !important;     /* Eliminamos cualquier borde */
-}
-
 /* Periféricos en la tabla principal - Ahora en Morado */
 .badge-info {
     color: #ac4caf; 
@@ -1328,5 +1319,54 @@ h1,h2 .titulo-seccion {
     border-radius: 4px;
     font-size: 0.92em;
     color: #3b2040;
+}
+
+.contenedor-consentimiento-rgpd {
+    background-color: #f7f3f9; /* Fondo lila muy suave */
+    border: 1px solid #e2d5e7;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 30px auto;
+    max-width: 90%;
+    font-family: sans-serif;
+}
+
+.titulo-consentimiento {
+    color: #4a154b; /* Morado oscuro */
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.texto-ley-rgpd {
+    font-size: 0.9em;
+    color: #555555;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.opcion-consentimiento {
+    margin-bottom: 12px;
+    padding: 8px 0;
+}
+
+.etiqueta-check-rgpd {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+.etiqueta-check-rgpd input[type="checkbox"] {
+    margin-top: 4px;
+    margin-right: 12px;
+    accent-color: #6b2d5c; /* Hace que el tick del checkbox sea morado en navegadores modernos */
+    transform: scale(1.1);
+}
+
+.texto-check {
+    font-size: 0.92em;
+    color: #222222;
+    line-height: 1.4;
 }
 

@@ -25,19 +25,6 @@
         <!-- DATOS GENERALES -->
         <div class="seccion">
             <h2>1. Información básica</h2>
-            
-            <!-- Filtro para diferenciar pruebas de datos reales -->
-            <div class="alerta-validacion">
-                <label class="label-checkbox-personalizado">
-                    <input type="checkbox" name="es_real" value="true" class="input-checkbox-grande">
-                    <span class="texto-validacion">
-                        <strong>Validación de datos para investigación:</strong> 
-                        Marque esta casilla únicamente si es una persona afectada por ELA o cuidador. 
-                        Esto permite que sus respuestas sean incluidas en el análisis estadístico del estudio de investigación 
-                        asociado a este proyecto, diferenciándolas de las pruebas de funcionamiento.
-                    </span>
-                </label>
-            </div>
 
             <!-- Idiomas generados dinámicamente desde la base de datos (idioma_ids) -->
             <div class="pregunta">
@@ -193,6 +180,38 @@
                     Este estudio es totalmente anónimo. No se recogen nombres, correos ni datos personales. 
                     Al hacer clic en el botón de abajo, se le asignará un código ID aleatorio para procesar sus datos clínicos.
                 </p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE CONSENTIMIENTO SEPARADO (REQUISITO RGPD + INTEGRACIÓN PACIENTE REAL) -->
+        <div class="contenedor-consentimiento-rgpd">
+            <h3 class="titulo-consentimiento">Cláusula de Consentimiento Informado</h3>
+            <p class="texto-ley-rgpd">
+                De conformidad con el RGPD, solicitamos su autorización inequívoca para las siguientes operaciones de tratamiento. Puede consultar los detalles completos de nuestra política en la pestaña de <strong>Información legal</strong>.
+            </p>
+
+            <!-- Acción 1: Obligatoria para recibir el servicio en tiempo real (No guarda en BD) -->
+            <div class="opcion-consentimiento">
+                <label class="etiqueta-check-rgpd">
+                    <input type="checkbox" name="acepta_procesamiento" value="true" required>
+                    <span class="texto-check">Quiero utilizar esta herramienta para procesar mis respuestas y obtener una recomendación personalizada de SAAC en este momento (Finalidad asistencial).</span>
+                </label>
+            </div>
+
+            <!-- Acción 2: OPT-IN INDEPENDIENTE Y INTEGRADO (Guarda en BD y diferencia si es real) -->
+            <div class="opcion-consentimiento">
+                <label class="etiqueta-check-rgpd">
+                    <input type="checkbox" name="autoriza_investigacion" value="true">
+                    <span class="texto-check">Autorizo voluntariamente que mis respuestas se almacenen en la base de datos para fines estadísticos e investigación científica del TFG.</span>
+                </label>
+            </div>
+
+            <!-- Sub-casilla de datos reales: Solo tiene sentido si se autoriza la investigación -->
+            <div class="opcion-consentimiento sub-opcion-real" style="margin-left: 25px; margin-top: 5px;">
+                <label class="etiqueta-check-rgpd">
+                    <input type="checkbox" name="es_real" value="true">
+                    <span class="texto-check" style="font-size: 0.88em;"><strong>Marque esta casilla solo si los datos introducidos pertenecen a un caso real</strong> (persona afectada por ELA o cuidador), para diferenciarlos de las pruebas de desarrollo.</span>
+                </label>
             </div>
         </div>
 

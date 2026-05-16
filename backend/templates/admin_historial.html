@@ -38,7 +38,9 @@
                         <span class="fecha-texto">{{ r.fecha.strftime('%d/%m/%Y') if r.fecha else 'S/F' }}</span><br>
                         <strong class="hora-texto">{{ r.fecha.strftime('%H:%M') if r.fecha else '' }}</strong>
                         <br>
-                        {% if r.es_real %}
+                        
+                        <!-- Evaluación explícita del booleano o su equivalente en base de datos -->
+                        {% if r.es_real is sameas true or r.es_real == 1 %}
                             <span class="badge badge-real">PACIENTE REAL</span>
                         {% else %}
                             <span class="badge badge-prueba">PRUEBA / OTROS</span>
