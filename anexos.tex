@@ -89,7 +89,6 @@
 \makeatletter
 \usepackage{xcolor}
 \newcommand{\tutor}[1]{\def\@tutor{#1}}
-\newcommand{\tutorb}[1]{\def\@tutorb{#1}}
 \newcommand{\course}[1]{\def\@course{#1}}
 \definecolor{newBox}{HTML}{D8AD6E}
 \def\maketitle{
@@ -131,7 +130,7 @@
     \@date{}\\
     \vspace{0.5cm}
     %Tutor: \@tutor{}\\ % comenta el que no corresponda
-    Tutores: \@tutor{} -- \@tutorb{}\\
+    Tutor: \@tutor{} 
   }%
   \end{center}%
   \null
@@ -143,9 +142,8 @@
 
 % Datos de portada
 \title{título del TFG \\Documentación Técnica}
-\author{Nombre Alumno/a}
-\tutor{Nombre Tutor/a}
-\tutorb{Nombre Tutor/a 2}
+\author{Lucía Gil Aire}
+\tutor{Pedro Luis Sánchez Ortega}
 \date{\today}
 
 \begin{document}

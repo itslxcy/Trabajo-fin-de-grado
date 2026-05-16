@@ -357,10 +357,6 @@ small { color: #888; display: block; margin-top: 5px; font-style: normal; font-s
 .tarjeta-tipo.espinal { background-color: #fdf7ff; }
 .tarjeta-tipo.bulbar { background-color: #fdf7ff; border-left-color: #ac4caf; } 
 
-.timeline {
-    margin-top: 30px;
-}
-
 .fase-item {
     margin-bottom: 25px;
     position: relative;
@@ -703,28 +699,6 @@ h1, h2 {
     padding-left: 20px;
 }
 
-.fase-item {
-    position: relative;
-    padding-left: 30px;
-    padding-bottom: 20px;
-    border-left: 2px solid #ac4caf;
-}
-
-/* Clase para quitar el borde al último elemento de la fase */
-.fase-item.last-item {
-    border-left: none;
-}
-
-.fase-punto {
-    position: absolute;
-    left: -9px;
-    top: 5px;
-    width: 16px;
-    height: 16px;
-    background-color: #ac4caf;
-    border-radius: 50%;
-}
-
 /* Enlaces y utilidades */
 .resumen-preservacion a {
     color: #ac4caf;
@@ -784,32 +758,6 @@ h1, h2 {
     background-color: #fcf8ff; /* Fondo ligeramente violáceo */
 }
 
-/* Línea de tiempo (Timeline) */
-.timeline {
-    margin-top: 30px;
-    padding-left: 20px;
-}
-
-.fase-item {
-    position: relative;
-    padding-left: 30px;
-    padding-bottom: 20px;
-    border-left: 2px solid #ac4caf;
-}
-
-.fase-item.last-item {
-    border-left: none;
-}
-
-.fase-punto {
-    position: absolute;
-    left: -9px;
-    top: 5px;
-    width: 16px;
-    height: 16px;
-    background-color: #ac4caf;
-    border-radius: 50%;
-}
 
 .mt-15 {
     margin-top: 15px;
