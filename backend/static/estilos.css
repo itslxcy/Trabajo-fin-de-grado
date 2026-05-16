@@ -1370,3 +1370,17 @@ h1,h2 .titulo-seccion {
     line-height: 1.4;
 }
 
+/* Contenedor de todas las descripciones de los niveles */
+.descripcion-niveles {
+    margin-top: 15px;      /* Despega el texto del slider superior */
+    margin-bottom: 25px;   /* Da espacio antes de la siguiente pregunta */
+    max-width: 850px;      /* Evita que las líneas se hagan infinitas a lo ancho */
+}
+
+/* Cada una de las líneas de nivel (0:, 1:, 2:, 3:) */
+.descripcion-niveles p {
+    font-size: 1.1em !important;   /* Aumenta el tamaño de la letra significativamente */
+    line-height: 1.6 !important;   /* Da más aire entre líneas para facilitar la lectura */
+    margin: 8px 0 !important;      /* Separa un poco más un nivel del otro */
+    color: #334155 !important;     /* Un gris oscuro de alto contraste, más elegante que el negro puro */
+}

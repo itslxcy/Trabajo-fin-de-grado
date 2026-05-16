@@ -3,8 +3,9 @@ import string
 import random
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma, HistorialRecomendacion, EntornoUso, MetodoComunicacion
-from extension import bd
+from flask_talisman import Talisman
+from backend.modelos import SaacSistema, Idioma, SistemaRequisitoFuncional, TipoEntrada, Plataforma, HistorialRecomendacion, EntornoUso, MetodoComunicacion
+from backend.extension import bd
 from dotenv import load_dotenv
 from sqlalchemy import or_
 
@@ -16,6 +17,31 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+
+# Definimos una política CSP equilibrada para que permita tus estilos locales
+csp_config = {
+    'default-src': '\'self\'',
+    # Permite tus estilos locales (estilos.css) y estilos en línea si los usas
+    'style-src': [
+        '\'self\'',
+        '\'unsafe-inline\'' 
+    ],
+    # Permite tus scripts locales de JavaScript
+    'script-src': [
+        '\'self\'',
+        '\'unsafe-inline\''
+    ]
+}
+
+# Inicializamos Talisman con las directivas de OWASP
+Talisman(
+    app,
+    force_https=True,                # 1. Redirección automática HTTP -> HTTPS
+    strict_transport_security=True,  # 2. HSTS (Forzar HTTPS en el navegador)
+    content_security_policy=csp_config, # 3. CSP (Previene ataques XSS e inyecciones)
+    session_cookie_secure=True,      # Asegura que las cookies solo viajen por HTTPS
+    session_cookie_http_only=True    # Previene que scripts maliciosos roben tus cookies
+)
 
 # CONFIGURACIÓN DE BASE DE DATOS 
 # Primero intenta obtener la URL completa (la que da Render)

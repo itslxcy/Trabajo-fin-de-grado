@@ -1,5 +1,5 @@
 from datetime import datetime
-from extension import bd
+from backend.extension import bd
 
 #TABLAS DE RELACIÓN MUCHOS A MUCHOS
 #Relaciona sistemas SAAC con los entornos de uso donde son aplicables (ej: domicilio, colegio, trabajo)

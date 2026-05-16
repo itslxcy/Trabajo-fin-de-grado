@@ -42,8 +42,9 @@
 
         <!-- CAPACIDADES (Sliders)-->
         <div class="seccion">
-            <h2>2. Capacidades del Usuario</h2>
+            <h2>2. Capacidades del usuario</h2>
             <!-- Lista con variables clínicas para generar los sliders automáticamente-->
+             
             {% set caps = [
                 ('vision', 'Capacidad visual y de fijación', 
                  '0: Nula o sin control voluntario de la mirada.|1: Movimientos involuntarios o dificultad física para mantener el foco.|2: Funcional para distinguir símbolos y botones grandes.|3: Precisión total para lectura de texto y botones pequeños.', 0),
@@ -127,15 +128,13 @@
                 </small>
 
                 <!-- Guía rápida para el usuario -->
-                <div class="guia-plataformas">
+                <div class="guia-plataformas descripcion-niveles">
                     <strong>Guía rápida:</strong>
-                    <ul>
-                        <li><strong>Windows:</strong> Ordenadores portátiles o de sobremesa. </li>
-                        <li><strong>iOS:</strong> Dispositivos Apple (iPad o iPhone).</li>
-                        <li><strong>Android:</strong> Tablets y móviles de marcas como Samsung, Xiaomi, etc.</li>
-                        <li><strong>Web:</strong> Sistemas accesibles desde cualquier navegador por internet (Google).</li>
-                        <li><strong>Panel físico:</strong> Soluciones sin electrónica (cartón, plástico o láminas).</li>
-                    </ul>
+                    <p><strong>Windows:</strong> Ordenadores portátiles o de sobremesa.</p>
+                    <p><strong>iOS:</strong> Dispositivos Apple (iPad o iPhone).</p>
+                    <p><strong>Android:</strong> Tablets y móviles de marcas como Samsung, Xiaomi, etc.</p>
+                    <p><strong>Web:</strong> Sistemas accesibles desde cualquier navegador por internet (Google).</p>
+                    <p><strong>Panel físico:</strong> Soluciones sin electrónica (cartón, plástico o láminas).</p>
                 </div>
                 <div class="opciones-grid">
                     {% for p in plataformas %}
