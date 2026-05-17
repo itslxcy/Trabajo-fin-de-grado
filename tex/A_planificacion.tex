@@ -1,27 +1,92 @@
 \apendice{Plan de Proyecto}
 
 \section{Introducción}
+Este proyecto aborda el desarrollo de una herramienta web de apoyo a la decisión para la elección de Sistemas Aumentativos y Alternativos de Comunicación (SAAC) en pacientes diagnosticados con Esclerosis Lateral Amiotrófica (ELA). La ELA es una enfermedad neurodegenerativa progresiva que afecta a las neuronas motoras, provocando una pérdida gradual de las capacidades motoras y, con frecuencia, del habla, lo que hace imprescindible el uso de sistemas de comunicación adaptados.
 
-En este apartado se describe de forma breve el propósito general del proyecto, su contexto y el alcance del trabajo realizado, indicando qué problema se aborda y qué se pretende conseguir con el TFG.
+La selección de un SAAC adecuado es un proceso complejo que depende de múltiples variables clínicas: las capacidades funcionales del paciente, su nivel de alfabetización, el idioma, las plataformas tecnológicas disponibles y el entorno de uso. En la práctica clínica, esta decisión recae habitualmente en logopedas y terapeutas ocupacionales que deben conocer un catálogo amplio y en constante actualización de herramientas.
 
+El objetivo del TFG es desarrollar una aplicación web que, a partir de un cuestionario, aplique un algoritmo de filtrado para proporcionar una recomendación personalizada de sistemas SAAC, periféricos y bancos de voz adaptados al perfil del paciente. Adicionalmente, la herramienta recoge feedback de los usuarios con fines de investigación y cuya almacenado se realiza de forma anónima en cumplimiento del RGPD.
 
 \section{Metodología de ingeniería del software}
-Si procede.
-Se debe describir la metodología seguida durante el desarrollo del proyecto. En caso de existir desarrollo software, se indicará la metodología utilizada (por ejemplo, cascada, ágil o experimental)
-En cada apartado de los apéndices (A hasta el G) se deberá indicar que tarea o fase de la metodología utilizada se está realizando, o bien en este nuevo apéndice deberá quedar reflejado con detalle las tareas y fases que se han ido realizando.
-Si el TFG no contiene  todo el ciclo de vida de la metodología utilizada, deberá indicarse las fases y tareas que han quedado pendientes.
-Si el TFG no está centrado el desarrollo software, pero puede servir para un posterior desarrollo software, se deberá indicar qué metodología de desarrollo se recomienda y argumentar los motivos.
+El desarrollo de este proyecto ha seguido una metodología de carácter \textbf{iterativo e incremental}, adaptada a la naturaleza experimental del trabajo y a los condicionantes propios de un TFG.
 
+Se optó por este enfoque frente a una metodología en cascada por dos razones principales. Por un lado, los requisitos del sistema evolucionaron a lo largo del proyecto a medida que se fue ampliando el catálogo de sistemas SAAC y se refinó el algoritmo de filtrado. Por otro lado, la naturaleza del proyecto requería validar cada componente antes de avanzar al siguiente.
+
+El ciclo de desarrollo se organizó en las siguientes fases:
+
+\begin{description}
+	\item[\textbf{Fase 1: Análisis y requisitos}] Revisión bibliográfica sobre ELA y SAAC, definición de los requisitos funcionales del sistema, y diseño del cuestionario clínico junto con los criterios de filtrado.
+	\item[\textbf{Fase 2:  Diseño}] Diseño de la arquitectura MVC definida en el anexo C, modelado de la base de datos relacional y definición del algoritmo de filtrado recursivo.
+	\item[\textbf{Fase 3: Implementación}] Desarrollo iterativo de la aplicación Flask, construcción y población de la base de datos PostgreSQL, implementación del algoritmo de filtrado y desarrollo de las plantillas Jinja2.
+	\item[\textbf{Fase 4: Validación}] Pruebas funcionales del cuestionario y del algoritmo, verificación del cumplimiento RGPD y recogida de feedback con casos reales y de prueba.
+	\item[\textbf{Fase 5: Documentación}] Redacción de la memoria y los anexos del TFG.
+\end{description}
+
+La principal fase que queda fuera del alcance de este TFG y que podría abordarse en un trabajo futuro es la validación clínica formal con una muestra representativa de pacientes y profesionales.
 
 \section{Planificación temporal}
+La planificación inicial del proyecto se estableció en febrero de 2026 y se refleja en el siguiente diagrama de Gantt.
 
-Se presentará la planificación temporal del proyecto, preferiblemente mediante un cronograma o diagrama de Gantt, donde se reflejen las principales tareas, fases y su duración aproximada.
+\imagen{../img/Planificacion_temporal_inicial.png}{Planificación temporal inicial del proyecto (febrero 2026).}
+
+La planificación seguida finalmente se establece en mayo teniendo en cuenta la evolución de issues del GitHub y se refleja aquí:
+% \imagen{../img/gantt_final.png}{Planificación temporal final del proyecto.}
 
 \subsection{Planificación económica}
+A continuación se desglosan los costes estimados del proyecto, diferenciando entre recursos humanos y recursos materiales.
+
+\subsubsection{Recursos humanos}
+El proyecto ha sido desarrollado por una única persona en el rol de analista, diseñadora y programadora, con una dedicación estimada de \textbf{300 horas} a lo largo del período de desarrollo. Tomando como referencia el salario bruto medio de un ingeniero de software junior en España, estimado en torno a 20€/hora, el coste de los recursos humanos asciende a:
+
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{ l p{4cm} r }
+        \toprule
+        \textbf{Rol} & \textbf{Horas} & \textbf{Coste estimado} \\
+        \midrule
+        \addlinespace
+        Analista / Desarrolladora & 300 h & 6.000 € \\
+        \addlinespace
+        \bottomrule
+    \end{tabular}
+    \caption{Coste estimado de recursos humanos.}
+\end{table}
+\FloatBarrier
+
+\subsubsection{Recursos materiales y software}
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{ l p{5cm} r }
+        \toprule
+        \textbf{Recurso} & \textbf{Descripción} & \textbf{Coste} \\
+        \midrule
+        \addlinespace
+        Ordenador portátil & Equipo de desarrollo & Amortización estimada: 150 € \\
+        \addlinespace
+        Python / Flask & Framework de desarrollo & Gratuito (open source) \\
+        \addlinespace
+        PostgreSQL & Base de datos relacional & Gratuito (open source) \\
+        \addlinespace
+        Visual Studio Code & Entorno de desarrollo & Gratuito \\
+        \addlinespace
+        TeXworks & Redacción de la memoria & Gratuito (plan básico) \\
+        \addlinespace
+        \bottomrule
+    \end{tabular}
+    \caption{Coste estimado de recursos materiales y software.}
+\end{table}
+\FloatBarrier
+
+El coste total estimado del proyecto asciende a aproximadamente \textbf{6.150€}, siendo el principal factor el coste de los recursos humanos.
 
 \subsection{Viabilidad legal}
+La herramienta desarrollada procesa datos clínicos de carácter sensible, por lo que su diseño se ha ajustado al \textbf{Reglamento General de Protección de Datos (RGPD, UE 2016/679)} y a la \textbf{Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD)}.
 
-Si corresponde, incluir aquí el documento de aprovación por parte de la Comisión de Bioética.
+Las medidas adoptadas para garantizar la conformidad legal son las siguientes:
 
-Ojo \footnote{Los anexos deben de tener su propia bibliografía, eso es tan fácil como utilizar referencias igual que en la memoria \cite{bortolot2005}}
-
+\begin{itemize}
+	\item No se almacena ningún dato de carácter personal que permita la reidentificación directa del paciente. Los registros de investigación se guardan de forma completamente anónima mediante un identificador autogenerado compuesto por combinaciones aleatorias de letras y 		números.
+	\item El sistema requiere el consentimiento explícito del usuario para el procesamiento obligatorio de datos, sin este no se procesa el cuestionario.
+	\item El consentimiento para el almacenamiento con fines de investigación es opcional e independiente del anterior.
+	\item La aplicación incluye una página de información legal accesible desde el menú de navegación principal, donde se detalla la finalidad del tratamiento, las bases jurídicas, la política de conservación y los derechos del usuario.
+\end{itemize}
