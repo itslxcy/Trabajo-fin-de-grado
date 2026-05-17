@@ -1,11 +1,114 @@
 \apendice{Descripción de adquisición y tratamiento de datos}
 
-
 \section{Descripción formal de los datos}
+\subsection{Origen y adquisición}
+Los datos utilizados en este proyecto tienen dos orígenes diferenciados:
 
-Se describirá el tipo de datos utilizados, su formato, origen, volumen y características principales.
-Tablas, imágenes, señales, secuencias de ADN…
-    
-\section{Descripción clínica de los datos.}
+\begin{description}
+	\item[\textbf{Base de datos de sistemas SAAC}] Construida manualmente a partir de revisión bibliográfica y consulta de fuentes especializadas (fabricantes, distribuidores y documentación clínica). Constituye el catálogo estático sobre el que opera el algoritmo de filtrado y no varía 		en tiempo de ejecución.
+	\item[\textbf{Perfiles clínicos de usuarios}] Recogidos dinámicamente a través del formulario web de la aplicación. Cada perfil se genera a partir de las respuestas del usuario al cuestionario y se almacena de forma anónima en la base de datos únicamente si el usuario otorga 			consentimiento de investigación.
+\end{description}
 
-Descripción y explicaciones clinicas del significado o interpretación de los datos.
+\subsection{Formato y estructura}
+Los datos del perfil clínico se almacenan en formato \textbf{JSONB} dentro del campo \texttt{input\_usuario} de la tabla \texttt{historial\_recomendacion}. Un ejemplo de registro tiene la siguiente estructura:
+
+\begin{verbatim}
+{
+  "idioma": "español",
+  "nivel_visual": 2,
+  "nivel_auditivo": 1,
+  "nivel_habla": 0,
+  "nivel_tecnologico": 2,
+  "metodo_entrada": ["ojos", "pulsador"],
+  "metodo_comunicacion": "alfabeto",
+  "plataforma": ["Windows", "iOS"],
+  "entorno_uso": ["domicilio"],
+  "silla_ruedas": sí
+}
+\end{verbatim}
+
+El campo \texttt{feedback}, también en formato JSON, almacena la retroalimentación del usuario con la siguiente estructura:
+
+\begin{verbatim}
+{
+  "usa_sistema_recomendado": "Sí",
+  "satisfaccion_sistema": "Satisfecho, aunque abierto a informarme 
+                            sobre otras opciones",
+  "considera_otros_sistemas": "Es posible, encuentro interesante 
+                               alguna otra opción",
+  "experiencia_previa": "Sí, lo dejé por progresión de la enfermedad",
+  "valoracion_global": 8,
+  "comentarios": "La recomendación ha sido muy útil y ajustada."
+}
+\end{verbatim}
+
+\subsection{Volumen de datos}
+Durante el período de desarrollo y validación del TFG se han recogido                       registros en total, combinando casos reales y casos de prueba. El campo booleano \texttt{es\_real} de la tabla \texttt{historial\_recomendacion} permite distinguir ambos tipos en el panel de administración. Dado el volumen reducido, los datos tienen un valor cualitativo y de validación funcional del sistema, no estadístico.
+
+\subsection{Variables del cuestionario}
+Las variables recogidas por el cuestionario se agrupan en cuatro categorías:
+
+\begin{description}
+	\item[\textbf{Capacidades funcionales}] Nivel visual, auditivo, de habla y tecnológico del paciente, expresados en una escala ordinal de 0 (ausente o nulo) a 3 (conservado o alto). Estas variables se contrastan directamente con los requisitos mínimos de cada sistema en la tabla 			\texttt{sistema\_requisito\_funcional}.
+	\item[\textbf{Método de entrada preferido}] Método o métodos mediante los que el paciente puede interactuar con los dispositivos: manos, ojos, cabeza, voz o pulsador. Es una variable multivalor que puede combinar varias opciones simultáneamente.
+	\item[\textbf{Idioma y método de comunicación}] Idioma en el que el paciente se comunica (español, gallego, catalán o euskera) y preferencia de comunicación (alfabeto o pictogramas).
+	\item[\textbf{Plataforma y entorno de uso}] Sistemas operativos o dispositivos disponibles (Windows, iOS, Android, Web, panel físico) y contexto en el que se usará el SAAC (domicilio o exterior).
+\end{description}
+
+\section{Descripción clínica de los datos}
+
+\subsection{Interpretación del idioma}
+El idioma es una variable de filtrado directo que elimina de la propuesta los sistemas que no están disponibles en la lengua del paciente. En el contexto, la herramienta contempla cuatro lenguas oficiales: español, gallego, catalán y euskera. Esta variable es clínicamente relevante porque algunos sistemas de comunicación tienen soporte limitado para lenguas cooficiales, lo que puede reducir significativamente el catálogo disponible para pacientes en determinadas comunidades autónomas.
+
+\subsection{Interpretación de las capacidades funcionales}
+Las cuatro capacidades funcionales recogidas por el cuestionario reflejan el estado clínico del paciente en el momento de la evaluación y condicionan directamente qué sistemas SAAC son viables.
+
+\begin{description}
+	\item[\textbf{Nivel visual}] Determina si el paciente puede utilizar sistemas basados en la mirada o en la lectura. Un nivel 0 excluye cualquier sistema que requiera reconocimiento visual de símbolos o letras. Un nivel 2 o superior permite el uso de seguimiento ocular (\textit{eye 			tracking}), fundamental en etapas avanzadas.
+	\item[\textbf{Nivel auditivo}] Condiciona el uso de sistemas con salida de voz sintetizada o de asistentes virtuales. Un nivel 0 implica que el paciente no puede beneficiarse de la retroalimentación auditiva del sistema.
+	\item[\textbf{Nivel de habla}] Es especialmente relevante en la ELA porque la disartria (deterioro del habla) es uno de los primeros síntomas en la forma bulbar de la enfermedad. Un nivel 3 (habla conservada) permite el uso de sistemas de control por voz y es el único requisito para 	acceder a los bancos de voz, que deben grabarse antes de que la voz se deteriore. Un nivel 0 excluye completamente estos sistemas.
+	\item[\textbf{Nivel tecnológico}] Refleja la familiaridad del paciente con la tecnología. Un nivel bajo orienta la recomendación hacia sistemas de baja tecnología (paneles físicos, tableros ETRAN) o hacia sistemas con interfaces simplificadas. Un nivel alto permite recomendar software 	avanzado como Grid3.
+\end{description}
+
+\subsection{Interpretación del método de entrada}
+En la ELA, la capacidad motora se deteriora progresivamente y de forma asimétrica según el origen de la enfermedad. El método de entrada indica qué vía motora conserva el paciente para interactuar con el sistema:
+
+\begin{description}
+	\item[\textbf{Manos}] Presencia de movilidad funcional en las extremidades superiores. Permite el uso directo de pantallas táctiles, teclados y ratones. Es el método más frecuente en fases iniciales.
+	\item[\textbf{Ojos}] Capacidad de controlar la dirección de la mirada. El control ocular está especialmente preservado en la ELA avanzada, ya que los músculos oculomotores son de los últimos en verse afectados, lo que lo convierte en el método de acceso más importante en fases 		tardías.
+	\item[\textbf{Cabeza}] Presencia de movilidad cervical residual. Permite el uso de punteros láser adaptados o sistemas de seguimiento cefálico como EVA Facial Mouse.
+	\item[\textbf{Voz}] Capacidad de emitir sonidos con suficiente claridad para ser reconocidos por el sistema. Solo viable si el nivel de habla es 3.
+	\item[\textbf{Pulsador}] Cualquier movimiento voluntario y repetible, por mínimo que sea (soplido, parpadeo, presión con el pie o un dedo), puede activar un conmutador. Es el método de acceso más adaptable y el último recurso en fases muy avanzadas de la enfermedad.
+\end{description}
+
+\subsection{Interpretación del método de comunicación preferido}
+El método de comunicación refleja cómo prefiere expresarse el paciente y condiciona qué tipo de interfaz simbólica es más adecuada:
+
+\begin{description}
+	\item[\textbf{Alfabeto}] El paciente mantiene la capacidad lectora y prefiere comunicarse mediante texto escrito. Orienta la recomendación hacia teclados en pantalla, sistemas de predicción de texto y comunicadores alfabéticos como Predictable u OptiKey. Es el método habitual 			en pacientes con preservación cognitiva y nivel de alfabetización alto.
+	\item[\textbf{Pictogramas}] El paciente se comunica mejor mediante símbolos visuales. Orienta hacia sistemas basados en imágenes como Proloquo2Go, TD Snap o LetMeTalk. Puede ser especialmente útil cuando el nivel tecnológico o de alfabetización es bajo, o cuando la fatiga 		cognitiva desaconseja el uso del teclado.
+\end{description}
+
+\subsection{Interpretación de la plataforma tecnológica}
+La plataforma indica los dispositivos o sistemas operativos disponibles en el entorno del paciente. Su correcta identificación es fundamental porque un sistema SAAC, por adecuado que sea clínicamente, no puede recomendarse si el paciente no dispone del hardware necesario para ejecutarlo. Las plataformas contempladas son Windows, iOS, Android, Web y panel físico o papel. Un paciente puede tener acceso a varias plataformas simultáneamente, lo que amplía el catálogo de sistemas recomendables.
+
+\subsection{Interpretación del entorno de uso}
+El entorno de uso indica dónde va a utilizar el paciente el sistema SAAC:
+
+\begin{description}
+	\item[\textbf{Domicilio}] Todos los sistemas del catálogo son aptos para uso en domicilio, incluidos los que requieren anclaje o equipos voluminosos.
+	\item[\textbf{Exterior}] Restringe la recomendación a sistemas portátiles y manejables fuera del hogar, como tableros físicos, tablets o aplicaciones móviles. Excluye sistemas que requieren infraestructura fija o conexión a equipos de sobremesa.
+	\item[\textbf{Mixto}] Al igual que el anterior deberá limitar a aquellos portables al ser la variable más restrictiva. Si el usuario va a usarlo fuera de su casa pero en interiores (hospital, tiendas) se le recomienda que ponga domicilio ya que no presentará problemas ambientales como 		al seleccionar Exterior.
+\end{description}
+
+\subsection{Interpretación del feedback}
+El formulario de retroalimentación recoge seis variables cuyo significado clínico es el siguiente:
+
+\begin{description}
+	\item[\textbf{Uso actual de un sistema recomendado}] Variable dicotómica (sí/no) que indica si el paciente ya utiliza alguno de los sistemas incluidos en la propuesta generada. Permite detectar si la herramienta está recomendando sistemas que el paciente ya conoce y ha 				adoptado, lo que validaría la pertinencia del algoritmo.
+	\item[\textbf{Satisfacción con el sistema en uso}] Variable con tres opciones: satisfecho pero abierto a otras opciones, insatisfecho y en búsqueda de alternativas, o no aplicable. Esta variable es clínicamente relevante porque en la ELA la satisfacción con un sistema es temporal: la 			progresión de la enfermedad obliga a revisar periódicamente las opciones disponibles incluso cuando el sistema actual funciona bien.
+	\item[\textbf{Consideración de otros sistemas recomendados}] Recoge si el paciente está abierto a explorar otras opciones de la propuesta además de la que ya utiliza. Permite valorar si los resultados (sistemas finales, preventivos y bancos de voz) resultan útiles para el usuario.
+	\item[\textbf{Experiencia previa con sistemas recomendados}] Variable categórica que recoge si alguno de los sistemas recomendados fue utilizado en el pasado y, en caso afirmativo, el motivo de abandono: progresión de la enfermedad, incomodidad o fatiga, falta de fluidez, 			inadecuación al entorno, dificultad de aprendizaje u otras razones. Esta variable tiene un alto valor clínico porque el motivo de abandono orienta hacia qué ha podido fallar en la recomendación.
+	\item[\textbf{Valoración global de la recomendación}] Escala numérica del 1 al 10 que recoge la percepción general del usuario sobre la adecuación de la propuesta a su perfil. Es la variable principal para evaluar la calidad del algoritmo de filtrado.
+	\item[\textbf{Sugerencias y comentarios}] Campo opcional que permite al usuario aportar información no recogida por el resto del formulario, como preferencias estéticas, condicionantes económicos o experiencias con sistemas no incluidos en el catálogo.
+\end{description}
