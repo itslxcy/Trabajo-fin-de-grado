@@ -1,16 +1,90 @@
 \apendice{Manual de especificación de diseño}
 
-Si procede.
-
 \section{Planos}
+Este proyecto es una aplicación web de software, por lo que no dispone de planos físicos de hardware ni esquemas de distribución de dispositivos.
 
-Si procede
-
-En este apartado se incluirán los planos técnicos del sistema si procede, tales como esquemas de hardware, distribución de dispositivos, flujos físicos o cualquier otro elemento relevante para la comprensión del diseño.
 
 \section{Diseño arquitectónico}
+La aplicación sigue el patrón arquitectónico \textbf{MVC (Modelo-Vista-Controlador)} implementado sobre el framework Flask en Python.
 
-Si procede.
+\begin{description}
+ 	\item[\textbf{Modelo}] Gestiona la persistencia de datos mediante SQLAlchemy como ORM. El modelo de datos está compuesto por la tabla central \texttt{saac\_sistema}, las tablas maestras de referencia (\texttt{tipo\_entrada}, \texttt{idioma}, \texttt{plataforma}, 					\texttt{entorno\_uso}, \texttt{metodo\_comunicacion}), las tablas de relación muchos a muchos (\texttt{sistema\_entrada}, \texttt{sistema\_idioma}, \texttt{sistema\_plataforma}, \texttt{sistema\_metodo}, \texttt{sistema\_entorno}, \texttt{sistema\_dependencia}), la tabla de requisitos 		funcionales (\texttt{sistema\_requisito\_funcional}) y la tabla de historial anónimo (\texttt{historial\_recomendacion})
+ 	\item[\textbf{Vista}] Las plantillas HTML son renderizadas por el motor Jinja2. Las vistas principales son el formulario de cuestionario, la pantalla de resultados segmentada en tres bloques (sistemas finales, sistemas preventivos y bancos de voz), el formulario de feedback y el panel 		de administración.
+ 	\item[\textbf{Controlador}] La lógica de negocio reside en las rutas Flask: \texttt{/recomendar} procesa el cuestionario y ejecuta el algoritmo de filtrado clínico, \texttt{/guardar-feedback} vincula la retroalimentación del usuario con su registro en base de datos, y \texttt{/				admin\_historial} expone el panel de consulta para el investigador.
+\end{description}
 
-Se describirá la arquitectura general del sistema o solución desarrollada. Puede incluir diagramas de bloques, diagramas de clases, diagramas de despliegue u otros esquemas que faciliten la comprensión del diseño.
+\imagen{../img/diagrama_arquitectura.png}{Diagrama de arquitectura de la aplicación.}
 
+\subsection{Diseño de vistas}
+La aplicación cuenta con las siguientes vistas, organizadas según su naturaleza.
+
+\subsubsection{Páginas informativas estáticas}
+Accesibles desde el menú de navegación principal, proporcionan contexto clínico y legal al usuario antes de interactuar con el cuestionario.
+
+\begin{description}
+	\item[Página de inicio] Presenta la naturaleza y propósito de la herramienta, los criterios utilizados para su desarrollo y las instituciones colaboradoras.
+	\item[Información sobre ELA] Explica qué es la Esclerosis Lateral Amiotrófica, sus tipos según el origen, sus fases de progresión y consideraciones sobre la preservación cognitiva.
+	\item[Información sobre SAAC] Describe los Sistemas Aumentativos y Alternativos de Comunicación, su clasificación según tecnología, la importancia de los sistemas escalables y aspectos sobre financiación.
+	\item[Base legal] Detalla la finalidad del tratamiento de datos, las bases jurídicas, la política de conservación, los destinatarios de la información y los derechos del usuario en cumplimiento del RGPD.
+\end{description}
+
+\subsubsection{Páginas funcionales}
+Constituyen el flujo principal de interacción con el sistema.
+
+\begin{description}
+	\item[Cuestionario] Formulario web que recoge el perfil clínico del usuario mediante menús desplegables y botones de opción, incluyendo la casilla de consentimiento RGPD obligatorio.
+	\item[Resultados] Renderiza dinámicamente la propuesta personalizada segmentada en tres bloques: sistemas finales, sistemas de uso preventivo y bancos de voz.
+	\item[Feedback] Formulario opcional para que el usuario evalúe la propuesta recibida.
+	\item[Agradecimiento] Pantalla de confirmación tras el envío del feedback.
+	\item[Panel de administración] Vista exclusiva para el investigador que lista cronológicamente todos los registros almacenados con consentimiento, diferenciando casos reales de pruebas.
+\end{description}
+
+\subsection{Diseño de la base de datos}
+La base de datos relacional está compuesta por las siguientes tablas, organizadas en tres grupos funcionales.
+
+\subsubsection{Tablas maestras}
+Almacenan los valores de referencia del sistema de filtrado clínico.
+
+\begin{description}
+	\item[\texttt{tipo\_entrada}] Métodos de entrada disponibles: manos, ojos, cabeza, voz y pulsador.
+	\item[\texttt{idioma}] Idiomas soportados: español, gallego, catalán y euskera.
+	\item[\texttt{plataforma}] Plataformas tecnológicas: Windows, iOS, Android, Web y panel físico.
+	\item[\texttt{entorno\_uso}] Contextos de uso: domicilio y exterior.
+	\item[\texttt{metodo\_comunicacion}] Métodos de comunicación: alfabeto y pictogramas.
+\end{description}
+
+\subsubsection{Tabla principal de sistemas}
+\begin{description}
+	\item[\texttt{saac\_sistema}] Tabla central del catálogo. Almacena todos los sistemas, hardware y servicios recomendables, con sus atributos: nombre, descripción, si requiere interlocutor, nivel de fatiga física, portabilidad, compatibilidad con anclaje, enlace externo y categoría 			(\texttt{sistema}, \texttt{hardware} o \texttt{servicio}).
+	\item[\texttt{sistema\_requisito\_funcional}] Define los niveles mínimos funcionales que debe tener el usuario para poder utilizar cada sistema: nivel visual, auditivo, tecnológico y de habla, en una escala de 0 a 3.
+\end{description}
+
+\subsubsection{Tablas de relación (muchos a muchos)}
+Vinculan cada sistema con sus características clínicas y técnicas.
+
+\begin{description}
+	\item[\texttt{sistema\_entrada}] Relaciona cada sistema con los métodos de entrada que admite.
+	\item[\texttt{sistema\_idioma}] Relaciona cada sistema con los idiomas en los que está disponible.
+	\item[\texttt{sistema\_plataforma}] Relaciona cada sistema con las plataformas en las que funciona.
+	\item[\texttt{sistema\_metodo}] Relaciona cada sistema con el método de comunicación que emplea.
+	\item[\texttt{sistema\_entorno}] Relaciona cada sistema con los entornos de uso en los que es apto.
+	\item[\texttt{sistema\_dependencia}] Define qué periféricos o hardware requiere cada sistema para funcionar, indicando además si dicho hardware es obligatorio u opcional.
+\end{description}
+
+\subsubsection{Tabla de historial}
+\begin{description}
+	 \item[\texttt{historial\_recomendacion}] Almacena de forma anónima los registros generados con consentimiento de investigación. Sus campos principales son: identificador único autogenerado (\texttt{id}), fecha del registro, perfil clínico del usuario en formato JSONB (\texttt{input\_usuario}), sistemas recomendados, retroalimentación estructurada en JSON (\texttt{feedback}) e indicador booleano (\texttt{es\_real}) que distingue casos clínicos reales de pruebas.
+\end{description}
+
+\subsection{Flujo de datos}
+El flujo principal de la aplicación sigue estos pasos:
+
+\begin{enumerate}
+	\item El usuario navega por las páginas informativas (inicio, ELA, SAAC y base legal) para conocer la herramienta.
+	\item El usuario completa el cuestionario y acepta el consentimiento RGPD.
+	\item El servidor recibe la petición POST en \texttt{/recomendar} y ejecuta el algoritmo de filtrado clínico.
+	\item Si el usuario otorgó consentimiento de investigación, el perfil se almacena de forma anónima en la base de datos.
+	\item Se renderiza la pantalla de resultados con los sistemas SAAC recomendados.
+	\item Opcionalmente, el usuario envía feedback, que queda vinculado a su registro mediante el \texttt{historial\_id}.
+	\item El investigador puede consultar todos los registros almacenados accediendo a \texttt{/admin\_historial}.
+\end{enumerate}
