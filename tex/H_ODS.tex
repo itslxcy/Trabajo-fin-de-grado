@@ -1,9 +1,31 @@
 \apendice{Anexo de sostenibilización curricular}
 
 \section{Introducción}
-Este anexo incluirá una reflexión personal del alumnado sobre los aspectos de la sostenibilidad que se abordan en el trabajo.
-Se pueden incluir tantas subsecciones como sean necesarias con la intención de explicar las competencias de sostenibilidad adquiridas durante el alumnado y aplicadas al Trabajo de Fin de Grado.
+La sostenibilidad no se limita al ámbito medioambiental. A lo largo del Grado en Ingeniería de la Salud he comprendido que la sostenibilidad abarca también dimensiones sociales, éticas y económicas que son inseparables de cualquier proyecto tecnológico orientado a las personas. Este TFG, centrado en el desarrollo de una herramienta de apoyo a la prescripción de SAAC para pacientes con ELA, me ha permitido aplicar y reflexionar sobre varias de estas dimensiones de forma directa.
 
-Más información en el documento de la CRUE \url{https://www.crue.org/wp-content/uploads/2020/02/Directrices_Sosteniblidad_Crue2012.pdf}.
+\section{Sostenibilidad social e inclusión}
+El punto de partida de este proyecto es, en sí mismo, un compromiso con la sostenibilidad social. La ELA es una enfermedad que afecta de forma progresiva e irreversible a la capacidad de comunicación de las personas que la padecen. La comunicación es un derecho fundamental, y la pérdida de esa capacidad tiene consecuencias devastadoras no solo para el paciente, sino para su entorno familiar y social.
 
-Este anexo tendrá una extensión comprendida entre 600 y 800 palabras.
+Desarrollar una herramienta que facilite la selección de sistemas de comunicación aumentativa y alternativa supone contribuir directamente a la autonomía y a la dignidad de estas personas. Desde la perspectiva de la sostenibilidad social, este proyecto trabaja la equidad en el acceso a la tecnología asistiva: el cuestionario recoge variables como el idioma, el nivel tecnológico y el entorno de uso precisamente para que la recomendación sea pertinente independientemente del perfil cultural, lingüístico o socioeconómico del paciente.
+
+El soporte para lenguas cooficiales como el gallego, el catalán y el euskera responde también a un compromiso de inclusión lingüística, reconociendo que la diversidad cultural es parte de la sostenibilidad social.
+
+\section{Sostenibilidad ética y privacidad}
+El tratamiento de datos clínicos implica una responsabilidad ética que he tenido que asumir desde el diseño del sistema. La aplicación recoge información sensible sobre las capacidades funcionales de personas con una enfermedad grave, lo que exige un nivel de cuidado especial.
+
+He aplicado el principio de minimización de datos del RGPD: solo se recoge lo estrictamente necesario para generar la recomendación, y el almacenamiento con fines de investigación es siempre voluntario y anónimo. Esta decisión de diseño no es solo un requisito legal, sino una postura ética: las personas vulnerables no deben ser objeto de extracción de datos sin su consentimiento explícito e informado.
+
+Esta experiencia me ha hecho reflexionar sobre la responsabilidad que tenemos los ingenieros de la salud cuando desarrollamos sistemas que interactúan con datos de pacientes y como debemos velar por sus derechos. 
+
+\section{Sostenibilidad económica y accesibilidad}
+Una de las decisiones más conscientes del proyecto ha sido priorizar en el catálogo de sistemas SAAC las opciones gratuitas o de bajo coste junto a las de mayor coste, con el objetivo de que la herramienta sea útil para pacientes con recursos económicos diversos. Aplicaciones como LetMeTalk, Look to Speak u OptiKey son completamente gratuitas..
+
+Asimismo, el uso exclusivo de tecnologías de código abierto en el desarrollo de la propia herramienta (Python, Flask, PostgreSQL) garantiza que esta pueda mantenerse, ampliarse o adaptarse en el futuro sin coste de licencias, lo que contribuye a su sostenibilidad económica a largo plazo.
+
+\section{Sostenibilidad tecnológica y escalabilidad}
+Durante el desarrollo he tomado decisiones orientadas a la longevidad del sistema. El diseño modular de la base de datos permite añadir nuevos sistemas SAAC al catálogo sin modificar el código de la aplicación. El algoritmo de filtrado opera sobre los datos, no sobre reglas fijas escritas en el código, lo que lo hace adaptable a la evolución del mercado de tecnología asistiva.
+
+Esta forma de pensar el software, orientada a la mantenibilidad y a la escalabilidad, es también una forma de sostenibilidad: un sistema que puede actualizarse y crecer tiene una vida útil mucho mayor y genera menos residuo tecnológico que uno que requiere ser reescrito ante cualquier cambio.
+
+\section{Reflexión final}
+Este TFG me ha enseñado que, aunque en la ingeniería de la salud trabajamos con tecnología, nuestro usuario final es siempre una persona en una situación de vulnerabilidad. Esa conciencia debe traducirse en decisiones técnicas concretas: sistemas inclusivos, datos tratados con respeto, herramientas accesibles y código diseñado para durar. La sostenibilidad, entendida en su sentido más amplio, no es un añadido al final del proyecto sino una forma de trabajar desde el principio.
