@@ -1,16 +1,73 @@
 \apendice{Documentación de usuario}
 
-\section{Requisitos software y hardware para ejecutar el proyecto.}
-Se detallarán los requisitos mínimos de software y hardware necesarios para ejecutar correctamente el proyecto.
+\section{Requisitos software y hardware para ejecutar el proyecto}
+Para garantizar el correcto funcionamiento del sistema, se deben cumplir los requisitos mínimos indicados a continuación:
+
+\subsection{Software}
+\begin{itemize}
+	\item \textbf{Sistema operativo:} Multiplataforma (Linux, Windows o macOS).
+	\item \textbf{Lenguaje de programación:} Python 3.9 o superior.
+	\item \textbf{Gestor de base de datos:} PostgreSQL 13 o superior (debido al uso de \texttt{psycopg2}).
+	\item \textbf{Navegador web:} Versiones actualizadas de Google Chrome, Mozilla Firefox o Microsoft Edge (compatibles con HTML5 y CSS3).
+\end{itemize}
+
+\subsection{Hardware}
+\begin{itemize}
+    \item \textbf{Procesador:} Arquitectura x64.
+    \item \textbf{Memoria RAM:} Mínimo 2 GB de RAM libres.
+    \item \textbf{Almacenamiento:} 500 MB de espacio disponible para la aplicación y la base de datos local.
+    \item \textbf{Conexión a internet:} Necesaria para el acceso remoto a la plataforma.
+\end{itemize}
 
 \section{Instalación / Puesta en marcha}
-Se describirá el proceso de instalación y ejecución del sistema de forma clara y ordenada, indicando los pasos necesarios para su correcta puesta en funcionamiento.
+El proceso de instalación se basa en la creación de un entorno virtual para asegurar la estabilidad de las dependencias.
 
-\section{Manuales y/o Demostraciones prácticas}
-Se incluirán instrucciones de uso del sistema y ejemplos prácticos que faciliten su comprensión por parte del usuario final.
+\subsection{Pasos para la ejecución en local}
+\begin{enumerate}
+	\item \textbf{Descarga del código:} Clonar el repositorio o descomprimir el archivo del proyecto.
+	\item \textbf{Creación del entorno virtual:}
+	\begin{verbatim}
+	python -m venv venv
+	venv\ Scripts\ activate
+	\end{verbatim}
+	\item \textbf{Instalación de dependencias:} Utilizar el archivo \texttt{requirements.txt} proporcionado:
+	\begin{verbatim}
+	pip install -r requirements.txt
+	\end{verbatim}
+	\item \textbf{Configuración de variables de entorno:} Crear un archivo \texttt{.env} en la raíz con las credenciales de la base de datos y la \texttt{SECRET_KEY} (gestionado por \texttt{python-dotenv}).
+	\item \textbf{Inicialización de la base de datos:} Asegurarse de que PostgreSQL está ejecutándose y crear la base de datos definida en el archivo de configuración.
+	\item \textbf{Ejecución:}
+	\begin{verbatim}
+	flask run  # Desarrollo
+	gunicorn -w 4 app:app  # Producción (usando gunicorn v26.0.0)
+	\end{verbatim}
+\end{enumerate}
 
+\section{Manuales y/o demostraciones prácticas}
+La interacción con el sistema es intuitiva y sigue un flujo lineal dividido en tres áreas principales:
 
+\subsection{Generación de recomendación}
+El usuario accede a la página principal donde se presenta el cuestionario clínico. 
+\begin{itemize}
+	\item Debe completar todos los campos obligatorios sobre capacidades (motoras, cognitivas, visuales).
+	\item Es imprescindible marcar la casilla de aceptación de términos legales para que el sistema procese la solicitud.
+	\item Al finalizar, el sistema mostrará una página con los sistemas SAAC recomendados y el hardware complementario.
+\end{itemize}
 
+\subsection{Envío de retroalimentación (Feedback)}
+Tras visualizar los resultados, el usuario encontrará un botón de "Enviar Feedback". Al pulsarlo:
+\begin{itemize}
+	\item Se le realizarán preguntas sobre la exactitud de los resultados de recomendación.
+	\item Podrá valorar la precisión de la recomendación de 1 a 10.
+	\item Podrá añadir comentarios adicionales sobre su experiencia actual con otros sistemas.
+	\item Esta información se vincula de forma anónima al registro previo mediante el identificador de sesión.
+\end{itemize}
 
+\subsection{Panel de administración (Uso del investigador)}
+Accediendo a la ruta protegida \texttt{/admin_historial}, el personal autorizado puede visualizar una tabla con todos los registros:
+\begin{itemize}
+	\item Se diferencian visualmente los "Pacientes reales" de las "Pruebas".
+	\item Se pueden analizar los datos JSON almacenados para estudios clínicos o mejora del algoritmo de filtrado.
+\end{itemize}
     
      
