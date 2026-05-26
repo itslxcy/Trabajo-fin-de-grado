@@ -22,21 +22,21 @@ La aplicación cuenta con las siguientes vistas, organizadas según su naturalez
 Accesibles desde el menú de navegación principal, proporcionan contexto clínico y legal al usuario antes de interactuar con el cuestionario.
 
 \begin{description}
-	\item[Página de inicio] Presenta la naturaleza y propósito de la herramienta, los criterios utilizados para su desarrollo y las instituciones colaboradoras.
-	\item[Información sobre ELA] Explica qué es la Esclerosis Lateral Amiotrófica, sus tipos según el origen, sus fases de progresión y consideraciones sobre la preservación cognitiva.
-	\item[Información sobre SAAC] Describe los Sistemas Aumentativos y Alternativos de Comunicación, su clasificación según tecnología, la importancia de los sistemas escalables y aspectos sobre financiación.
-	\item[Base legal] Detalla la finalidad del tratamiento de datos, las bases jurídicas, la política de conservación, los destinatarios de la información y los derechos del usuario en cumplimiento del RGPD.
+		\item - Página de inicio: Presenta la naturaleza y propósito de la herramienta, los criterios utilizados para su desarrollo y las instituciones colaboradoras.
+		\item- Información sobre ELA: Explica qué es la Esclerosis Lateral Amiotrófica, sus tipos según el origen, sus fases de progresión y consideraciones sobre la preservación cognitiva.
+		\item- Información sobre SAAC: Describe los Sistemas Aumentativos y Alternativos de Comunicación, su clasificación según tecnología, la importancia de los sistemas escalables y aspectos sobre financiación.
+		\item- Base legal: Detalla la finalidad del tratamiento de datos, las bases jurídicas, la política de conservación, los destinatarios de la información y los derechos del usuario en cumplimiento del RGPD.
 \end{description}
 
-\subsubsection{Páginas funcionales}
+\subsubsection{Páginas funcionales:}
 Constituyen el flujo principal de interacción con el sistema.
 
 \begin{description}
-	\item[Cuestionario] Formulario web que recoge el perfil clínico del usuario mediante menús desplegables y botones de opción, incluyendo la casilla de consentimiento RGPD obligatorio.
-	\item[Resultados] Renderiza dinámicamente la propuesta personalizada segmentada en tres bloques: sistemas finales, sistemas de uso preventivo y bancos de voz.
-	\item[Feedback] Formulario opcional para que el usuario evalúe la propuesta recibida.
-	\item[Agradecimiento] Pantalla de confirmación tras el envío del feedback.
-	\item[Panel de administración] Vista exclusiva para el investigador que lista cronológicamente todos los registros almacenados con consentimiento, diferenciando casos reales de pruebas.
+		\item- Cuestionario: Formulario web que recoge el perfil clínico del usuario mediante menús desplegables y botones de opción, incluyendo la casilla de consentimiento RGPD obligatorio.
+		\item- Resultados: Renderiza dinámicamente la propuesta personalizada segmentada en tres bloques: sistemas finales, sistemas de uso preventivo y bancos de voz.
+		\item- Feedback: Formulario opcional para que el usuario evalúe la propuesta recibida.
+		\item- Agradecimiento: Pantalla de confirmación tras el envío del feedback.
+		\item- Panel de administración: Vista exclusiva para el investigador que lista cronológicamente todos los registros almacenados con consentimiento, diferenciando casos reales de pruebas.
 \end{description}
 
 \subsection{Diseño de la base de datos}
@@ -49,13 +49,13 @@ Almacenan los valores de referencia del sistema de filtrado clínico.
 	\item[\texttt{tipo\_entrada}] Métodos de entrada disponibles: manos, ojos, cabeza, voz y pulsador.
 	\item[\texttt{idioma}] Idiomas soportados: español, gallego, catalán y euskera.
 	\item[\texttt{plataforma}] Plataformas tecnológicas: Windows, iOS, Android, Web y panel físico.
-	\item[\texttt{entorno\_uso}] Contextos de uso: domicilio y exterior.
+	\item[\texttt{entorno\_uso}] Contextos de uso: domicilio, exterior y mixto.
 	\item[\texttt{metodo\_comunicacion}] Métodos de comunicación: alfabeto y pictogramas.
 \end{description}
 
-\subsubsection{Tabla principal de sistemas}
+\subsubsection{Tablas principales de sistemas}
 \begin{description}
-	\item[\texttt{saac\_sistema}] Tabla central del catálogo. Almacena todos los sistemas, hardware y servicios recomendables, con sus atributos: nombre, descripción, si requiere interlocutor, nivel de fatiga física, portabilidad, compatibilidad con anclaje, enlace externo y categoría 			(\texttt{sistema}, \texttt{hardware} o \texttt{servicio}).
+	\item[\texttt{saac\_sistema}] Tabla central del catálogo. Almacena todos los sistemas, hardware y servicios recomendables, con sus atributos: nombre, descripción, si requiere interlocutor, nivel de fatiga física, portabilidad, compatibilidad con anclaje, enlace externo y categoría 			(sistema, hardware o servicio).
 	\item[\texttt{sistema\_requisito\_funcional}] Define los niveles mínimos funcionales que debe tener el usuario para poder utilizar cada sistema: nivel visual, auditivo, tecnológico y de habla, en una escala de 0 a 3.
 \end{description}
 
