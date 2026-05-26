@@ -1,19 +1,62 @@
-\apendice{Manual del desarrollador / programador / investigador.} % usar el término que mejor se corresponda.
+\apendice{Manual del desarrollador e investigador}
+
+Este manual proporciona la información necesaria para comprender la arquitectura interna del software, facilitar su mantenimiento y permitir la replicación del entorno de investigación por parte de otros desarrolladores o personal científico.
 
 \section{Estructura de directorios}
+El proyecto se organiza en una estructura de carpetas que separa claramente el entorno de ejecución, la lógica de la aplicación, los scripts de la base de datos y la documentación técnica en LaTeX:
 
-Descripción de la estructura de carpetas y archivos entregados junto con el proyecto.
-
+\begin{itemize}
+	\item \ruta{/Backend/}: Carpeta principal que contiene la lógica del servidor Flask.
+	\begin{itemize}
+		\item \ruta{app.py}: Archivo que aloja las rutas y algoritmo de filtrado.
+        		\item \ruta{extension.py}: Archivo de configuración donde se realiza la instancia de la base de datos (SQLAlchemy).
+       		\item \ruta{modelos.py}: Definición de las clases y tablas de relación (mapeo ORM).
+        		\item \ruta{templates/}: Directorio con las plantillas HTML (Jinja2) para la renderización de las vistas.
+       		\item \ruta{static/}: Contiene los archivos CSS para el diseño visual y el archivo \texttt{Procfile} para el despliegue en la nube.
+        		\item \ruta{.env}: Archivo de configuración de variables de entorno (claves secretas y URLs de conexión). 
+	\end{itemize}
+    	\item \ruta{/Base\_de\_datos/}: Contiene los scripts SQL necesarios para la inicialización.
+    	\begin{itemize}
+      		  \item \ruta{TFG.sql}: Script para la creación y población de la base de datos en entorno local.
+        		  \item \ruta{TFG\_nube.sql}: Versión optimizada del script para el funcionamiento en servidores de producción.
+    	\end{itemize}
+   	 \item \ruta{/img/}: Almacena los diagramas y capturas de pantalla utilizados en la memoria y anexos.
+    	\item \ruta{/tex/}: Contiene los archivos fuente de LaTeX (\texttt{.tex}) que componen los capítulos y apéndices del trabajo.
+   	\item \ruta{/venv/}: Entorno virtual de Python con las librerías aisladas del sistema.
+    	\item \ruta{Archivos en la raíz}:
+    	\begin{itemize}
+        		\item \ruta{requirements.txt}: Lista de requisitos del proyecto para su instalación directa.
+        		\item \ruta{gitignore}: Configuración de archivos y carpetas excluidos del almacenamiento en Github.
+        		\item \ruta{README.md}: Documentación de presentación del repositorio.
+        		\item \ruta{memoria.tex} y \ruta{anexos.tex}: Archivos maestros para la compilación de la documentación final.
+   	 \end{itemize}
+\end{itemize}
 \section{Compilación, instalación y ejecución del proyecto}
 
-En caso necesario, se detallarán los pasos técnicos para compilar, instalar y ejecutar el proyecto.
+\subsection{Entorno de desarrollo}
+Se recomienda el uso de \texttt{pip} y \texttt{virtualenv}. El sistema utiliza \texttt{python-dotenv} para cargar la configuración, por lo que es necesario definir \texttt{DATABASE\_URL} y \texttt{FLASK\_ENV} en el entorno local antes de la ejecución.
+
+\subsection{Base de datos y ORM}
+La persistencia se gestiona mediante \textbf{SQLAlchemy 2.0}. Para inicializar el esquema en un nuevo entorno de base de datos, se debe ejecutar desde la consola de Python:
+\begin{verbatim}
+from app import db
+with app.app\_context():
+	db.create\_all()
+\end{verbatim}
 
 \section{Pruebas del sistema}
-Esta sección puede ser opcional.
+Para validar la fiabilidad del recomendador y la integridad de los datos, se han realizado los siguientes bloques de pruebas:
 
-Se describirán las pruebas realizadas para validar el correcto funcionamiento del sistema, tales como pruebas unitarias, funcionales o validaciones con usuarios.
+\begin{itemize}
+	\item \textbf{Pruebas funcionales (Caja negra):} Validación de los formularios de cuestionario y feedback, asegurando que los métodos POST envían correctamente los resultados al servidor.
+	\item \textbf{Pruebas de lógica de filtrado:} Introducción de perfiles clínicos extremos (ej. ausencia total de movilidad) para comprobar que el algoritmo filtra correctamente los SAAC incompatibles.
+	\item \textbf{Validación de persistencia:} Comprobación en el panel de administración (\texttt{/admin\_historial}) que los datos guardados coinciden exactamente con los enviados por el usuario.
+	\item \textbf{Pruebas de seguridad:} Verificación de las cabeceras de seguridad inyectadas por \texttt{Flask-Talisman} (HSTS, XSS Protection) mediante la web VirusTotal.
+\end{itemize}
 
+\section{Instrucciones para la modificación o mejora del proyecto}
+\subsection{Ampliación del catálogo de SAAC}
+Para añadir nuevos sistemas o periféricos no es necesario modificar el código fuente, basta con insertar los nuevos registros en las tablas correspondientes de PostgreSQL, siguiendo el esquema de capacidades requerido por el algoritmo de filtrado.
 
-\section{Instrucciones para la modificación o mejora del proyecto.}
-
-Se proporcionarán indicaciones y recomendaciones para facilitar futuras ampliaciones o mejoras del trabajo realizado.
+\subsection{Mejora del algoritmo de recomendación}
+ Se recomienda el uso de técnicas de \textit{Machine Learning} en futuras versiones, utilizando el historial de \texttt{feedback} recolectado en este proyecto como conjunto de entrenamiento (Dataset) para refinar las sugerencias automáticas.
