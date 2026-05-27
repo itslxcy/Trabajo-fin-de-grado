@@ -5,8 +5,8 @@
 Los datos utilizados en este proyecto tienen dos orígenes diferenciados:
 
 \begin{description}
-	\item[\textbf{Base de datos de sistemas SAAC}] Construida manualmente a partir de revisión bibliográfica y consulta de fuentes especializadas (fabricantes, distribuidores y documentación clínica). Constituye el catálogo estático sobre el que opera el algoritmo de filtrado y no varía 		en tiempo de ejecución.
-	\item[\textbf{Perfiles clínicos de usuarios}] Recogidos dinámicamente a través del formulario web de la aplicación. Cada perfil se genera a partir de las respuestas del usuario al cuestionario y se almacena de forma anónima en la base de datos únicamente si el usuario otorga 			consentimiento de investigación.
+	\item[\textbf{Base de datos de sistemas SAAC:}] Construida manualmente a partir de revisión bibliográfica y consulta de fuentes especializadas (fabricantes, distribuidores y documentación clínica). Constituye el catálogo estático sobre el que opera el algoritmo de filtrado y no varía 		en tiempo de ejecución.
+	\item[\textbf{Perfiles clínicos de usuarios:}] Recogidos dinámicamente a través del formulario web de la aplicación. Cada perfil se genera a partir de las respuestas del usuario al cuestionario y se almacena de forma anónima en la base de datos únicamente si el usuario otorga 			consentimiento de investigación.
 \end{description}
 
 \subsection{Formato y estructura}
@@ -43,7 +43,7 @@ El campo \texttt{feedback}, también en formato JSON, almacena la retroalimentac
 \end{verbatim}
 
 \subsection{Volumen de datos}
-Durante el período de desarrollo y validación del TFG se han recogido                       registros en total, combinando casos reales y casos de prueba. El campo booleano \texttt{es\_real} de la tabla \texttt{historial\_recomendacion} permite distinguir ambos tipos en el panel de administración. Dado el volumen reducido, los datos tienen un valor cualitativo y de validación funcional del sistema, no estadístico.
+Durante el período de desarrollo y validación del TFG se han recogido menos de 20 registros en total, combinando casos reales y casos de prueba. El campo booleano \texttt{es\_real} de la tabla \texttt{historial\_recomendacion} permite distinguir ambos tipos en el panel de administración. Dado el volumen reducido, los datos tienen un valor cualitativo y de validación funcional del sistema, no estadístico.
 
 \subsection{Variables del cuestionario}
 Las variables recogidas por el cuestionario se agrupan en cuatro categorías:
@@ -77,7 +77,7 @@ En la ELA, la capacidad motora se deteriora progresivamente y de forma asimétri
 	\item[\textbf{Manos}] Presencia de movilidad funcional en las extremidades superiores. Permite el uso directo de pantallas táctiles, teclados y ratones. Es el método más frecuente en fases iniciales.
 	\item[\textbf{Ojos}] Capacidad de controlar la dirección de la mirada. El control ocular está especialmente preservado en la ELA avanzada, ya que los músculos oculomotores son de los últimos en verse afectados, lo que lo convierte en el método de acceso más importante en fases 		tardías.
 	\item[\textbf{Cabeza}] Presencia de movilidad cervical residual. Permite el uso de punteros láser adaptados o sistemas de seguimiento cefálico como EVA Facial Mouse.
-	\item[\textbf{Voz}] Capacidad de emitir sonidos con suficiente claridad para ser reconocidos por el sistema. Solo viable si el nivel de habla es 3.
+	\item[\textbf{Voz}] Capacidad de emitir sonidos con suficiente claridad para ser reconocidos por el sistema.
 	\item[\textbf{Pulsador}] Cualquier movimiento voluntario y repetible, por mínimo que sea (soplido, parpadeo, presión con el pie o un dedo), puede activar un conmutador. Es el método de acceso más adaptable y el último recurso en fases muy avanzadas de la enfermedad.
 \end{description}
 

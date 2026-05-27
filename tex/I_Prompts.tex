@@ -1,22 +1,50 @@
 \apendice{Registro de interacciones con sistemas de IA}
 
-\section{Registro de interacciones con sistemas de IA}
-
 Este anexo tiene como objetivo garantizar la transparencia en el uso de herramientas de inteligencia artificial generativa durante la realización del Trabajo de Fin de Grado. 
 
-\begin{itemize}
-    \item Herramienta o modelo de IA utilizado.
-    \item Fecha aproximada de uso.
-    \item Prompt/petición/solicitud/forma de uso realizada por el estudiante.
-    \item Respuesta completa generada por la IA (opcional)
-    \item Uso posterior de dicha respuesta en el TFG (orientación conceptual,
-    mejora de redacción, generación de ideas, apoyo técnico, generación de código, etc.).
-\end{itemize}
+\paragraph{Interacción 1: Validación del catálogo de SAAC} \mbox{} \\
+\textbf{Herramienta:} Gemini (Google). \\
+\textbf{Fecha aproximada de uso:} Marzo de 2026. \\
+\textbf{Prompt:} Proporcioné a la IA el catálogo preliminar de Sistemas Aumentativos y Alternativos de Comunicación (SAAC) que había diseñado para la aplicación y le planteé la siguiente consulta: \textit{Este es el catálogo de SAAC que he recopilado para el sistema de recomendación enfocado en pacientes con ELA. Analiza la selección actual basándote en la literatura clínica y tecnológica sobre comunicación asistida. ¿Consideras que he pasado por alto algún sistema o categoría de SAAC que sea fundamental incluir para estos pacientes?} \\
+\textbf{Respuesta de la IA:} La IA evaluó la lista proporcionada, validó la estructura existente y sugirió expandir el catálogo incluyendo alternativas específicas de acceso (como sistemas de seguimiento ocular de bajo coste o aplicaciones de voice banking) para garantizar que la herramienta cubriera de forma realista todas las fases de progresión de la enfermedad. \\
+\textbf{Uso posterior en el TFG:} Generación de ideas y orientación conceptual. La respuesta de la IA se utilizó como un filtro para ampliar el catálogo de SAAC del proyecto. Permitió identificar lagunas en los sistemas recomendados, ayudando a asegurar que la base de la aplicación fuera verdaderamente exhaustiva y representativa de las tecnologías de apoyo actuales.
 
-\begin{itemize}
-    \item Herramienta: Gemini (Google)
-    \item Fecha aproximada de uso: Abril 2026
-    \item Prompt: Quiero editar mi página web para que tenga una visualización más bonita. Para ello crea estilos CSS donde la página esté centrada, los títulos y botones aparezcan en color morado, los sliders tengan una regla graduada, la pestaña en la que estás navegando actualmente esté marcada en color y más cosas que consideres necesarias para una buena visualización.
-    \item Respuesta completa generada por la IA (opcional): La IA generó varios estilos que se usaron para la página, se encuentran en la carpeta backend/static/estilos.
-    \item Uso posterior de dicha respuesta en el TFG: Apoyo técnico ayudando a una personalización y mejora de la estética. 
-\end{itemize}
+\paragraph{Interacción 2: Diseño y estética de la interfaz web} \mbox{} \\
+\textbf{Herramienta:} Gemini (Google). \\
+\textbf{Fecha aproximada de uso:} Abril de 2026. \\
+\textbf{Prompt:} \textit{ Quiero editar mi página web para que tenga una visualización más bonita. Para ello crea estilos CSS donde la página esté centrada, los títulos y botones aparezcan en color morado, los sliders tengan una regla graduada, la pestaña en la que estás navegando actualmente esté marcada en color y más cosas que consideres necesarias para una buena visualización.} \\
+\textbf{Respuesta de la IA:} La IA generó varios estilos CSS que se aplicaron a la interfaz; el código resultante se integró en el directorio \texttt{backend/static/estilos}. \\
+\textbf{Uso posterior en el TFG:} Apoyo técnico ayudando a una personalización y mejora de la estética general de la herramienta.
+
+\paragraph{Interacción 3: Implementación de seguridad OWASP} \mbox{} \\
+\textbf{Herramienta:} Gemini (Google). \\
+\textbf{Fecha aproximada de uso:} Mayo de 2026. \\
+\textbf{Prompt:} \textit{ Mi tutor me ha indicado que, aunque el sitio responde por HTTPS, debo asegurar técnicamente la redirección automática HTTP $\rightarrow$ HTTPS, activar HSTS (Strict-Transport-Security) e implementar cabeceras seguras como Content-Security-Policy (CSP) siguiendo las recomendaciones de OWASP para prevenir ataques XSS, inyecciones y problemas con cookies de sesión. ¿Cómo puedo implementar esto en mi código?} \\
+\textbf{Respuesta de la IA:} La IA recomendó la utilización de la librería \texttt{Flask-Talisman} como la solución estándar para acoplar las directivas de seguridad de OWASP en Flask, proporcionando la estructura de configuración necesaria. \\
+\textbf{Uso posterior en el TFG:} Apoyo técnico y generación de código. La respuesta se utilizó para implementar el módulo de seguridad mediante el siguiente bloque:
+
+\begin{verbatim}
+# Inicializamos Talisman con las directivas de OWASP
+Talisman(
+    app,
+    force_https=True,              
+    strict_transport_security=True,  
+    content_security_policy=csp_config,
+    session_cookie_secure=True,     
+    session_cookie_http_only=True   
+)
+\end{verbatim}
+
+\paragraph{Interacción 4: Generación de casos de prueba para el algoritmo} \mbox{} \\
+\textbf{Herramienta:} Gemini (Google). \\
+\textbf{Fecha aproximada de uso:} Mayo de 2026. \\
+\textbf{Prompt:} \textit{Necesito probar un algoritmo de recomendación de SAAC en personas con ELA. Genera una variedad de posibles combinaciones de parámetros a marcar para comprobar el correcto funcionamiento en distintas condiciones.} \\
+\textbf{Respuesta de la IA:} La IA proporcionó una serie de respuestas detallando distintas combinaciones de selección (clínicas y técnicas) y la respuesta esperada que el algoritmo debería devolver. \\
+\textbf{Uso posterior en el TFG:} Apoyo técnico y pruebas. Los datos sirvieron como banco de pruebas para verificar el funcionamiento de las reglas lógicas antes de la fase de despliegue, garantizando que el sistema no generara salidas inesperadas o nulas.
+
+\paragraph{Interacción 5: Redacción de cláusula legal (RGPD)} \mbox{} \\
+\textbf{Herramienta:} Gemini (Google). \\
+\textbf{Fecha aproximada de uso:} Mayo de 2026. \\
+\textbf{Prompt:} \textit{Actúa como un experto en reglamento de protección de datos en España. Redacta el borrador de una cláusula de consentimiento informado para una aplicación web académica que recopila datos de salud de pacientes con ELA para recomendarles sistemas de comunicación (SAAC). El consentimiento debe ser explícito, revocable, detallar que los datos se usarán solo con fines de investigación y que están completamente anonimizados.} \\
+\textbf{Respuesta de la IA:} La IA devolvió una plantilla legal estructurada con las secciones obligatorias según el RGPD (Responsable, finalidad, legitimación, derechos y conservación). \\
+\textbf{Uso posterior en el TFG:} Orientación conceptual y redacción de contenido. El texto se adaptó para la vista de Base legal y el formulario del cuestionario (Apéndice C), garantizando el cumplimiento normativo.
