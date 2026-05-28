@@ -1,19 +1,24 @@
 \capitulo{7}{Conclusiones}
+Tras completar el desarrollo, despliegue y validación de la herramienta web de recomendación de SAAC para pacientes con ELA, se presentan las principales conclusiones del proyectodivididas entre los hitos alcanzados.
 
-Todo proyecto debe incluir las conclusiones que se derivan de su desarrollo. Éstas pueden ser de diferente índole, dependiendo de la tipología del proyecto, pero normalmente van a estar presentes un conjunto de conclusiones relacionadas con los resultados del proyecto y un conjunto de conclusiones técnicas. 
+\begin{itemize}
+    	\item \textbf{Cumplimiento de objetivos:} Se ha logrado diseñar e implementar un prototipo web funcional y accesible que centraliza las soluciones SAAC del mercado y automatiza su recomendación. La lógica del cuestionario traduce con éxito variables biomédicas y de 				accesibilidad en propuestas tecnológicas concretas, lo que optimiza un proceso que hasta ahora los profesionales realizaban de forma manual y dispersa.
+    	\item \textbf{Validación en entornos reales:} Las pruebas con pacientes reales de ELACyL demostraron la utilidad práctica del sistema. Obtener una nota de adecuación de 6/10 en las primeras pruebas reales valida que el recomendador ofrece una guía sólida y realista, sirviendo 			tanto de respuesta inmediata para fases avanzadas como de herramienta de planificación preventiva en las fases iniciales (como la ELA bulbar).
+    	\item \textbf{Impacto formativo e interdisciplinar:} Desde el punto de vista del aprendizaje, el proyecto ha permitido aplicar principios de Ingeniería de la Salud a un problema sociosanitario real. Se ha logrado unificar el lenguaje clínico (escalas de autonomía, fatiga o afectación del 	habla) con la lógica computacional (estructuras de bases de datos relacionales y condicionales lógicos de filtrado).
+\end{itemize}
 
+\section{Aspectos relevantes}
+Esta sección resume la experiencia práctica acumulada durante las fases del proyecto, detallando las decisiones de diseño no triviales y los caminos descartados tras obtener resultados negativos.
 
+\subsection{El diseño del modelo de datos y el efecto embudo}
+Uno de los mayores retos del proyecto fue estructurar la base de datos de manera que reflejara fielmente el ecosistema SAAC. Inicialmente, se planteó un modelo de emparejamiento rígido, donde cada perfil de usuario se conectaba directamente con un único kit cerrado de software y hardware. 
 
-\section{Aspectos relevantes.}
+Sin embargo, las primeras simulaciones técnicas dieron resultados negativos: la ELA es una enfermedad demasiado heterogénea y este enfoque provocaba que muchos perfiles se quedaran sin ninguna recomendación válida al no cumplir con el 100\% de los requisitos estrictos de un kit.
 
-Este apartado pretende recoger los aspectos más interesantes del \textbf{desarrollo del proyecto}, comentados por los autores del mismo.
+Para solucionar esto, se optó por cambiar la estrategia hacia un modelo de filtrado por exclusión (efecto embudo). La base de datos se dividió en entidades independientes (software, hardware, periféricos, bancos de voz). El cuestionario web no busca el sistema ideal sino que va descartando lo que el paciente no puede usar. 
 
-Debe incluir los detalles más relevantes en cada fase del desarrollo, justificando los caminos tomados, especialmente aquellos que no sean triviales. 
+Por ejemplo, si el usuario marca "Interacción: ojos", el sistema elimina directamente los ratones y pantallas táctiles, pero mantiene abiertos todos los \textit{Eye trackers} y softwares compatibles de la base de datos. Esto permite que el sistema siempre ofrezca alternativas viables y escalables, tal y como se demostró en el caso de prueba en euskera (\textit{PAC-SKNTHB}), donde a pesar de no definirse la interacción, la web desplegó un abanico útil de opciones en lugar de bloquearse.
 
-Puede ser el lugar más adecuado para documentar los aspectos más interesantes del proyecto y también los resultados negativos obtenidos por soluciones previas a la solución entregada.
-
-Este apartado, debe convertirse en el resumen de la experiencia práctica del proyecto, y por sí mismo justifica que la memoria se convierta en un documento útil, fuente de referencia para los autores, los tutores y futuros alumnos.
-
-
-
+\subsection{Justificación de la plataforma}
+La elección de desarrollar una aplicación web (en lugar de una aplicación de escritorio o móvil) se justificó por criterios de accesibilidad y despliegue. Un entorno web garantiza que los profesionales de las asociaciones puedan acceder al recomendador desde cualquier dispositivo (Windows, Mac, tablet) sin necesidad de instalaciones complejas, únicamente entrando en un enlace. Además, facilita la actualización en tiempo real de la base de datos a medida que surjan nuevos dispositivos o aplicaciones de comunicación en el mercado, asegurando la sostenibilidad del proyecto a largo plazo.
 

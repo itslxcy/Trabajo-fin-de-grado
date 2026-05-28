@@ -18,15 +18,12 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Definimos una política CSP equilibrada para que permita tus estilos locales
 csp_config = {
     'default-src': '\'self\'',
-    # Permite tus estilos locales (estilos.css) y estilos en línea si los usas
     'style-src': [
         '\'self\'',
         '\'unsafe-inline\'' 
     ],
-    # Permite tus scripts locales de JavaScript
     'script-src': [
         '\'self\'',
         '\'unsafe-inline\''
@@ -36,9 +33,9 @@ csp_config = {
 # Inicializamos Talisman con las directivas de OWASP
 Talisman(
     app,
-    force_https=True,                # 1. Redirección automática HTTP -> HTTPS
-    strict_transport_security=True,  # 2. HSTS (Forzar HTTPS en el navegador)
-    content_security_policy=csp_config, # 3. CSP (Previene ataques XSS e inyecciones)
+    force_https=True,                # Redirección automática HTTP -> HTTPS
+    strict_transport_security=True,  # HSTS (Forzar HTTPS en el navegador)
+    content_security_policy=csp_config, #  CSP (Previene ataques XSS e inyecciones)
     session_cookie_secure=True,      # Asegura que las cookies solo viajen por HTTPS
     session_cookie_http_only=True    # Previene que scripts maliciosos roben tus cookies
 )
