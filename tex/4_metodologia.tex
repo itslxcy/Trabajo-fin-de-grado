@@ -1,54 +1,49 @@
 \capitulo{4}{Metodología}
 
 \section{Descripción de los datos}
-
-Los datos que sustentan el sistema de recomendación provienen de un análisis exhaustivo de soluciones tecnológicas actuales para la comunicación en pacientes con Esclerosis Lateral Amiotrófica (ELA). La base de conocimiento se ha estructurado en una base de datos relacional que categoriza los Sistemas Aumentativos y Alternativos de Comunicación (SAAC) según criterios clínicos y técnicos.
+Los datos que sustentan el sistema de recomendación provienen de un análisis de soluciones tecnológicas actuales para la comunicación en pacientes con Esclerosis Lateral Amiotrófica (ELA). La base de conocimiento se ha estructurado en una base de datos relacional que categoriza los Sistemas Aumentativos y Alternativos de Comunicación (SAAC) según criterios clínicos y técnicos.
 
 \begin{itemize}
-    \item \textbf{Origen de los datos:} La información ha sido recopilada a partir de catálogos de productos de apoyo (CEAPAT), documentación de asociaciones de ELA (como ELA Andalucía) y especificaciones técnicas de desarrolladores de software especializado (Tobii Dynavox, Smartbox, etc.).
-    \item \textbf{Tipología y formato:} Los datos se almacenan en un sistema de gestión de bases de datos relacionales (PostgreSQL). Se dividen en:
+    	\item \textbf{Origen de los datos:} La información ha sido recopilada a partir de catálogos de productos de apoyo (CEAPAT), documentación de asociaciones de ELA (como ELA Andalucía) y especificaciones técnicas de desarrolladores de software especializado (Tobii Dynavox, 			Smartbox, Qinera, Irisbond, etc.).
+    	\item \textbf{Tipología y formato:} Los datos se almacenan en un sistema de gestión de bases de datos relacionales (PostgreSQL). Se dividen en:
     \begin{itemize}
-        \item \textbf{Entidades maestras:} Catálogos de idiomas (español, gallego, catalán, euskera), tipos de entrada (ojos, voz, pulsador, etc.) y plataformas (Windows, iOS, Android, Web).
-        \item \textbf{Sistemas SAAC:} 29 registros iniciales que incluyen software, hardware y soluciones de baja tecnología.
-        \item \textbf{Requisitos funcionales:} Atributos numéricos que definen los niveles mínimos necesarios (0-3) de capacidad visual, auditiva, cognitiva, tecnológica y de habla para cada sistema.
+	\item \textbf{Entidades maestras:} Catálogos de idiomas (español, gallego, catalán, euskera), tipos de entrada (manos, ojos, cabeza, voz, pulsador), plataformas (Windows, iOS, Android, web, panel físico), entornos de uso (domicilio o exterior) y métodos de comunicación (alfabeto o 		pictogramas).
+        	\item \textbf{Sistemas SAAC:} 46 registros que incluyen software (desde paneles físicos hasta software avanzados y apps móviles), hardware (dispositivos base, periféricos de acceso y complementos) y servicios de Voice Banking.
+        	\item \textbf{Requisitos funcionales:} Atributos numéricos que definen los niveles mínimos necesarios (0-3) de capacidad visual, auditiva, cognitiva, tecnológica y de habla para cada sistema.
     \end{itemize}
-    \item \textbf{Características principales:} Los datos permiten un filtrado dinámico mediante consultas SQL que cruzan las capacidades del usuario con las prestaciones del sistema.
+    	\item \textbf{Características principales:} Los datos permiten un filtrado dinámico mediante consultas SQL que cruzan las capacidades del usuario con las prestaciones del sistema.
 \end{itemize}
 
 \section{Técnicas y herramientas}
-
 El desarrollo de la aplicación se ha basado en una arquitectura web con procesamiento de reglas de recomendación.
 
 \subsection{Herramientas de desarrollo}
 \begin{itemize}
-    \item \textbf{Python y Flask:} Se seleccionó Python como lenguaje principal por la familiarización adquirida durante la carrera. Flask fue elegido por su simplicidad de uso y la posibilidad de construcción de una estructura backend.
-    \item \textbf{PostgreSQL y SQLAlchemy:} Para el almacenamiento de datos se utiliza PostgreSQL. La interacción entre la aplicación y la base de datos se realiza mediante SQLAlchemy al considerar la herramienta más intuitiva para realizar una conexión entre ambos.
-    \item \textbf{Jinja2:} Como motor de plantillas para la generación dinámica de las interfaces de usuario (cuestionario e informes de resultados). Es utilizado como extensión al uso de Flask.
-    \item \textbf{Frontend (HTML/CSS):} Se ha diseñado una interfaz mediante pestañas (tabs) para facilitar la navegación.
+    	\item \textbf{Python y Flask:} Se seleccionó Python como lenguaje principal por la familiarización adquirida durante la carrera. Flask fue elegido por su simplicidad de uso y la posibilidad de construcción de una estructura backend.
+    	\item \textbf{PostgreSQL y SQLAlchemy:} Para el almacenamiento de datos se utiliza PostgreSQL. La interacción entre la aplicación y la base de datos se realiza mediante SQLAlchemy al considerar la herramienta más intuitiva para realizar una conexión entre ambos.
+    	\item \textbf{Jinja2:} Como motor de plantillas para la generación dinámica de las interfaces de usuario (cuestionario e informes de resultados). Es utilizado como extensión al uso de Flask.
+    	\item \textbf{Frontend (HTML/CSS):} Se ha diseñado una interfaz mediante pestañas (tabs) para facilitar la navegación.
 \end{itemize}
 
 \section{Metodología software}
-
 Tal y como se introdujo en la sección anterior, el software desarrollado se categoriza como un Sistema de Apoyo a la Decisión (SAD). Su construcción se ha articulado mediante una metodología iterativa e incremental, centrada en la implementación de un motor de decisión basado en lógica proposicional.
 
 \subsection{Modelado de la lógica proposicional}
-
 El recomendador es un sistema que evalúa un conjunto de sentencias lógicas, el conocimiento clínico se traduce en operaciones booleanas y comparativas:
 
 \begin{itemize}
-    \item \textbf{Estructura de las reglas:} Se han definido reglas bajo la estructura condicional IF-THEN. Por ejemplo, si la proposición indica que si el control manual es nulo, se excluyen automáticamente los sistemas de interacción táctil.
-    \item \textbf{Inferencia por filtrado progresivo:} El sistema opera mediante un proceso de eliminación. A medida que el usuario responde al cuestionario, se van validando o invalidando proposiciones lógicas que reducen el conjunto de soluciones posibles hasta obtener el subconjunto óptimo para el paciente.
-    \item \textbf{Lógica de post-procesamiento:} Además de la exclusión, se han implementado reglas de recomendación proactiva para sugerir acciones preventivas como el Voice Banking.
+    	\item \textbf{Estructura de las reglas:} Se han definido reglas bajo la estructura condicional IF-THEN. Por ejemplo, si la proposición indica que si el control manual es nulo, se excluyen automáticamente los sistemas de interacción táctil.
+    	\item \textbf{Inferencia por filtrado progresivo:} El sistema opera mediante un proceso de eliminación. A medida que el usuario responde al cuestionario, se van validando o invalidando proposiciones lógicas que reducen el conjunto de soluciones posibles hasta obtener el subconjunto óptimo para el paciente.
+    	\item \textbf{Lógica de post-procesamiento:} Además de la exclusión, se han implementado reglas de recomendación proactiva para sugerir acciones preventivas como el Voice Banking.
 \end{itemize}
 
 \subsection{Organización de fases y tareas}
-
 Para garantizar la fiabilidad del sistema, el desarrollo se organizó en las siguientes fases:
 
 \begin{enumerate}
-    \item \textbf{Fase de análisis y captura de reglas:} Identificación de los umbrales críticos de capacidad (visual, cognitiva, motora).
-    \item \textbf{Diseño e implementación del motor lógico:} Traducción de las reglas a consultas SQL y estructuras de control en Python (Flask). En esta fase se realizaron múltiples iteraciones para ajustar los filtros lógicos a medida que se realizaban pruebas de funcionamiento.
-    \item \textbf{Validación del sistema experto:} Verificación del comportamiento del recomendador mediante la introducción de perfiles de usuario tipo para asegurar que los resultados fueran clínicamente coherentes.
+    	\item \textbf{Fase de análisis y captura de reglas:} Identificación de los umbrales críticos de capacidad (visual, cognitiva, motora).
+    	\item \textbf{Diseño e implementación del motor lógico:} Traducción de las reglas a consultas SQL y estructuras de control en Python (Flask). En esta fase se realizaron múltiples iteraciones para ajustar los filtros lógicos a medida que se realizaban pruebas de funcionamiento.
+    	\item \textbf{Validación del sistema experto:} Verificación del comportamiento del recomendador mediante la introducción de perfiles de usuario tipo para asegurar que los resultados fueran clínicamente coherentes.
 \end{enumerate}
 
 
