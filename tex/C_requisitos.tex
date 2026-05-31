@@ -7,22 +7,22 @@ A continuación, se detallan los requisitos funcionales del sistema.
 
 \subsection{Captura de datos y filtrado clínico (Asociados a CU-1)}
 \begin{description}
-	\item[\textbf{RF-01: Captura de perfil clínico.}] El sistema deberá proporcionar un formulario web que permita recabar las capacidades funcionales, el idioma, los métodos de entrada de hardware, el nivel de alfabetización, las plataformas tecnológicas preferidas y el entorno de uso del usuario.
-	\item[\textbf{RF-02: Algoritmo de filtrado clínico.}] El sistema deberá implementar un algoritmo capaz de contrastar el perfil del usuario con los requisitos de la base de datos de SAAC. Asimismo, deberá ejecutar de forma recursiva la asociación de periféricos y hardware necesario, garantizando la eliminación de duplicados de la propuesta.
-	\item[\textbf{RF-03: Gestión de consentimiento y cumplimiento RGPD.}] El sistema debe validar obligatoriamente en tiempo real que el usuario acepte los términos de procesamiento de datos antes de enviar el cuestionario. De manera opcional, capturará el consentimiento explícito para el almacenamiento anónimo de los datos con fines de investigación.
-	\item[\textbf{RF-03b: Clasificación y anonimización del registro.}] En caso de contar con el consentimiento de investigación, el sistema deberá almacenar de forma anónima el perfil en formato JSON dentro de la tabla de historial, asignándole un identificador único (\texttt{ID}) y clasificando el registro entre un caso real o uno de prueba.
+	\item[\textbf{RF-01: Captura de perfil clínico.}] El sistema deberá proporcionar un formulario web que permita recabar las capacidades funcionales, el idioma, los métodos de entrada de hardware, el nivel de alfabetización, las plataformas tecnológicas preferidas y el entorno de uso 		del usuario.
+	\item[\textbf{RF-02: Algoritmo de filtrado clínico.}] El sistema deberá implementar un algoritmo capaz de contrastar el perfil del usuario con los requisitos de la base de datos de SAAC. Asimismo, deberá ejecutar de forma recursiva la asociación de periféricos y hardware necesario, 		garantizando la eliminación de duplicados de la propuesta.
+	\item[\textbf{RF-03: Gestión de consentimiento y cumplimiento RGPD.}] El sistema debe validar obligatoriamente en tiempo real que el usuario acepte los términos de procesamiento de datos antes de enviar el cuestionario. De manera opcional, capturará el consentimiento 			explícito para el almacenamiento anónimo de los datos con fines de investigación \cite{ue:rgpd}.
+	\item[\textbf{RF-03b: Clasificación y anonimización del registro.}] En caso de contar con el consentimiento de investigación, el sistema deberá almacenar de forma anónima el perfil en formato JSON dentro de la tabla de historial, asignándole un identificador único (\texttt{ID}) y 			clasificando el registro entre un caso real o uno de prueba.
 	\item[\textbf{RF-03c: Segmentación en la interfaz de resultados.}] El sistema deberá renderizar dinámicamente la plantilla de resultados organizando los elementos recomendados en tres bloques independientes: sistemas finales, sistemas preventivos y bancos de voz.
 \end{description}
 
 \subsection{Retroalimentación y evaluación (Asociados a CU-2)}
 \begin{description}
-	\item[\textbf{RF-04: Captura de feedback del usuario.}] El sistema deberá ofrecer un formulario en la pantalla de resultados para que el paciente o cuidador evalúe la propuesta. Los campos incluirán el nivel de satisfacción, el uso actual de SAAC, los motivos de cambio y comentarios cualitativos.
-	\item[\textbf{RF-05: Vinculación con historial mediante ORM.}] El sistema deberá recuperar de forma segura el identificador oculto del historial (\texttt{historial\_id}) de la sesión actual, buscar el registro correspondiente en la tabla \texttt{HistorialRecomendacion} por su clave primaria y guardar las respuestas indexadas en un diccionario JSON estructurado en el campo \texttt{feedback}.
+	\item[\textbf{RF-04: Captura de feedback del usuario.}] El sistema deberá ofrecer un formulario en la pantalla de resultados para que el paciente o cuidador evalúe la propuesta. Los campos incluirán el nivel de satisfacción, el uso actual de SAAC, los motivos de cambio y 				comentarios cualitativos.
+	\item[\textbf{RF-05: Vinculación con historial mediante ORM.}] El sistema deberá recuperar de forma segura el identificador oculto del historial (\texttt{historial\_id}) de la sesión actual, buscar el registro correspondiente en la tabla \texttt{HistorialRecomendacion} por su clave 			primaria y guardar las respuestas indexadas en un diccionario JSON estructurado en el campo \texttt{feedback}.
 \end{description}
 
 \subsection{Panel de administración (Asociados a CU-3)}
 \begin{description}
-	\item[\textbf{RF-06: Visualización cronológica de registros.}] El sistema dispondrá de una ruta de administración protegida (\texttt{/admin\_historial}) exclusiva para el investigador, que recupere y liste de manera descendente (por ID de historial) todos los registros clínicos almacenados con consentimiento.
+	\item[\textbf{RF-06: Visualización cronológica de registros.}] El sistema dispondrá de una ruta de administración protegida (\texttt{/admin\_historial}) exclusiva para el investigador, que recupere y liste de manera descendente (por ID de historial) todos los registros clínicos 				almacenados con consentimiento.
 	\item[\textbf{RF-07: Visualización de etiquetado.}] La interfaz del panel de administración procesará mediante el motor de plantillas cada registro, evaluando un indicador booleano (\texttt{es\_real}) para rcrear etiquetas visuales que diferencien los casos de «PACIENTE REAL» frente a los de «PRUEBA».
 \end{description}
 

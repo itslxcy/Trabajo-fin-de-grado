@@ -4,7 +4,7 @@
 Los datos que sustentan el sistema de recomendación provienen de un análisis de soluciones tecnológicas actuales para la comunicación en pacientes con Esclerosis Lateral Amiotrófica (ELA). La base de conocimiento se ha estructurado en una base de datos relacional que categoriza los Sistemas Aumentativos y Alternativos de Comunicación (SAAC) según criterios clínicos y técnicos.
 
 \begin{itemize}
-    	\item \textbf{Origen de los datos:} La información ha sido recopilada a partir de catálogos de productos de apoyo (CEAPAT), documentación de asociaciones de ELA (como ELA Andalucía) y especificaciones técnicas de desarrolladores de software especializado (Tobii Dynavox, 			Smartbox, Qinera, Irisbond, etc.).
+    	\item \textbf{Origen de los datos:} La información ha sido recopilada a partir de catálogos de productos de apoyo (CEAPAT) \cite{ceapat:productos}, documentación de asociaciones de ELA (como ELA Andalucía) \cite{elaandalucia:guia} y especificaciones técnicas de desarrolladores 		de software especializado (Tobii Dynavox, 	Smartbox, Qinera, Irisbond, etc.) \cite{tobiidynavox:products,qinera:caa,irisbond:soluciones}.
     	\item \textbf{Tipología y formato:} Los datos se almacenan en un sistema de gestión de bases de datos relacionales (PostgreSQL). Se dividen en:
     \begin{itemize}
 	\item \textbf{Entidades maestras:} Catálogos de idiomas (español, gallego, catalán, euskera), tipos de entrada (manos, ojos, cabeza, voz, pulsador), plataformas (Windows, iOS, Android, web, panel físico), entornos de uso (domicilio o exterior) y métodos de comunicación (alfabeto o 		pictogramas).

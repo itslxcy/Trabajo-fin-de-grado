@@ -51,7 +51,7 @@ Para validar la fiabilidad del recomendador y la integridad de los datos, se han
 	\item \textbf{Pruebas funcionales (Caja negra):} Validación de los formularios de cuestionario y feedback, asegurando que los métodos POST envían correctamente los resultados al servidor.
 	\item \textbf{Pruebas de lógica de filtrado:} Introducción de perfiles clínicos extremos (ej. ausencia total de movilidad) para comprobar que el algoritmo filtra correctamente los SAAC incompatibles.
 	\item \textbf{Validación de persistencia:} Comprobación en el panel de administración (\texttt{/admin\_historial}) que los datos guardados coinciden exactamente con los enviados por el usuario.
-	\item \textbf{Pruebas de seguridad:} Verificación de las cabeceras de seguridad inyectadas por \texttt{Flask-Talisman} (HSTS, XSS Protection) mediante la web VirusTotal.
+	\item \textbf{Pruebas de seguridad:} Verificación de las cabeceras de seguridad inyectadas por \texttt{Flask-Talisman} (HSTS, XSS Protection) mediante la web VirusTotal \cite{virustotal:upload}.
 \end{itemize}
 
 \section{Instrucciones para la modificación o mejora del proyecto}
