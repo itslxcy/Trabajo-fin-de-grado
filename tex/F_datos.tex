@@ -43,7 +43,7 @@ El campo \texttt{feedback}, también en formato JSON, almacena la retroalimentac
 \end{verbatim}
 
 \subsection{Volumen de datos}
-Durante el período de desarrollo y validación del TFG se han recogido menos de 20 registros en total, combinando casos reales y casos de prueba. El campo booleano \texttt{es\_real} de la tabla \texttt{historial\_recomendacion} permite distinguir ambos tipos en el panel de administración. Dado el volumen reducido, los datos tienen un valor cualitativo y de validación funcional del sistema, no estadístico.
+Durante el período de desarrollo y validación del TFG se han recogido cerca de 20 registros de pacientes en total, combinando casos reales y casos de prueba. El campo booleano \texttt{es\_real} de la tabla \texttt{historial\_recomendacion} permite distinguir ambos tipos en el panel de administración. Dado el volumen reducido, los datos tienen un valor cualitativo y de validación funcional del sistema, no estadístico.
 
 \subsection{Variables del cuestionario}
 Las variables recogidas por el cuestionario se agrupan en cuatro categorías:
@@ -112,3 +112,97 @@ El formulario de retroalimentación recoge seis variables cuyo significado clín
 	\item[\textbf{Valoración global de la recomendación}] Escala numérica del 1 al 10 que recoge la percepción general del usuario sobre la adecuación de la propuesta a su perfil. Es la variable principal para evaluar la calidad del algoritmo de filtrado.
 	\item[\textbf{Sugerencias y comentarios}] Campo opcional que permite al usuario aportar información no recogida por el resto del formulario, como preferencias estéticas, condicionantes económicos o experiencias con sistemas no incluidos en el catálogo.
 \end{description}
+
+\section{Catálogo de soluciones (Base de datos)}
+Para dar cumplimiento al objetivo de realizar un análisis comparativo y sistemático de los SAAC existentes, se detalla a continuación el catálogo completo de las 46 soluciones integradas en la base de conocimiento del sistema (\texttt{saac\_sistema}). 
+
+La Tabla \ref{tab:catalogo_saac} detalla los requisitos funcionales mínimos (escala $[0, 3]$) exigidos por el algoritmo de filtrado, donde las columnas corresponden a: Capacidad Visual (\textbf{Vis.}), Auditiva (\textbf{Aud.}), Tecnológica (\textbf{Tec.}) y de Habla (\textbf{Hab.}).
+
+\begin{small}
+% Forzamos que la tabla ocupe el ancho de línea
+\begin{longtable}{p{4cm}cccc p{4cm} l}
+    \caption{Matriz de parametrización sistemática del catálogo de soluciones SAAC.} \label{tab:catalogo_saac} \\
+    \toprule
+    \textbf{Nombre del Sistema} & \textbf{Vis.} & \textbf{Aud.} & \textbf{Tec.} & \textbf{Hab.} & \textbf{Plataformas} & \textbf{Ext.} \\
+    \midrule
+    \endfirsthead
+    
+    \multicolumn{7}{c}{{\bfseries \tablename\ \thetable{} -- Continuación}} \\
+    \toprule
+    \textbf{Nombre del Sistema} & \textbf{Vis.} & \textbf{Aud.} & \textbf{Tec.} & \textbf{Hab.} & \textbf{Plataformas} & \textbf{Ext.} \\
+    \midrule
+    \endhead
+
+    \midrule
+    \multicolumn{7}{r}{{Continúa en la siguiente página...}} \\
+    \endfoot
+
+    \bottomrule
+    \endlastfoot
+
+    \multicolumn{7}{l}{\textit{\textbf{Categoría: Sistemas de baja tecnología}}} \\
+    \midrule
+    Panel pictogramas & 1 & 0 & 0 & 0 & Papel/Físico & Sí \\
+    Panel alfabético & 1 & 0 & 0 & 0 & Papel/Físico & Sí \\
+    SpeakBook & 1 & 0 & 0 & 0 & Papel/Físico & Sí \\
+    Tablero ETRAN & 1 & 0 & 0 & 0 & Papel/Físico & Sí \\
+    MegaBEE & 1 & 0 & 1 & 0 & Papel/Físico & No \\
+    QuickTalker 23 & 1 & 1 & 2 & 0 & Papel/Físico & Sí \\
+    \midrule
+
+    \multicolumn{7}{l}{\textit{\textbf{Categoría: Software y aplicaciones}}} \\
+    \midrule
+    Look to Speak & 2 & 1 & 1 & 0 & Android, Web & Sí \\
+    Tallk & 2 & 1 & 1 & 0 & Android & Sí \\
+    Grid 3 & 2 & 1 & 2 & 0 & Windows & No \\
+    Verbo & 2 & 1 & 2 & 0 & Windows & No \\
+    Proloquo2Go & 2 & 1 & 2 & 0 & iOS & No \\
+    TD Snap & 2 & 1 & 2 & 0 & Win, iOS, And & No \\
+    Communicator 5 & 2 & 1 & 2 & 0 & Windows & No \\
+    Boardmaker 7 & 1 & 1 & 2 & 0 & Windows, Web & No \\
+    Look to learn & 2 & 1 & 1 & 0 & Windows & No \\
+    LetMeTalk & 2 & 1 & 2 & 0 & iOS, And, Web & No \\
+    OptiKey & 2 & 1 & 1 & 0 & Windows, Web & No \\
+    Predictable & 2 & 1 & 2 & 0 & iOS & Sí \\
+    VirtualTEC & 1 & 1 & 2 & 0 & Android & Sí \\
+    EVA Facial Mouse & 2 & 1 & 2 & 0 & Android & No \\
+    Ease Touch & 1 & 1 & 2 & 0 & Android & No \\
+    Voice Access & 0 & 1 & 2 & 3 & Android & Sí \\
+    Asistente AAC & 2 & 1 & 1 & 0 & iOS, Android & Sí \\
+    Speak4Me & 2 & 1 & 2 & 0 & iOS & Sí \\
+    \midrule
+
+    \multicolumn{7}{l}{\textit{\textbf{Categoría: Hardware Integrado y domótica}}} \\
+    \midrule
+    ComuniQa (TD Snap) & 2 & 1 & 2 & 0 & Windows & No \\
+    ComuniQa (Grid 3) & 2 & 1 & 2 & 0 & Windows & No \\
+    TD Pilot & 2 & 1 & 2 & 0 & iOS & No \\
+    Alexa / Google Home & 0 & 1 & 2 & 3 & Web & No \\
+    Enchufe Smart WiFi & 2 & 2 & 2 & 0 & iOS, Android & No \\
+    iPad & 1 & 1 & 1 & 0 & iOS & Sí \\
+    Tablet Android & 1 & 1 & 1 & 0 & Android & Sí \\
+    Ordenador Portátil & 1 & 1 & 1 & 0 & Windows & No \\
+    \midrule
+
+    \multicolumn{7}{l}{\textit{\textbf{Categoría: Periféricos y soporte}}} \\
+    \midrule
+    Eye tracker & 2 & 1 & 1 & 0 & Windows & No \\
+    Puntero Láser & 2 & 1 & 0 & 0 & Papel/Físico & No \\
+    Gafas con Puntero & 2 & 1 & 0 & 0 & Papel/Físico & No \\
+    Soporte articulado & 0 & 0 & 0 & 0 & Todos & Sí \\
+    Conmutador soplido & 1 & 1 & 1 & 0 & Win, iOS, And & No \\
+    Conmutador pedal & 1 & 1 & 0 & 0 & Papel, Win... & No \\
+    Conmutador Spec & 1 & 1 & 0 & 0 & Papel, Win... & No \\
+    BJOY Chin Plus & 1 & 1 & 1 & 0 & Papel, Win... & No \\
+    Guantes & 1 & 1 & 0 & 0 & iOS, Android & No \\
+    Lápiz táctil & 1 & 1 & 0 & 0 & iOS, Android & No \\
+    Ratón Bluetooth & 1 & 1 & 1 & 0 & Win, iOS, And & No \\
+    \midrule
+
+    \multicolumn{7}{l}{\textit{\textbf{Categoría: Banco de voz}}} \\
+    \midrule
+    ModelTalker Gen3 & 0 & 1 & 2 & 3 & Web & No \\
+    MyOwnVoice & 0 & 1 & 2 & 3 & Web & No \\
+    VocaliD & 0 & 1 & 2 & 3 & Web & No \\
+\end{longtable}
+\end{small}

@@ -31,8 +31,47 @@ El proyecto se organiza en una estructura de carpetas que separa claramente el e
         		\item \ruta{memoria.tex} y \ruta{anexos.tex}: Archivos maestros para la compilación de la documentación final.
    	 \end{itemize}
 \end{itemize}
-\section{Compilación, instalación y ejecución del proyecto}
 
+\section{Diseño de clases y Modelado ORM}
+La persistencia de la aplicación se basa en un mapeo objeto-relacional (ORM) mediante SQLAlchemy. A continuación, se presenta el diagrama de clases que representa la jerarquía y las relaciones del catálogo SAAC.
+
+\imagen{../img/diagrama_clases.png}{Diagrama de clases UML del modelo de datos.}
+
+Este esquema destaca la centralidad de la clase \texttt{SAACSistema}, la cual actúa como principal para las relaciones de muchos a muchos (\textit{Many-to-Many}) con las tablas maestras, permitiendo que el algoritmo realice consultas cruzadas eficientes durante el filtrado.
+
+\section{Especificación del diccionario de datos (Input Usuario)}
+El algoritmo de filtrado por exclusión recibe los datos del formulario en un objeto JSON estructurado. Este diccionario es el que permite realizar el "efecto embudo", descartando sistemas según se comparan las claves del JSON con los requisitos de la base de datos.
+
+\subsection{Estructura del diccionario JSON}
+A continuación se detalla la especificación del objeto \texttt{user\_data} procesado en la ruta \texttt{/recomendar}:
+
+\begin{verbatim}
+{
+    "input_usuario": {
+        "visual": int,       // Nivel 0-3 (Criterio de exclusión)
+        "auditivo": int,     // Nivel 0-3
+        "tecnologico": int,  // Nivel 0-3
+        "habla": int,        // Nivel 0-3 (Criterio para bancos de voz)
+        "entradas": [int],   // Lista de IDs de la tabla tipo_entrada
+        "plataformas": [int],// Lista de IDs de la tabla plataforma
+        "idiomas": [int],    // Lista de IDs de la tabla idioma
+        "metodos": [int],    // Lista de IDs (Alfabeto/Pictogramas)
+        "entorno": int       // ID de entorno (Domicilio/Exterior)
+    }
+}
+\end{verbatim}
+
+\subsection{Lógica de Filtrado por Exclusión (Efecto Embudo)}
+El algoritmo opera mediante una cascada de filtros secuenciales que reducen el conjunto total de SAAC ($S_{total}$) hasta obtener la recomendación final ($S_{rec}$):
+
+\begin{enumerate}
+    \item \textbf{Filtro de capacidades críticas:} Se eliminan sistemas cuyos \texttt{sistema\_requisito\_funcional} sean superiores a los niveles declarados por el usuario.
+    \item \textbf{Filtro de acceso:} Se excluyen sistemas que no soporten ninguno de los \texttt{metodos\_entrada} disponibles para el paciente.
+    \item \textbf{Filtro tecnológico:} Se filtran sistemas que no operen en las \texttt{plataformas} accesibles para el usuario.
+    \item \textbf{Filtro de entorno:} Si el usuario requiere uso en exterior, se descartan sistemas marcados únicamente como domésticos.
+\end{enumerate}
+
+\section{Compilación, instalación y ejecución del proyecto}
 \subsection{Entorno de desarrollo}
 Se recomienda el uso de \texttt{pip} y \texttt{virtualenv}. El sistema utiliza \texttt{python-dotenv} para cargar la configuración, por lo que es necesario definir \texttt{DATABASE\_URL} y \texttt{FLASK\_ENV} en el entorno local antes de la ejecución.
 

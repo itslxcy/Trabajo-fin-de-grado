@@ -88,3 +88,20 @@ El flujo principal de la aplicación sigue estos pasos:
 	\item Opcionalmente, el usuario envía feedback, que queda vinculado a su registro mediante el \texttt{historial\_id}.
 	\item El investigador puede consultar todos los registros almacenados accediendo a \texttt{/admin\_historial}.
 \end{enumerate}
+
+\subsection{Lógica de asociación de hardware y recursividad}
+Para garantizar que la recomendación sea completa, el sistema no solo filtra el software principal, sino que deduce de forma recursiva los periféricos y accesorios necesarios para su funcionamiento. Esto se realiza mediante un algoritmo de búsqueda en cascada.
+
+La lógica reside en una función recursiva que opera sobre la tabla \texttt{sistema\_dependencia}. El proceso sigue los siguientes pasos:
+\begin{enumerate}
+    \item \textbf{Detección de dependencia:} Por cada sistema recomendado, el algoritmo busca en la base de datos si existe hardware obligatorio asociado (ej. \textit{Grid 3} requiere \textit{Eye Tracker}).
+    \item \textbf{Filtros de viabilidad:} Antes de añadir un periférico, el sistema valida:
+    \begin{itemize}
+        \item \textbf{Filtro táctil:} Si el periférico requiere uso manual (ej. \textit{Lápiz táctil}), solo se incluye si el usuario declaró tener funcionalidad en las manos.
+        \item \textbf{Filtro de plataforma:} Solo se incluyen accesorios compatibles con el sistema operativo detectado o seleccionado (ej. no sugerir un \textit{Apple Pencil} si el usuario usa \textit{Android}).
+    \end{itemize}
+    \item \textbf{Recursión (Salto de nivel):} Una vez añadido un hardware, la función se llama a sí misma para comprobar si ese hardware necesita otro a su vez (ej. el \textit{Eye Tracker} requiere un \textit{Soporte de anclaje articulado}).
+    \item \textbf{Control de redundancia:} El sistema utiliza un conjunto de identificadores (\texttt{Set}) para evitar bucles infinitos y asegurar que cada accesorio aparezca una sola vez en la interfaz, independientemente de cuántos programas lo requieran.
+\end{enumerate}
+
+\imagen{../img/diagrama_recursividad.png}{Diagrama de flujo del algoritmo de asociación recursiva de periféricos.}
