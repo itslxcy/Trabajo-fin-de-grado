@@ -1,3 +1,6 @@
+![Cabecera EPS](img/cabecera_EPS.png)
+![Logo GIS](img/Logo_GIS.png)
+
 # Sistema de recomendación de SAAC para pacientes con ELA (2026)
 
 **Alumna:** Lucía Gil Aire  
@@ -64,23 +67,23 @@ A continuación se detalla la estructura de ficheros y directorios que forman es
 ### Documentación de la memoria (`tex/`)
 Esta carpeta incluye todos los capítulos de la memoria en formato LaTeX necesarios para la compilación del documento:
 
-1_introduccion.tex: Contexto clínico de la ELA, conceptos básicos de los SAAC y estado del arte.
-2_objetivos.tex: Definición detallada de los objetivos del proyecto.
-3_teoricos.tex: Marco conceptual del proyecto.
-4_metodologia.tex: Descripción de los datos (catálogo), herramientas de desarrollo (Flask, PostgreSQL, Jinja2) y modelado de la lógica proposicional. |
-5_resultados.tex: Resultados detallados obtenidos en el proyecto. |
-6_discusion.tex: Discusión e interpretación de los resultados clínicos y técnicos. |
-7_conclusiones.tex: Cierre del proyecto con las conclusiones obtenidas. |
-8_lineas_futuras.tex: Propuestas de mejora y escalabilidad del recomendador (Machine Learning). |
-A_planificacion.tex: Anexo relativo a la planificación temporal y económica. |
-B_diseno.tex: Especificación del diseño del software y su arquitectura correspondiente. |
-C_requisitos.tex: Requisitos técnicos necesarios para hacer uso e instalar el proyecto. |
-D_manual_usuario.tex: Manual de usuario orientado a profesionales clínicos/usuarios finales. |
-E_diseno.tex: Especificaciones de diseño para desarrolladores externos (replicabilidad). |
-F_datos.tex: Estructuras de datos y fragmentos de código JSON del sistema. |
-G_experimental.tex: Registro de las pruebas de caja negra realizadas sobre el motor de recomendación. |
-H_ODS.tex: Documento de sostenibilización curricular (Objetivos de Desarrollo Sostenible). |
-I_prompts.tex: Documento de transparencia en cuanto al uso de Inteligencia Artificial. |
+* 1_introduccion.tex: Contexto clínico de la ELA, conceptos básicos de los SAAC y estado del arte.
+* 2_objetivos.tex: Definición detallada de los objetivos del proyecto.
+* 3_teoricos.tex: Marco conceptual del proyecto.
+* 4_metodologia.tex: Descripción de los datos (catálogo), herramientas de desarrollo (Flask, PostgreSQL, Jinja2) y modelado de la lógica proposicional.
+* 5_resultados.tex: Resultados detallados obtenidos en el proyecto.
+* 6_discusion.tex: Discusión e interpretación de los resultados clínicos y técnicos.
+* 7_conclusiones.tex: Cierre del proyecto con las conclusiones obtenidas.
+* 8_lineas_futuras.tex: Propuestas de mejora y escalabilidad del recomendador (Machine Learning).
+* A_planificacion.tex: Anexo relativo a la planificación temporal y económica.
+* B_diseno.tex: Especificación del diseño del software y su arquitectura correspondiente.
+* C_requisitos.tex: Requisitos técnicos necesarios para hacer uso e instalar el proyecto.
+* D_manual_usuario.tex: Manual de usuario orientado a profesionales clínicos/usuarios finales.
+* E_diseno.tex: Especificaciones de diseño para desarrolladores externos (replicabilidad).
+* F_datos.tex: Estructuras de datos y fragmentos de código JSON del sistema.
+* G_experimental.tex: Registro de las pruebas de caja negra realizadas sobre el motor de recomendación.
+* H_ODS.tex: Documento de sostenibilización curricular (Objetivos de Desarrollo Sostenible).
+* I_prompts.tex: Documento de transparencia en cuanto al uso de Inteligencia Artificial.
 
 ### Código fuente (`backend/`)
 Contiene todo el código fuente correspondiente a la aplicación web:
