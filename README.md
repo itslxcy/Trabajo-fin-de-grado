@@ -1,5 +1,4 @@
-![Cabecera EPS](img/cabecera_EPS.png)
-![Logo GIS](img/Logo_GIS.png)
+<img src="img/cabeceraEPS.png" alt="Cabecera EPS" width="40%"> <img src="img/Logo_GIS.png" alt="Logo GIS" width="20%">
 
 # Sistema de recomendación de SAAC para pacientes con ELA (2026)
 
