@@ -11,7 +11,7 @@
 
 ## Resumen / Abstract
 
-### 🇪🇸 Resumen
+### Resumen
 Este trabajo se centra en la búsqueda de una solución tecnológica e ingenieril a la necesidad clínica de la pérdida de la comunicación en pacientes con Esclerosis Lateral Amiotrófica (ELA). El objetivo es la creación de un Sistema de Apoyo a la Decisión (SAD) asistido por base de datos para la recomendación de Sistemas Aumentativos y Alternativos de Comunicación (SAAC) según distintas variables como la progresión de la enfermedad o características del entorno. 
 
 Durante el desarrollo del proyecto se han estudiado las bases fisiopatológicas de la ELA y el impacto de los SAAC en la calidad de vida de los pacientes. Por otro lado, se ha recopilado y estructurado un catálogo de soluciones tecnológicas actuales para predefinir los criterios de filtrado.
@@ -20,7 +20,7 @@ Tras la obtención de la idea y la captura de requerimientos clínicos, se dise�
 
 La versión final del sistema consigue realizar una recomendación clínica precisa de las soluciones óptimas, incluyendo además propuestas preventivas como el *Voice Banking*. Al tratarse de un sistema validado mediante perfiles tipo, se ofrecen diferentes líneas para seguir escalando el proyecto en el futuro, incluyendo la integración de algoritmos de aprendizaje automático.
 
-### 🇬🇧 Abstract
+### Abstract
 This work focuses on finding a technological and engineering solution to the clinical need of the loss of communication in patients with Amyotrophic Lateral Sclerosis (ALS). The main goal is the creation of a Database-Assisted Decision Support System (DSS) for the optimal recommendation of Aumentative and Alternative Communication (AAC) systems based on different parameters as disease progression and enviroment characteristics. 
 
 During the development of the project, the pathophysiological foundations of ALS and the impact of AAC on patients quality of life were studied. On the other hand, a catalog of current technological solutions was compiled and structured to predefine the filtering criteria.
