@@ -39,7 +39,7 @@ El proceso de instalación se basa en la creación de un entorno virtual para as
 	\item \textbf{Ejecución:}
 	\begin{verbatim}
 	flask run  # Desarrollo
-	gunicorn -w 4 app:app  # Producción (usando gunicorn v26.0.0)
+	gunicorn -w 4 app:app  # Producción (usando gunicorn v26.0.0) \cite{gunicorn:manual}
 	\end{verbatim}
 \end{enumerate}
 
@@ -50,7 +50,7 @@ La interacción con el sistema es intuitiva y sigue un flujo lineal dividido en 
 El usuario accede a la página principal donde se presenta el cuestionario clínico. 
 \begin{itemize}
 	\item Debe completar todos los campos obligatorios sobre capacidades (motoras, cognitivas, visuales).
-	\item Es imprescindible marcar la casilla de aceptación de términos legales para que el sistema procese la solicitud.
+	\item Es imprescindible marcar la casilla de aceptación de términos legales para que el sistema procese la solicitud. \cite{ue:rgpd}
 	\item Al finalizar, el sistema mostrará una página con los sistemas SAAC recomendados y el hardware complementario.
 \end{itemize}
 

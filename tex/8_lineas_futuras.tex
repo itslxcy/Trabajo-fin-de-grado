@@ -1,6 +1,6 @@
 \capitulo {8}{Líneas de trabajo futuras}
 
-El desarrollo de este proyecto ha permitido asentar las bases para la recomendación y selección de Sistemas Aumentativos y Alternativos de Comunicación (SAAC) en pacientes con Esclerosis Lateral Amiotrófica (ELA). Sin embargo, la naturaleza progresiva de la enfermedad y la constante evolución de la tecnología abren un amplio abanico de mejoras  que enriquecerían el alcance y la utilidad de la propuesta actual.
+El desarrollo de este proyecto ha permitido asentar las bases para la recomendación y selección de Sistemas Aumentativos y Alternativos de Comunicación (SAAC) en pacientes con Esclerosis Lateral Amiotrófica (ELA). Sin embargo, la naturaleza progresiva de la enfermedad \cite{startstemcells:als, hardiman2017amyotrophic} y la constante evolución de la tecnología abren un amplio abanico de mejoras  que enriquecerían el alcance y la utilidad de la propuesta actual.
 
 A continuación, se presenta un informe que detalla las principales líneas de trabajo futuras, orientadas tanto a perfeccionar la herramienta existente como a expandir sus capacidades.
 
@@ -13,7 +13,7 @@ Actualmente, el diseño cumple con funciones básicas de navegación, pero es cr
 El campo de la tecnología asistencial avanza a gran velocidad. Para que la herramienta no quede obsoleta, el sistema debe concebirse como un entorno dinámico y escalable:
 \begin{itemize}
     	\item \textbf{Inclusión de novedades tecnológicas:} Se debe establecer un protocolo para añadir de forma periódica los nuevos SAAC que se vayan inventando o comercializando en el mercado.
-    	\item \textbf{SAAC sin ayuda:} Aunque el proyecto se ha centrado notablemente en soluciones con ayuda, es importante abrir el espectro hacia la posibilidad de implementar SAAC sin ayuda, como la lengua de signos o códigos gestuales propios, que resultan de enorme utilidad en 		fases específicas de la enfermedad o en entornos familiares concretos.
+    	\item \textbf{SAAC sin ayuda:} Aunque el proyecto se ha centrado notablemente en soluciones con ayuda, es importante abrir el espectro hacia la posibilidad de implementar SAAC sin ayuda, como la lengua de signos o códigos gestuales propios, que resultan de enorme utilidad 		en fases específicas de la enfermedad o en entornos familiares concretos.
 \end{itemize}
 
 \section{Validación clínica con pacientes reales}
@@ -24,8 +24,17 @@ Esta validación clínica permitirá contrastar la utilidad real del cuestionari
 \section{Evolución de las funcionalidades y experiencia de usuario}
 Para aportar un mayor valor añadido tanto al paciente como al profesional que lo acompaña, se proponen dos mejoras directas en la interacción con la plataforma:
 \begin{itemize}
-    	\item \textbf{Descarga de informes de recomendación:} Sería de gran utilidad ofrecer al usuario la posibilidad de descargarse un informe PDF que detalle los resultados de su recomendación. Este documento serviría como guía de referencia para la familia o para entregar 			directamente al equipo médico y agilizar la toma de decisiones.
+    	\item \textbf{Descarga de informes de recomendación:} Sería de gran utilidad ofrecer al usuario la posibilidad de descargarse un informe PDF que detalle los resultados de su recomendación. Este documento serviría como guía de referencia para la familia o para entregar 				directamente al equipo médico y agilizar la toma de decisiones.
     	\item \textbf{Incorporación de material multimedia:} La lectura de las características de un SAAC no siempre es suficiente para comprender su funcionamiento. Añadir vídeos explicativos con ejemplos prácticos de uso de cada sistema facilitaría la comprensión al usaurio final y 			ayudaría a reducir la curva de aprendizaje y la reticencia inicial al uso de estas herramientas.
+\end{itemize}
+
+\section{Mejoras técnicas y evolución de la ingeniería de software}
+Con el fin de mejorar el prototipo actual hacia un estándar de producción profesional y escalable se contemplan las siguientes directrices técnicas:
+\begin{itemize}
+    	\item \textbf{Automatización de pruebas e Integración Continua (CI):} Se plantea la migración de la validación funcional manual actual hacia un entorno basado en pruebas automatizadas mediante frameworks como \textit{PyTest} o \textit{Unittest}. Ello permitirá desplegar un flujo 		de trabajo automatizado (\textit{pipeline}) en el repositorio que valide el "efecto embudo" del algoritmo ante modificaciones de las reglas lógicas, previniendo fallos de regresión.
+    	\item \textbf{Evolución hacia una arquitectura desacoplada (API-First):} Para asegurar la sostenibilidad tecnológica a largo plazo, se propone separar el motor de recomendación de la actual interfaz monolítica. Al transformar el backend en una API REST independiente, la lógica 			clínica del recomendador podrá ser utilizada por otros sistemas hospitalarios, aplicaciones móviles o terminales específicos en entornos clínicos.
+    	\item \textbf{Automatización en la gestión de datos (ETL y Migraciones):} El mantenimiento manual actual de scripts SQL estáticos se sustituirá por un sistema de control de versiones de base de datos como \textit{Alembic} para SQLAlchemy. Asimismo, se planifica el desarrollo de 		un módulo de automatización de procesos ETL (Extract, Transform, Load) conectado a fuentes abiertas de datos de tecnología asistencial (como las APIs de CEAPAT) \cite{ceapat:productos} para mantener el catálogo actualizado de forma autónoma.
+    	\item \textbf{Seguridad por diseño (Security by Design):} En futuras fases conceptuales, se sustituirá la incorporación de seguridad reactiva por un modelado de amenazas inicial y exhaustivo. Esto incluirá la integración en el ciclo de desarrollo de herramientas de Análisis Estático de 	Código (SAST) como \textit{Bandit}, alineando el proyecto con los principios DevSecOps requeridos en el tratamiento seguro de datos de salud.
 \end{itemize}
 
 \section{Conclusión}

@@ -1,31 +1,44 @@
 \apendice{Anexo de sostenibilización curricular}
 
 \section{Introducción}
-La sostenibilidad no se limita al ámbito medioambiental. A lo largo del Grado en Ingeniería de la Salud he comprendido que la sostenibilidad abarca también dimensiones sociales, éticas y económicas que son inseparables de cualquier proyecto tecnológico orientado a las personas. Este TFG, centrado en el desarrollo de una herramienta de apoyo a la prescripción de SAAC para pacientes con ELA, me ha permitido aplicar y reflexionar sobre varias de estas dimensiones de forma directa.
+La sostenibilidad en la Ingeniería de la Salud trasciende el ámbito medioambiental, abarca dimensiones sociales, éticas, económicas y tecnológicas que condicionan la viabilidad a largo plazo de cualquier sistema de información clínica. El desarrollo de este Sistema de Apoyo a la Decisión (SAD) para la prescripción de Sistemas Aumentativos y Alternativos de Comunicación (SAAC) en pacientes con ELA se ha evaluado bajo estos cuatro conceptos.
 
-\section{Sostenibilidad social e inclusión}
-El punto de partida de este proyecto es, en sí mismo, un compromiso con la sostenibilidad social. La ELA es una enfermedad que afecta de forma progresiva e irreversible a la capacidad de comunicación de las personas que la padecen. La comunicación es un derecho fundamental, y la pérdida de esa capacidad tiene consecuencias devastadoras no solo para el paciente, sino para su entorno familiar y social.
+\section{Sostenibilidad social, inclusión y análisis de cobertura lingüística}
+La pérdida progresiva de la comunicación en pacientes con ELA exige soluciones tecnológicas que garanticen la equidad en el acceso. Se ha realizado un análisis cuantitativo de la cobertura lingüística del catálogo de datos actual (46 sistemas registrados) para verificar el impacto real del algoritmo de filtrado sobre la diversidad lingüística cooficial:
 
-Desarrollar una herramienta que facilite la selección de sistemas de comunicación aumentativa y alternativa supone contribuir directamente a la autonomía y a la dignidad de estas personas. Desde la perspectiva de la sostenibilidad social, este proyecto trabaja la equidad en el acceso a la tecnología asistiva: el cuestionario recoge variables como el idioma, el nivel tecnológico y el entorno de uso precisamente para que la recomendación sea pertinente independientemente del perfil cultural, lingüístico o socioeconómico del paciente.
+\begin{itemize}
+    \item \textbf{Soporte en Castellano:} 100\% de los sistemas del catálogo (46 de 46 registros) operan de forma nativa en este idioma, asegurando la línea base de prescripción nacional.
+    \item \textbf{Soporte en Catalán:} 43,4\% del catálogo (20 de 46 sistemas, principalmente \textit{software} de grandes desarrolladores como Tobii Dynavox o Smartbox) integran traducción de interfaz y síntesis de voz en esta lengua.
+    \item \textbf{Soporte en Gallego y Euskera:} 26,1\% del catálogo (12 de 46 sistemas) ofrecen soporte completo, viéndose limitado en soluciones de \textit{Voice Banking} de carácter comercial anglosajón.
+\end{itemize}
 
-El soporte para lenguas cooficiales como el gallego, el catalán y el euskera responde también a un compromiso de inclusión lingüística, reconociendo que la diversidad cultural es parte de la sostenibilidad social.
+El algoritmo mitiga esta brecha al cruzar la variable del idioma del paciente con la disponibilidad real del sistema, evitando prescripciones frustrantes. La sostenibilidad social se cuantifica aquí mediante la capacidad de la herramienta para ofrecer alternativas válidas de comunicación adaptada a la realidad demográfica del usuario, independientemente de su entorno geográfico o lingüístico.
 
-\section{Sostenibilidad ética y privacidad}
-El tratamiento de datos clínicos implica una responsabilidad ética que he tenido que asumir desde el diseño del sistema. La aplicación recoge información sensible sobre las capacidades funcionales de personas con una enfermedad grave, lo que exige un nivel de cuidado especial.
+\section{Sostenibilidad ética, soberanía de datos e infraestructura}
+El tratamiento de datos funcionales y clínicos de pacientes con patologías neurodegenerativas exige un análisis de riesgos éticos y legales más allá del cumplimiento normativo del RGPD y el principio de minimización de datos.
 
-He aplicado el principio de minimización de datos del RGPD \cite{ue:rgpd} mediante el cual solo se recoge lo estrictamente necesario para generar la recomendación, y el almacenamiento con fines de investigación es siempre voluntario y anónimo. 
+Un factor crítico evaluado en la arquitectura actual es la dependencia de una infraestructura en la nube comercial externa para el despliegue del prototipo (\textit{Render}, con servidores ubicados en la región de Frankfurt (Alemania). Aunque el almacenamiento de los datos de investigación se realiza de forma completamente anónima y cumple con las directrices de la Unión Europea sobre la ubicación de servidores, la dependencia de terceros proveedores comerciales introduce un vector de riesgo para la soberanía de los datos a largo plazo y la sostenibilidad del servicio.
 
-Esta experiencia me ha hecho reflexionar sobre la responsabilidad que tenemos los ingenieros de la salud cuando desarrollamos sistemas que interactúan con datos de pacientes y como debemos velar por sus derechos. 
+Como mejora ética y de infraestructura, se propone la migración del sistema hacia servidores propios de la red hospitalaria pública o de la propia Universidad. Este cambio garantizaría el control absoluto sobre el ciclo de vida del dato, alineando el software con los exigentes criterios de la Guía de Auditorías de Tratamientos de Datos del Esquema Nacional de Seguridad (ENS). \cite{ttech:auditoriaens}
 
-\section{Sostenibilidad económica y accesibilidad}
-Una de las decisiones más conscientes del proyecto ha sido priorizar en el catálogo de sistemas SAAC las opciones gratuitas o de bajo coste junto a las de mayor coste, con el objetivo de que la herramienta sea útil para pacientes con recursos económicos diversos. Aplicaciones como LetMeTalk, Look to Speak u OptiKey son completamente gratuitas..
+\section{Sostenibilidad económica y eficiencia de la inversión}
+La sostenibilidad económica de un desarrollo de ingeniería no puede limitarse a la ausencia de costes de licencias mediante el uso de tecnologías \textit{open-source} (Python, Flask, PostgreSQL); debe ponderar el coste del esfuerzo de ingeniería frente al impacto clínico generado.
 
-Asimismo, el uso exclusivo de tecnologías de código abierto en el desarrollo de la propia herramienta (Python, Flask, PostgreSQL) garantiza que esta pueda mantenerse, ampliarse o adaptarse en el futuro sin coste de licencias, lo que contribuye a su sostenibilidad económica a largo plazo.
+Tomando como referencia el presupuesto real calculado en el Plan de Proyecto, el coste total de desarrollo del software asciende a \textbf{6.630 €} (derivado de las 360 horas de ingeniería valoradas según el Convenio TIC y la amortización de hardware). Para evaluar la viabilidad y eficiencia de esta inversión frente a una consulta humana tradicional de terapia ocupacional (estimada de media en un coste público general de 50 € por sesión especializada), se define el **Coste por Recomendación Exitosa (CRE)** bajo la siguiente función:
 
-\section{Sostenibilidad tecnológica y escalabilidad}
-Durante el desarrollo he tomado decisiones orientadas a la longevidad del sistema. El diseño modular de la base de datos permite añadir nuevos sistemas SAAC al catálogo sin modificar el código de la aplicación. El algoritmo de filtrado opera sobre los datos, no sobre reglas fijas escritas en el código, lo que lo hace adaptable a la evolución del mercado de tecnología asistiva.
+$$CRE = \frac{\text{Coste total de Inversión}}{\text{Número de pacientes evaluados}} + \text{Coste de mantenimiento anual de servidor}$$
 
-Esta forma de pensar el software, orientada a la mantenibilidad y a la escalabilidad, es también una forma de sostenibilidad: un sistema que puede actualizarse y crecer tiene una vida útil mucho mayor y genera menos residuo tecnológico que uno que requiere ser reescrito ante cualquier cambio.
+Considerando un coste de servidor básico de 60 €/año, si la plataforma es adoptada de forma piloto por una red de asociaciones (como ELACyL u otras delegaciones) dando servicio a 150 pacientes en su primer año, el CRE se sitúa en 44,60 € en el año de amortización, descendiendo por debajo de los 5 € por paciente en los años sucesivos al requerir únicamente costes de mantenimiento técnico. Este cálculo demuestra que el software optimiza los recursos económicos del sistema sanitario al automatizar el triaje inicial de soluciones complejas y liberar horas de atención directa de los profesionales sanitarios.
 
-\section{Reflexión final}
-Este TFG me ha enseñado que, aunque en la ingeniería de la salud trabajamos con tecnología, nuestro usuario final es siempre una persona en una situación de vulnerabilidad. Esa conciencia debe traducirse en decisiones técnicas concretas: sistemas inclusivos, datos tratados con respeto, herramientas accesibles y código diseñado para durar. La sostenibilidad no es un añadido al final del proyecto sino una forma de trabajar desde el principio.
+\section{Sostenibilidad tecnológica, autocrítica técnica y mantenibilidad}
+El diseño modular del modelo relacional implementado mitiga la obsolescencia inmediata del catálogo al separar los datos del código fuente. No obstante, un análisis de ingeniería riguroso revela dos deficiencias críticas en el estado actual del desarrollo que comprometen su sostenibilidad tecnológica a medio plazo:
+
+\begin{enumerate}
+    	\item \textbf{Gestión manual del catálogo:} La carga de datos y la modificación de la estructura de las tablas se realiza mediante \textit{scripts} .sql estáticos. La ausencia de un sistema automatizado de migraciones (como \textit{Alembic} para SQLAlchemy) reduce la escalabilidad 		del sistema y eleva la probabilidad de errores humanos en entornos de producción.
+    	\item \textbf{Ausencia de pruebas automatizadas:} El proceso de validación actual se fundamenta en pruebas de "caja negra" manuales. La falta de un \textit{framework} de tests unitarios (como \textit{PyTest}) genera una deuda técnica sustancial, ya que cualquier actualización de 		las reglas lógicas o de las librerías base de Python puede provocar fallos de regresión inadvertidos en el algoritmo de filtrado.
+\end{enumerate}
+
+Para solventar estos puntos débiles, la sostenibilidad tecnológica futura se estructurará mediante la adopción de metodologías DevSecOps, implementando un flujo de Integración Continua (CI) en el repositorio que ejecute de manera automatizada las pruebas de regresión ante cualquier cambio, garantizando la estabilidad operativa del recomendador a lo largo del tiempo.
+
+\section{Reflexión final y compromiso con estándares}
+La sostenibilidad de este proyecto no se valida mediante juicios de valor morales, sino a través del cumplimiento estricto de estándares de calidad, accesibilidad y seguridad del software. En el ámbito de la Ingeniería de la Salud, la responsabilidad ética del desarrollador se consolida aplicando las pautas internacionales de accesibilidad web WCAG 2.1 (Nivel AA) \cite{w3c:wcag21} para asegurar que los pacientes con afectación motora severa naveguen de forma autónoma, y alineando los sistemas con el Esquema Nacional de Seguridad (ENS). El verdadero valor de este desarrollo radica en su capacidad de transformar recursos de ingeniería acotados en una solución tecnológica medible, segura, económicamente eficiente y diseñada para perdurar.

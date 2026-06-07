@@ -1,97 +1,110 @@
 \capitulo{3}{Fundamentos teóricos y estado del arte}
 
 \section{Introducción}
-En este capítulo se presentan los conceptos teóricos necesarios para comprender el desarrollo del trabajo. Se describe la enfermedad objeto de estudio (ELA), los sistemas aumentativos y alternativos de comunicación (SAAC), los criterios para su selección, así como los fundamentos de los sistemas de apoyo a la decisión. Finalmente, se expone una revisión del estado del arte de soluciones existentes y trabajos relacionados.
+En este capítulo se exponen los fundamentos teóricos, clínicos y tecnológicos que sustentan el diseño del sistema experto objeto de este trabajo. En primer lugar, se describe la caracterización fisiopatológica de la Esclerosis Lateral Amiotrófica (ELA) y su impacto secuencial en el aparato fonoarticulador, delimitando la ventana de oportunidad terapéutica para la preservación de la identidad vocal. En segundo lugar, se clasifican los Sistemas Aumentativos y Alternativos de Comunicación (SAAC) y se estructuran los criterios técnicos y variables de usuario requeridos para su modelado. Finalmente, se analizan los Sistemas de Apoyo a la Decisión (SAD) basados en reglas lógicas y se realiza una revisión crítica del estado del arte, contrastando las soluciones estáticas tradicionales con la propuesta interactiva desarrollada.
 
-\section{Esclerosis Lateral Amiotrófica}
-La Esclerosis Lateral Amiotrófica (ELA) es una enfermedad neurodegenerativa progresiva que afecta selectivamente a las motoneuronas superiores e inferiores, responsables del control voluntario de la musculatura. La degeneración de estas neuronas provoca debilidad muscular progresiva, pérdida de movilidad y, en fases avanzadas, parálisis generalizada.
+\section{Esclerosis Lateral Amiotrófica (ELA)}
+La Esclerosis Lateral Amiotrófica (ELA) es una patología neurodegenerativa de carácter progresivo caracterizada por la pérdida selectiva de las motoneuronas superiores (corteza cerebral) e inferiores (tronco del encéfalo y médula espinal), responsables del control motor voluntario \cite{hardiman2017amyotrophic}. La interrupción de la vía corticoespinal y de las conexiones neuromusculares conduce a una atrofia muscular generalizada, fasciculaciones, espasticidad y parálisis progresiva. 
 
-\subsection{Evolución clínica y etapas}
-Aunque la enfermedad avanza hacia un destino común, el inicio de los síntomas permite distinguir dos tipos principales:
+\subsection{Fenotipos clínicos y estadios de progresión}
+La heterogeneidad en la sintomatología clínica permite clasificar la enfermedad en dos fenotipos principales:
 
 \begin{description}
-    	\item[Inicio espinal:] Es el más frecuente (aprox. 70\%). Los primeros síntomas aparecen en las extremidades (piernas o brazos), como tropiezos o pérdida de fuerza en las manos. El habla se mantiene preservada durante más tiempo.
-    	\item[Inicio bulbar:] Afecta inicialmente a las neuronas del tronco encefálico. Los primeros síntomas son dificultades para hablar (disartria) o tragar. En estos casos, la necesidad de un SAAC surge de forma mucho más temprana.
+    	\item[\textbf{Fenotipo de inicio espinal:}] Manifiesta una prevalencia aproximada del 70\% de los casos. Las alteraciones iniciales se localizan en las motoneuronas de la médula espinal, afectando a la musculatura esquelética apendicular (extremidades superiores e inferiores). 			Clínicamente se traduce en debilidad distal, pérdida de destreza manual o caídas. En este fenotipo, la función bulbar y la capacidad fonoarticulatoria suelen preservarse en las fases tempranas, retrasando la necesidad inmediata de sistemas de comunicación sustitutivos.
+   	 \item[\textbf{Fenotipo de inicio bulbar:}] Afecta aproximadamente al 30\% restante de los pacientes, inician con la degeneración de los núcleos motores del tronco encefálico (pares craneales IX, X, XI y XII). Los síntomas iniciales incluyen disartria (dificultad para la articulación de la 		palabra) y disfagia (alteración de la deglución). En este escenario, la degradación de la inteligibilidad del habla se produce de forma acelerada, exigiendo una intervención tecnológica y logopédica precoz. \cite{rong2024multimodal, rico2021comunicacion}
 \end{description}
 
-La progresión de la ELA suele seguir una evolución gradual que puede dividirse en las siguientes fases \cite{startstemcells:als}:
+Independientemente del foco de inicio, la progresión de la ELA se categoriza en cuatro estadios clínicos según la escala de rehabilitación y pérdida funcional \cite{pmc2025stage}:
 \begin{enumerate}
-    	\item Etapa inicial: Debilidad localizada y alteraciones leves del habla.
-    	\item Etapas intermedias: Limitaciones motoras crecientes y deterioro del lenguaje.
-    	\item Etapa avanzada: Pérdida casi total de movilidad voluntaria.
-    	\item Etapa terminal: Parálisis generalizada y comunicación muy limitada o inexistente.
+    \item \textbf{Estadio temprano:} Debilidad localizada o fatiga muscular leve. En el caso del inicio bulbar, se observan cambios leves que no impiden la comunicación funcional.
+    \item \textbf{Estadio intermedio:} Restricciones motoras crecientes en múltiples segmentos. La inteligibilidad del habla disminuye significativamente, limitando la participación social activa y requiriendo el uso de SAAC aumentativos.
+    \item \textbf{Estadio avanzado:} Pérdida generalizada de la movilidad voluntaria. El paciente presenta anartria (pérdida total del habla), precisando el despliegue de SAAC alternativos de alta tecnología con métodos de acceso avanzados (ej. \textit{eyetracking}).
+    \item \textbf{Estadio terminal:} Parálisis neuromuscular total, afectando a la mecánica ventilatoria. La comunicación queda restringida a códigos binarios mínimos o interfaces cerebro-computador en ausencia de control ocular estable.
 \end{enumerate}
 
-\subsection{Impacto en la comunicación}
-Las alteraciones comunicativas asociadas a la ELA incluyen deterioro progresivo de la articulación, reducción de la inteligibilidad del habla y dificultades motoras que afectan a la producción verbal. Uno de los signos más característicos es la disartria progresiva, que puede evolucionar hasta la anartria, es decir, la pérdida total de la capacidad de habla.
+\subsection{Fisiopatología del impacto en la comunicación humana}
+Las alteraciones de la comunicación en la ELA se derivan de la afectación combinada de la musculatura respiratoria, fonatoria y articulatoria. La pérdida de inteligibilidad afecta de forma directa a la autoidentidad, la autonomía y la calidad de vida de los pacientes, correlacionándose con elevados índices de aislamiento social.
 
-A pesar de estas limitaciones en muchos pacientes las funciones cognitivas permanecen relativamente preservadas. Esta circunstancia, aunque intensifica el impacto emocional derivado de la pérdida comunicativa, también constituye un factor favorable, ya que posibilita el aprendizaje y uso eficaz de sistemas aumentativos y alternativos de comunicación, favoreciendo el mantenimiento de la autonomía personal y la participación social.
+No obstante, en la gran mayoría de los casos, las funciones cognitivas  permanecen intactas. Esta disociación incrementa el sufrimiento psicológico del paciente, pero al mismo tiempo representa la justificación técnica para la implementación de sistemas expertos de recomendación de SAAC. Dado que el usuario conserva la capacidad cognitiva y la comprensión semántica, es apto para el aprendizaje, configuración y uso eficaz de interfaces de comunicación asistiva avanzadas.
 
-\subsection{Preservación de la identidad vocal: El banco de voz}
-Cuando la disartria progresa hacia la anartria, las soluciones de alta tecnología suelen recurrir a voces sintéticas genéricas, lo que puede provocar un impacto psicológico negativo y una menor aceptación del sistema por parte del usuario y su entorno.
+\subsection{Preservación de la identidad vocal mediante técnicas de Voice Banking}
+La introducción de soluciones tradicionales de síntesis de voz mediante motores de Texto a Voz (\textit{Text-to-Speech}, TTS) basados en fonemas genéricos e impersonales introduce un factor de despersonalización. Estas voces sintéticas de catálogo omiten las particularidades acústicas del individuo, induciendo un impacto psicológico negativo y provocando la reticencia o el rechazo de la tecnología por parte del paciente y su núcleo familiar.
 
-Para mitigar este efecto, cobra especial relevancia la técnica del \textit{voice banking} o banco de voz, que consiste en el registro digitalizado y posterior procesamiento de muestras de voz del propio paciente. Este proceso permite sintetizar un modelo computacional de voz personalizado que conserva sus rasgos prosódicos y fonéticos característicos \cite{sanchez:voicebanking}.
+Para mitigar este fenómeno, la ingeniería biomédica actual incorpora procesos de \textit{Voice Banking} y reconstrucción acústica personalizada. De acuerdo con el marco técnico seminal definido por Yamagishi et al. \cite{yamagishi2012speech}, este método consiste en la digitalización y almacenamiento estructurado de muestras bioacústicas de habla del paciente mientras este conserva capacidades funcionales. Mediante algoritmos de síntesis por concatenación o modelado estadístico, se genera un clon de voz computacional que retiene los rasgos prosódicos, el timbre y la huella de identidad fonética del usuario \cite{yamagishi2012speech}.
 
-Clínicamente, el éxito de esta intervención está estrictamente condicionado por el factor temporal. La recolección de las muestras sonoras debe realizarse de forma precoz, idealmente en las fases iniciales de la enfermedad, antes de que aparezcan los primeros síntomas de afectación bulbar o fatiga muscular en el aparato fonador \cite{sanchez:voicebanking}. De esta forma, como método preventivo, se añadirán al sistema considerados un SAAC más.
+Estudios clínicos de alto impacto desarrollados por Cave y Bloch \cite{cave2021voice} demuestran de forma cuantitativa que más del 80\% de las personas que sufren enfermedades de la neurona motora consideran que disponer de una voz sintetizada personalizada es indispensable para preservar su autoidentidad y mantener el rol social y familiar. Sin embargo, la efectividad del proceso está estrictamente delimitada por la variable temporal. \cite{nature2025ai, rong2024multimodal}
 
-\section{Sistemas Aumentativos y Alternativos de Comunicación}
-Los Sistemas Aumentativos y Alternativos de Comunicación (SAAC) son herramientas diseñadas para facilitar o sustituir el habla en personas con dificultades de comunicación oral \cite{plenainclusion:saac, conectea:saac}.
+\section{Sistemas Aumentativos y Alternativos de Comunicación (SAAC)}
+Los Sistemas Aumentativos y Alternativos de Comunicación (SAAC) abarcan un conjunto heterogéneo de herramientas, estrategias y códigos estructurados para compensar las deficiencias graves de expresión verbal.
 
-\subsection{Definición conceptual}
-Se distinguen dos categorías principales:
-
+\subsection{Clasificación funcional}
+Desde una perspectiva funcional, los sistemas de comunicación asistida se dividen en dos categorías:
 \begin{itemize}
-    	\item \textbf{Sistema aumentativo}: Se emplea cuando la persona puede hablar parcialmente, pero necesita apoyo para ampliar su capacidad comunicativa.
-    	\item \textbf{Sistema alternativo}: Se utiliza cuando la persona no puede comunicarse mediante el habla y necesita un sistema sustitutivo a esta.
+   	 \item \textbf{Sistemas Aumentativos:} Se implementan como un recurso complementario al habla natural cuando esta, debido a la disartria, ha perdido inteligibilidad pero conserva funcionalidad parcial. El sistema ayuda mediante herramientas predictivas o clarificadores.
+    	\item \textbf{Sistemas Alternativos:} Actúan como sustitutos absolutos de la capacidad oral en escenarios de anartria proporcionando un canal de comunicación independiente mediante síntesis de texto o selección de símbolos.
 \end{itemize}
 
-A su vez, los SAAC se pueden clasificar generalmente según los siguientes parámetros \cite{arasaac:home, alfasaac:caa}:
+Asimismo, en función de su arquitectura e infraestructura de soporte, se categorizan según las redes de apoyo especializado \cite{alfasaac:caa}:
 \begin{itemize}
-    	\item \textbf{Nivel tecnológico}: Baja o alta tecnología, desde tableros fisicos hasta sistemas tecnológicos integrales.
-    	\item \textbf{Método de acceso}: Táctil, ocular, oral, mediante control cefálico o pulsador.
-    	\item \textbf{Naturaleza del contenido}: Pictográfico, alfabético o simbólico.
-    	\item \textbf{Organización semántica}: Distintas metodologías como PODD o texto predictivo.
+    	\item \textbf{SAAC sin ayuda:} Estrategias comunicativas que no requieren elementos físicos externos al cuerpo del paciente (códigos gestuales, lengua de signos, parpadeo codificado). Presentan alta disponibilidad pero un acoplamiento estricto a la presencia de un interlocutor 			entrenado.
+    	\item \textbf{SAAC con ayuda (Baja tecnología):} Soluciones que emplean soportes físicos pasivos (cuadernos de comunicación, tableros pictográficos impresos o sistemas de comunicación por intercambio de imágenes). Tienen un coste bajo y no requieren suministro eléctrico, 			pero limitan la velocidad de transmisión del mensaje.
+    	\item \textbf{SAAC con ayuda (Alta tecnología):} Dispositivos electrónicos que ejecutan \textit{software} especializado de comunicación. Integran motores de síntesis de voz y algoritmos de predicción semántica.
 \end{itemize}
 
-\section{Criterios técnicos de evaluación de SAAC}
-La elección de un sistema de comunicación asistida debe basarse en criterios objetivos que permitan ajustar la solución a las características individuales del usuario, para ello se analizan las especificaciones de los productos principales del mercado  \cite{tobiidynavox:products, irisbond:soluciones, assistiveware:proloquo}. Entre los principales parámetros evaluados se encuentran:
+\section{Criterios técnicos de evaluación e ingeniería de atributos en SAAC}
+La prescripción de un SAAC en una base de conocimiento relacional exige transformar las especificaciones comerciales de los fabricantes (como Tobii Dynavox, Irisbond o AssistiveWare) \cite{tobiidynavox:products, irisbond:soluciones, assistiveware:proloquo} en una matriz de atributos normalizados. Los parámetros evaluados para conformar el catálogo del sistema experto se definen bajo criterios objetivos de ingeniería:
 
 \begin{itemize}
-    	\item Cualidades cognitivas, visuales, auditivas, orales y tecnológicas requeridas.
-    	\item Hardware: Compatibilidad con pulsadores, mirada, pantalla táctil u otros sensores.
-    	\item Software: Personalización, idioma y compatibilidad.
-    	\item Interfaz: Facilidad de uso, esfuerzo físico y velocidad.
-    	\item Curva de aprendizaje para usuarios y cuidadores.
-    	\item Portabilidad del dispositivo y posibilidad de anclaje a silla.
-    	\item Robustez y fiabilidad.
-    	\item Adaptabilidad a distintos niveles de discapacidad.
-    	\item Aporte de independencia
+    	\item \textbf{Umbrales de capacidad operativa:} Requisitos mínimos normalizados en una escala ordinal (0-3) sobre el estado cognitivo, la agudeza visual, la discriminación auditiva y la competencia tecnológica exigidos por el sistema para evitar el rechazo por carga cognitiva.
+    	\item \textbf{Hardware y métodos de acceso:} Compatibilidad de la solución con periféricos de entrada avanzados, incluyendo interfaces de seguimiento ocular (\textit{eyetracking}), pulsadores mecánicos o de proximidad y conmutadores cefálicos.
+    	\item \textbf{Software y entorno operativo:} Restricciones de la aplicación, tales como el sistema operativo (Windows, iOS, Android, arquitecturas web), la compatibilidad con motores de base de datos y la localización lingüística.
+    	\item \textbf{Portabilidad, ergonomía y autonomía energética:} Factores físicos que condicionan el uso del dispositivo en movilidad, tales como el consumo de batería, el peso, la resistencia al exterior y la compatibilidad con sistemas de anclaje para sillas de ruedas.
 \end{itemize}
 
-El coste de los sistemas no se tiene en cuenta en este estudio ya que se encuentran altamente financiados por la Seguridad Social \cite{ceapat:productos}. Además, en Castilla y León, también puede recurrirse a la prestación ortoprotésica de Sacyl.
+Cabe destacar que las variables financieras o de coste de adquisición de hardware especializado se han omitido del algoritmo de decisión principal. Esto se fundamenta en que, dentro del marco normativo del Sistema Nacional de Salud español y de las directrices específicas del Servicio de Salud de Castilla y León (Sacyl), los productos de apoyo regulados en los catálogos oficiales de prestaciones ortoprotésicas cuentan con vías de financiación pública integral o subvención mayoritaria \cite{ceapat:productos}, priorizando los criterios de idoneidad clínica sobre el impacto presupuestario directo del usuario.
 
-\section{Variables de decisión centradas en el usuario}
- Para poder relacionarlo con su correspondiente característica evaluada en el apartado anterior debemos recopilar información sobre la persona que va a hacer uso del dispositivo. Para ello deberemos realizar una serie de preguntas tales como:
+\section{Modelado de variables de decisión centradas en el usuario}
+La construcción del recomendador requiere la captura  del perfil fisiológico, cognitivo y del entorno del paciente mediante un cuestionario clínico multivariable. Las preguntas del sistema se diseñaron para mapear las siguientes variables de decisión:
 
 \begin{itemize}
-    	\item ¿Cuáles son los niveles cognitivo, visual, auditivo, oral y tecnológico asumibles? ¿Puede fijar la mirada en pantalla y distinguir símbolos? ¿Escucha y entiende con claridad voces sintetizadas? ¿Está familiarizado con dispositivos electrónicos y/o informáticos?
-    	\item ¿Qué nivel de motilidad conserva? ¿Qué movimientos voluntarios puede hacer de forma fiable? ¿Qué método de acceso se ajusta más a su situación?
-    	\item ¿Con qué idioma se siente más cómodo comunicándose? 
-	\item ¿Cuál es su plataforma de uso de preferencia? ¿Prefiere tecnología o papel? ¿Le molesta llevar dispositivos? ¿Se siente cómodo utilizando una voz sintetizada?
-   	\item ¿Cuál es su nivel de resistencia ante tareas que conllevan esfuerzo como fijar la mirada o utilizar pulsadores? ¿Cuánto tiempo puede mantener una acción repetitiva?
-    	\item ¿Cuánto tiempo puede dedicar a familiarizarse con el programa?
-    	\item ¿En qué entorno planea hacer uso del sistema? ¿Requiere portabilidad? ¿Utiliza silla de ruedas o algún otro producto de apoyo para personas con movilidad reducida?
-    	\item ¿Dispone de apoyo por parte de cuidadores? ¿Requiere total independencia?
+    	\item \textbf{Preferencias lingüísticas e idioma:} Se identifica el idioma con el que el paciente se siente más cómodo para comunicarse diariamente, garantizando el soporte tanto para el castellano como para las diferentes lenguas cooficiales.
+    	\item \textbf{Capacidades perceptivas y cognitivas:} Se evalúa el nivel visual y auditivo del usuario, su capacidad de atención, su nivel de lectoescritura y su grado de familiarización previa con el uso de ordenadores o dispositivos electrónicos.
+	\item \textbf{Fatiga y resistencia funcional:} Se mide la capacidad del paciente para mantener una acción repetitiva a lo largo del tiempo, evitando recomendar sistemas que le exijan un esfuerzo físico o visual excesivo que pueda causarle frustración o cansancio extremo.
+    	\item \textbf{Naturaleza del contenido (Alfabeto o Pictogramas):} Se determina si el usuario prefiere o necesita una comunicación basada en texto alfabético (con teclado virtual y predicción de palabras) o si, debido a su evolución clínica o preferencia personal, requiere un sistema 		basado en pictogramas y símbolos visuales.
+	\item \textbf{Formas de acceso:} Se analiza qué forma de acceso al dispositivo es la más viable (táctil, por parpadeo, mediante control cefálico, pulsadores o sistemas de seguimiento ocular).
+    	\item \textbf{Plataformas tecnológicas y entorno de uso:} Se consulta al usuario sobre sus preferencias en cuanto al sistema operativo o plataforma tecnológica que le gustaría utilizar (Windows, iOS, Android, entornos web o soportes físicos en papel). Asimismo, se valora el entorno 	preferido de uso (si se utilizará principalmente en el domicilio, en centros institucionales o en exteriores) para asegurar la autonomía de la batería y la visibilidad de la pantalla.
+	\item \textbf{Uso de productos de apoyo móviles:} Se pregunta específicamente si el paciente utiliza silla de ruedas u otros elementos de asistencia para la movilidad reducida. Esta variable condiciona la necesidad de buscar sistemas SAAC que admitan soportes de anclaje 				mecánicos y que cuenten con una estructura ligera y portátil.
 \end{itemize}
 
-Estas variables constituyen la base lógica para diseñar sistemas automatizados de recomendación.
+\section{Fundamentos de los Sistemas de Apoyo a la Decisión (SAD)}
+Los Sistemas de Apoyo a la Decisión (SAD) o \textit{Decision Support Systems} (DSS) constituyen una rama de la ingeniería del software orientada al desarrollo de aplicaciones que procesan bases de conocimiento complejas para asistir en la resolución de problemas de diagnóstico o prescripción multivariable. 
 
-\section{Sistemas de apoyo a la decisión}
-Los sistemas de apoyo a la decisión son herramientas informáticas diseñadas para asistir en la selección entre múltiples alternativas mediante el análisis estructurado de criterios. 
+Dentro de la taxonomía de los sistemas de información, el recomendador desarrollado se estructura como un Sistema Experto basado en Reglas Lógicas. En lugar de utilizar algoritmos probabilísticos complejos, el conocimiento clínico extraído de las guías médicas se ha traducido en un motor de inferencia determinista que opera mediante condicionales estructurados del tipo **IF-THEN** (Si-Entonces).
 
-Su funcionamiento puede basarse en reglas lógicas, árboles de decisión o sistemas expertos, entre otros. En mi caso, como se profundiza más en la sección "4-Metodología", empleo un sistema de reglas lógicas. Por ejemplo: si control manos = no, se excluyen sistemas táctiles. Según las respuestas del usuario progresivamente se irán filtrando los sistemas hasta llegar al adecuado.
+El sistema funciona bajo un principio de inferencia por filtrado progresivo o descarte. Esto significa que el motor lógico asume inicialmente que todos los sistemas SAAC del catálogo son opciones válidas para el paciente. A medida que el usuario avanza en el cuestionario y selecciona sus características, el motor evalúa las incompatibilidades y va eliminando del mapa aquellas soluciones que no se adaptan a su perfil.
 
-\section{Estado del arte y trabajos relacionados}
-Actualmente existen guías clínicas y documentos técnicos que recopilan información detallada sobre sistemas de comunicación asistida, la primera y más destacable siendo "Guía para la Comunicación y Autonomía en la ELA" \cite{elaandalucia:guia} desarrollada por la asociación ELA Andalucía. Estas guías son completas y clínicamente rigurosas, pero presentan limitaciones desde el punto de vista operativo. Son documentos estáticos que están diseñados para una lectura secuencial. Requieren un tiempo de análisis del que muchas veces no se dispone y exigen un cierto nivel de conocimiento previo. No priorizan ni filtran automáticamente las opciones, causando que el proceso se alargue en el tiempo, produzca frustración e incluso pueda llevar a tomar una decisión subóptima.
+Para entender el comportamiento del motor, la lógica de exclusión sigue este esquema conceptual:
 
-En el ámbito académico existen estudios sobre tecnologías de asistencia y accesibilidad comunicativa \cite{elibro:ubu}, sin embargo, se observa una carencia de herramientas interactivas que integren en una única plataforma la evaluación del usuario junto con la recomendación automatizada personalizada. Esta limitación evidencia la necesidad de desarrollar sistemas digitales que faciliten la toma de decisiones de forma rápida, comprensible y basada en criterios objetivos, justificando así la relevancia del presente trabajo.
+\begin{center}
+\textbf{SI} [Variable\_Usuario] no cumple [Requisito\_Mínimo\_Sistema] $\implies$ \textbf{ENTONCES} [Estado\_Sistema] = Excluido
+\end{center}
+
+Por ejemplo, si el usuario indica en el cuestionario que su nivel de control manual es nulo, el motor de reglas activa inmediatamente una directiva de descarte: se evalúan todos los sistemas del catálogo y aquellos que tengan como requisito de acceso obligatorio la interacción táctil quedan automáticamente excluidos de la selección final. 
+
+A través de consultas a la base de datos el recomendador reduce dinámicamente el rango de soluciones hasta obtener el subconjunto óptimo compatible con las capacidades específicas del paciente, garantizando una propuesta limpia y clínicamente coherente al terminar el cuestionario.
+
+\section{Análisis del estado del arte y trabajos relacionados}
+En el escenario actual de la gestión asistencial de la ELA, existen diversos recursos documentales y guías clínicas orientadas a guiar a los profesionales en la selección de tecnologías de apoyo. El exponente de referencia es la \textit{Guía para la Comunicación y Autonomía en la ELA}, editada por la asociación ELA Andalucía \cite{elaandalucia:guia}. Esta obra compila las soluciones comerciales disponibles.
+
+No obstante, este tipo de soluciones presenta limitaciones derivadas de su formato estático:
+\begin{enumerate}
+    	\item \textbf{Lectura secuencial y sobrecarga cognitiva:} Al tratarse de documentos estáticos en formato de texto (PDF o manuales impresos), exigen que el terapeuta ocupacional, el familiar o el propio paciente realicen un proceso de lectura, análisis y comparación manual de 			cientos de páginas de especificaciones técnicas.
+    	\item \textbf{Ausencia de automatización y riesgo de sesgo:} Al carecer de un motor algorítmico no se realiza un filtrado cruzado de variables en tiempo real. La selección final del sistema queda expuesta a la experiencia subjetiva del prescriptor o al conocimiento limitado del 			catálogo de un fabricante concreto, lo que incrementa la probabilidad de incurrir en una prescripción subóptima.
+    	\item \textbf{Incompatibilidad temporal frente a una enfermedad progresiva:} Las guías impresas describen soluciones puntuales pero no integran una lógica de predicción o alerta que anticipe de forma automatizada las necesidades tecnológicas futuras asociadas a la pérdida de 		funcionalidad muscular bulbar o espinal.
+\end{enumerate}
+
+Por otra parte, la revisión sistemática internacional conducida por Davis et al. \cite{taylor2026timing} analiza la temporalidad de la implantación del soporte tecnológico de control en la ELA, concluyendo que las demoras en la provisión del dispositivo adecuado frustran la adaptación del paciente debido a la velocidad del deterioro motor. En el ámbito nacional, estudios como los de Rico Ivorra y Moltó Abad \cite{rico2021comunicacion} demuestran que el uso temprano y correcto de la CAA correlaciona de forma positiva con la reducción de comorbilidades como la depresión y la ansiedad reactiva en el paciente y sus cuidadores.
+
+A pesar de la existencia de estos marcos teóricos descriptivos en la literatura académica \cite{elibro:ubu}, se detecta una clara brecha tecnológica: la ausencia de herramientas informáticas interactivas que unifiquen en una plataforma web tanto la captura del perfil del usuario como un motor de inferencia lógica automatizado para la prescripción. La presente herramienta de apoyo a la decisión solventa esta deficiencia del estado del arte, transformando el conocimiento clínico estático en un sistema de información ágil, objetivo y escalable.
+
+Es necesario apuntar que el prototipo desarrollado presenta, en su estado actual, ciertas limitaciones metodológicas comunes en fases tempranas de ingeniería. El catálogo inicial de 46 sistemas se gestiona mediante inserciones de datos estáticas, careciendo de integraciones dinámicas automatizadas (como conexiones mediante APIs a bases de datos vivas del CEAPAT) o de flujos de despliegue continuo. Sin embargo, como solución de validación conceptual, este sistema sienta las bases operativas para automatizar un proceso que hasta ahora era completamente analógico, legitimando el valor de la propuesta de ingeniería de la salud desarrollada.

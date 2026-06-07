@@ -6,9 +6,9 @@ En este apéndice se describen las pruebas realizadas para validar la precisión
 Durante el desarrollo del proyecto se llevaron a cabo tres fases de experimentación para asegurar la robustez del sistema:
 
 \begin{enumerate}
-    	\item \textbf{Experimento E1: Validación de lógica de exclusión (Satisfactorio):} Se introdujeron perfiles de usuario con capacidades críticas (visión 0, audición 0) para verificar que el sistema descartaba correctamente dispositivos dependientes de esos sentidos. El resultado fue exitoso, filtrando el 100\% de los sistemas incompatibles.
-    	\item \textbf{Experimento E2: Recursividad de periféricos (No exitoso inicialmente):} Se detectó un fallo donde el sistema recomendaba varias veces el mismo soporte físico si este era compatible con varios softwares sugeridos. Se corrigió mediante la implementación de un conjunto de control (\textit{Set}) en la función \texttt{obtener\_perifericos\_recursivo}.
-    	\item \textbf{Experimento E3: Persistencia de Feedback (Satisfactorio):} Se probó la vinculación de encuestas de satisfacción con registros históricos preexistentes. El uso de \texttt{flag\_modified} en SQLAlchemy resolvió los problemas de persistencia detectados en las primeras pruebas con campos JSON.
+    	\item \textbf{Experimento E1: Validación de lógica de exclusión (Satisfactorio):} Se introdujeron perfiles de usuario con capacidades críticas (visión 0, audición 0) para verificar que el sistema descartaba correctamente dispositivos dependientes de esos sentidos. El resultado fue 			exitoso, filtrando el 100\% de los sistemas incompatibles.
+    	\item \textbf{Experimento E2: Recursividad de periféricos (No exitoso inicialmente):} Se detectó un fallo donde el sistema recomendaba varias veces el mismo soporte físico si este era compatible con varios softwares sugeridos. Se corrigió mediante la implementación de un 			conjunto de control (\textit{Set}) en la función \texttt{obtener\_perifericos\_recursivo}.
+    	\item \textbf{Experimento E3: Persistencia de Feedback (Satisfactorio):} Se probó la vinculación de encuestas de satisfacción con registros históricos preexistentes. El uso de \texttt{flag\_modified} en SQLAlchemy resolvió los problemas de persistencia detectados en las primeras 			pruebas con campos JSON.
 \end{enumerate}
 
 \section{Configuración y parametrización de las técnicas}
@@ -21,7 +21,7 @@ El comportamiento del algoritmo de recomendación se basa en la parametrización
     	\item \textbf{Nivel 3 (Experto/Total):} Habilita sistemas de alta precisión (como teclados virtuales pequeños o configuraciones avanzadas).
 \end{itemize}
 
-La elección de esta escala se justifica por su alineación con las escalas de valoración clínica habituales en logopedia y terapia ocupacional, facilitando la interpretación tanto para el personal sanitario como para el cuidador.
+La elección de esta escala se justifica por su alineación con las escalas de valoración clínica habituales en logopedia y terapia ocupacional, facilitando la interpretación tanto para el personal sanitario como para el cuidador. \cite{cedarbaum:alsfrsr}
 
 \section{Detalle de resultados}
 Al tratarse de una validación funcional basada en escenarios de uso y reglas lógicas deterministas, los resultados se evalúan en función del éxito del comportamiento esperado del sistema ante los casos de prueba introducidos:
@@ -34,7 +34,7 @@ Al tratarse de una validación funcional basada en escenarios de uso y reglas l�
         \toprule
         	\textbf{P1 (Afectación bulbar)} & Exclusión de SAAC orales. & Correcto. Sistemas segregados según base de datos. \\
 	\textbf{P3 (Paneles físicos)} & Exclusión total de software digital si no hay plataforma compatible. & Correcto. Filtrado estricto por coincidencia de \texttt{plataforma\_ids}. \\
-       	\textbf{P4 (Precisión táctil)} & Descarte de accesorios como lápices/guantes si no se usan las manos. & Correcto. Filtrado mediante análisis de cadenas por palabra clave. \\
+       	\textbf{P4 (Precisión táctil)} & Descarte de accesorios como lápices/guantes si no se usan las manos. & Correcto. Filtrado condicionado a la persistencia de la variable de funcionalidad motora manual.\\
        	\textbf{P5 (Casos duplicados)} & Unificación de periféricos comunes en el informe. & Correcto. Limpieza de duplicados mediante \textit{Set}. \\
       	 \textbf{P6 (Control RGPD)} & Bloqueo de escritura en BD si no hay consentimiento explícito. & Correcto. Persistencia condicionada al \textit{opt-in}. \\
 	\textbf{P7 (Prevención Eye-Tracker)} & Derivación de software ocular a la lista de Preventivos ante fatiga física extrema (\texttt{resistencia} = 0). & Correcto. Inserción de nota clínica para entrenamiento temprano. \\

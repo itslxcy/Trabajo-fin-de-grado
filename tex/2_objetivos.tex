@@ -1,36 +1,31 @@
 \capitulo{2}{Objetivos}
 
-El objetivo general de este Trabajo de Fin de Grado es realizar un análisis comparativo de los sistemas aumentativos y alternativos de comunicación existentes y emplear dicha información para desarrollar una herramienta web basada en cuestionario que permita recomendar de forma personalizada el sistema más adecuado a cada usuario.
+El objetivo general de este Trabajo de Fin de Grado es analizar los Sistemas Aumentativos y Alternativos de Comunicación (SAAC) existentes y desarrollar una aplicación web interactiva que, mediante un cuestionario, recomiende de forma personalizada el sistema más adecuado para cada paciente.
 
 \section{Objetivos específicos}
-
-Para alcanzar este objetivo general, se plantean los siguientes objetivos específicos:
-
+Para alcanzar el objetivo general, se plantean los siguientes objetivos específicos:
 \begin{itemize}
-	\item Realizar un análisis comparativo y sistemático de los sistemas aumentativos y alternativos de comunicación disponibles, considerando sus características técnicas, funcionales y de accesibilidad.
-    	\item Identificar que parámetros son relevantes en la selección de un SAAC.
-    	\item Definir un modelo de recomendación que relacione las características del usuario con su SAAC ideal.
-    	\item Desarrollar un prototipo funcional de aplicación web que implemente un cuestionario interactivo capaz de filtrar opciones y generar recomendaciones personalizadas a partir de la base de datos diseñada.
-    	\item Detectar posibles carencias o limitaciones a partir del análisis realizado y plantear propuestas de mejora o líneas de desarrollo futuras.
+    	\item \textbf{Analizar el catálogo tecnológico:} Estudiar las soluciones de SAAC disponibles en el mercado, indexando sus especificaciones de hardware, software y métodos de acceso.
+    	\item \textbf{Definir las variables clínicas:} Identificar los parámetros de capacidad del usuario (motora, cognitiva, visual y lingüística) que determinan la elección de un SAAC.
+    	\item \textbf{Diseñar el modelo de recomendación:} Desarrollar la lógica que vincula las respuestas del cuestionario del usuario con las características de los sistemas del catálogo.
+    	\item \textbf{Desarrollar un prototipo funcional:} Construir la aplicación web interactiva que implemente el cuestionario, procese los filtros y recoja feedback de forma anónima.
+    	\item \textbf{Evaluar limitaciones del sistema:} Analizar de forma crítica los puntos débiles del prototipo, su infraestructura y su viabilidad legal de cara a un uso clínico real.
 \end{itemize}
 
 \section{Objetivos técnicos}
-
-Asimismo, se establecen los siguientes objetivos técnicos derivados del desarrollo del proyecto:
-
+Desde la perspectiva de la ingeniería del software, se establecen los siguientes objetivos técnicos:
 \begin{itemize}
-    	\item Implementar una base de datos estructurada de dispositivos y características.
-    	\item Diseñar la arquitectura software del sistema.
-    	\item Implementar la lógica de recomendación y filtrado de resultados.
-    	\item Desarrollar una interfaz accesible, clara e intuitiva orientada a usuarios no especializados.
+    	\item \textbf{Implementar la base de datos:} Modelar y construir una base de datos relacional en PostgreSQL utilizando el ORM SQLAlchemy para almacenar el catálogo de SAAC.
+    	\item \textbf{Diseñar la arquitectura del software:} Estructurar la aplicación web utilizando el framework Flask y el motor de plantillas Jinja2 para la interfaz de usuario.
+    	\item \textbf{Programar el motor de reglas:} Implementar la lógica de filtrado por descarte mediante condicionales IF-THEN en Python, incluyendo el soporte para Voice Banking.
+    	\item \textbf{Integrar medidas de seguridad web:} Aplicar cabeceras de seguridad y mitigar vulnerabilidades comunes utilizando la librería Flask-Talisman bajo estándares OWASP.
+    	\item \textbf{Optimizar la interfaz y accesibilidad:} Diseñar las pantallas (HTML/CSS) para facilitar la navegación a usuarios no especializados y asentar las bases para el uso de pulsadores o eyetracking.
 \end{itemize}
 
 \section{Objetivos formativos}
-
-Finalmente, desde el punto de vista formativo, el trabajo persigue los siguientes objetivos de aprendizaje:
-
+Finalmente, desde el punto de vista del aprendizaje, el trabajo persigue los siguientes objetivos:
 \begin{itemize}
-    	\item Aplicar conocimientos de Ingeniería de la Salud y desarrollo software a un problema real del ámbito sanitario.
-    	\item Desarrollar competencias en análisis de requisitos, desarrollo web y tratamiento de bases de datos.
-    	\item Integrar criterios clínicos y tecnológicos dentro de un mismo proyecto interdisciplinar orientado a la toma de decisiones.
+   	 \item \textbf{Aplicar la Ingeniería de la Salud:} Resolver un problema real del ámbito sanitario combinando el desarrollo de software con criterios médicos.
+    	\item \textbf{Gestionar el ciclo de vida del proyecto:} Adquirir competencias en análisis de requisitos, presupuestos bajo el Convenio TIC y cumplimiento legal del RGPD.
+    	\item \textbf{Desarrollar autocrítica técnica:} Aprender a identificar la deuda técnica del proyecto y proponer soluciones de mejora.
 \end{itemize}
