@@ -1,4 +1,5 @@
 \documentclass[a4paper,12pt,twoside]{memoir}
+\openany %
 
 % Castellano
 \usepackage[spanish,es-tabla]{babel}
@@ -64,18 +65,40 @@
 
 \graphicspath{ {./img/} }
 
-% Capítulos
 \chapterstyle{bianchi}
-\newcommand{\capitulo}[2]{
-	\setcounter{chapter}{#1}
-	\setcounter{section}{0}
-	\setcounter{figure}{0}
-	\setcounter{table}{0}
-	\chapter*{#2}
-	\addcontentsline{toc}{chapter}{#2}
-	\markboth{#2}{#2}
-}
 
+\makeatletter
+\setlength{\beforechapskip}{-2.0cm} 
+\setlength{\midchapskip}{10pt}
+\def\@makechapterhead#1{%
+  \vspace*{0pt}%
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+      \if@mainmatter
+        \printchaptername \chapnumfont \thechapter
+        \par\nobreak
+        \vspace{10\p@}%
+      \fi
+    \fi
+    \interlinepenalty\@M
+    \printchapternonum
+    \chaptitlefont #1\par\nobreak
+    \vspace{15\p@}%
+    \hrule height \memhead7ht
+    \par\nobreak
+    \vspace{30\p@}%
+  }}
+\makeatother
+
+\newcommand{\capitulo}[2]{%
+	\setcounter{chapter}{#1}%
+	\setcounter{section}{0}%
+	\setcounter{figure}{0}%
+	\setcounter{table}{0}%
+	\chapter*{#2}%
+	\addcontentsline{toc}{chapter}{#2}%
+	\markboth{#2}{#2}%
+}
 % Apéndices
 \renewcommand{\appendixname}{Apéndice}
 \renewcommand*\cftappendixname{\appendixname}
@@ -135,7 +158,7 @@
     \@date{}\\
     \vspace{0.5cm}
     %Tutor: \@tutor{}\\ % comenta el que no corresponda
-    Tutores: \@tutor{} \\%-- \@tutorb{}\\
+    Tutor: \@tutor{} \\%-- \@tutorb{}\\
   }%
   \end{center}%
   \null
@@ -213,6 +236,7 @@ D. Pedro Luis Sánchez Ortega
 
 
 \frontmatter
+\pagenumbering{arabic}
 
 % Abstract en castellano
 \renewcommand*\abstractname{Resumen}
@@ -253,6 +277,9 @@ Augmentative and Alternative Communication (AAC), Amyotrophic Lateral Sclerosis 
 
 
 \mainmatter
+\pagenumbering{arabic} 
+\setcounter{page}{13}
+
 \include{./tex/1_introduccion}
 \include{./tex/2_objetivos}
 \include{./tex/3_teoricos}
