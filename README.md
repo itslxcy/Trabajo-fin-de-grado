@@ -1,12 +1,12 @@
 <img src="img/CabeceraEPS.png" alt="Cabecera EPS" width="60%"> <img src="img/Logo_GIS.png" alt="Logo GIS" width="20%">
 
-# Sistema de recomendación de SAAC para pacientes con ELA (2026)
+# Sistemas alternativos de comunicación para personas con discapacidad (2026)
 
 **Alumna:** Lucía Gil Aire  
 **Grado:** Ingeniería de la Salud  
 **Institución:** [Universidad de Burgos](https://www.ubu.es)  
 **En colaboración con:** [ELACyL (Asociación de Esclerosis Lateral Amiotrófica de Castilla y León)](https://www.elacyl.org)  
-**Acceso a la aplicación:** [Cuestionario TFG - Sistema Recomendador](https://cuestionario-tfg.onrender.com/)
+**Acceso a la aplicación:** [Cuestionario TFG - Sistema recomendador](https://cuestionario-tfg.onrender.com/)
 
 
 ## Resumen / Abstract
