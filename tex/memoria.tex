@@ -57,12 +57,6 @@
 	\FloatBarrier
 }
 
-
-
-
-
-
-
 \graphicspath{ {./img/} }
 
 \chapterstyle{bianchi}
@@ -178,6 +172,19 @@
 %\tutorb{\nombreTutorb}
 \date{\today}
 
+% =========================================================================
+% --- CONFIGURACIÓN DE NÚMEROS DE PÁGINA SIEMPRE ABAJO Y CENTRADOS ---
+% =========================================================================
+\makepagestyle{tfg_pie}
+\makeevenfoot{tfg_pie}{}{\thepage}{} % Número abajo en páginas pares
+\makeoddfoot{tfg_pie}{}{\thepage}{}  % Número abajo en páginas impares
+\makeevenhead{tfg_pie}{}{}{}         % Elimina texto de cabecera en páginas pares
+\makeoddhead{tfg_pie}{}{}{}          % Elimina texto de cabecera en páginas impares
+\pagestyle{tfg_pie}                  % Activa el estilo globalmente
+
+\makeevenfoot{plain}{}{\thepage}{}   % Fuerza número abajo en inicio de capítulos pares
+\makeoddfoot{plain}{}{\thepage}{}    % Fuerza número abajo en inicio de capítulos impares
+% =========================================================================
 
 \begin{document}
 
@@ -278,7 +285,7 @@ Augmentative and Alternative Communication (AAC), Amyotrophic Lateral Sclerosis 
 
 \mainmatter
 \pagenumbering{arabic} 
-\setcounter{page}{13}
+\setcounter{page}{7}
 
 \include{./tex/1_introduccion}
 \include{./tex/2_objetivos}
